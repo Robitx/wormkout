@@ -112,6 +112,8 @@ public class GameScreen implements Screen {
                 + (game.myPlayer.position.y)+" PZ "+ (game.myPlayer.position.z), 20, 300);
         batch.end();
 
+        if (!game.myAudio.playing)
+            game.myAudio.start();
 }
 
     @Override
@@ -163,7 +165,6 @@ public class GameScreen implements Screen {
 
 
 
-        game.myAudio.start(Gdx.files.external(game.myState.myPlayList.songPaths.get(0)), false);
         //first lvl then player
         game.myLevel.loadLevel();
         game.myPlayer.setCam();
@@ -197,7 +198,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume (){
-        game.myAudio.start(Gdx.files.external(game.myState.myPlayList.songPaths.get(0)), false);
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.analysis.KissFFT;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 
 
@@ -19,6 +18,7 @@ public class MyAudio {
     private Mpg123Decoder decoder;
     private KissFFT fft;
     private Thread playbackThread;
+    public boolean playing;
 
     private short[] samples = new short[2048];
     private float[] spectrum = new float[1025];
@@ -71,7 +71,7 @@ public class MyAudio {
 
     }
 
-    public void start(FileHandle file, boolean external){
+    public void start(){
 
         // fast fourier transform
         fft = new KissFFT(2048);
@@ -80,19 +80,13 @@ public class MyAudio {
             topValues[i] = 0;
         }
 
-        // if I am going to play external file, then use it directly, otherwise ...
-        ///if(external) {
-            decoder = new Mpg123Decoder(file);
-        /*}
-        else {
-            // the audio file has to be on the external storage (not in the assets)
-            FileHandle externalFile = Gdx.files.external("tmp/audio-spectrum.mp3");
-            Gdx.files.internal(file.path()).copyTo(externalFile);
+        if (game.myState.currentSong >= game.myState.myPlayList.songPaths.size) {
+            game.myState.currentSong = 0;
+        }
+        if (!game.myState.myPlayList.playDefault && game.myState.currentSong < game.myState.myPlayList.numOfDefaultSong)
+            game.myState.currentSong = game.myState.myPlayList.numOfDefaultSong;
 
-            // create the decoder (you can use a VorbisDecoder if you want to read
-            // ogg files)
-            decoder = new Mpg123Decoder(externalFile);
-        }*/
+        decoder = new Mpg123Decoder(Gdx.files.external(game.myState.myPlayList.songPaths.get(game.myState.currentSong)));
 
 
         // Create an audio device for playback
@@ -107,15 +101,20 @@ public class MyAudio {
 
                 // read until we reach the end of the file or playing is stopped
                 while (!Thread.currentThread().isInterrupted()
-                        && (readSamples = decoder.readSamples(samples, 0,
-                        samples.length)) > 0) {
+                        && (readSamples = decoder.readSamples(samples, 0, samples.length)) > 0) {
                     // get audio spectrum
                     fft.spectrum(samples, spectrum);
                     // write the samples to the AudioDevice
                     device.writeSamples(samples, 0, readSamples);
                 }
+                // if while cycle ended by finishing song, set different one
+                if (!Thread.currentThread().isInterrupted()) {
+                    game.myState.currentSong++;
+                }
+                playing = false;
             }
         });
+        playing = true;
         playbackThread.setDaemon(true);
         playbackThread.start();
 
@@ -139,9 +138,6 @@ public class MyAudio {
         if(fft != null)
             fft.dispose();
 
-        // delete the temp file
-        if(Gdx.files.external("tmp/audio-spectrum.mp3").exists())
-            Gdx.files.external("tmp/audio-spectrum.mp3").delete();
     }
 
 

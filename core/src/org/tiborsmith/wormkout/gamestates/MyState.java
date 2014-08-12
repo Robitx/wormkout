@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Json;
 import org.tiborsmith.wormkout.Wormkout;
 
 /**
- * Created by tibor on 8.8.14.
+ *
  */
 public class MyState {
     Wormkout game;
@@ -21,6 +21,7 @@ public class MyState {
     public MySettings mySettings;
     public MyPlayList myPlayList;
     public int currentLevel = 0;
+    public int currentSong = 0;
 
 
     /**

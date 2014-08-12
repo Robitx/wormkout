@@ -69,6 +69,9 @@ public class MainScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        if (!game.myAudio.playing)
+            game.myAudio.start();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class MainScreen implements Screen {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-        game.myAudio.start(Gdx.files.external(game.myState.myPlayList.songPaths.get(0)), false);
+
         //first lvl then player
         game.myLevel.loadLevel();
         game.myPlayer.setCam();
@@ -439,7 +442,6 @@ public class MainScreen implements Screen {
 
     @Override
     public void resume (){
-        game.myAudio.start(Gdx.files.external(game.myState.myPlayList.songPaths.get(0)), false);
     }
 
     @Override
