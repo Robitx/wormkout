@@ -119,38 +119,38 @@ public class MainScreen implements Screen {
         Table mainLvlTable = new Table();
         ScrollPane scroll = new ScrollPane(mainLvlTable.top());
 
-        for (int i=0 ; i < game.myState.levelStates.lvls.size; i++){
+        for (int i=0 ; i < game.levelStates.lvls.size; i++){
             //play button or lock label
-            if (!game.myState.levelStates.lvls.get(i).locked){
+            if (!game.levelStates.lvls.get(i).locked){
                 String buttonString;
-                if (game.myState.levelStates.lvls.get(i).finished){
-                    float time = game.myState.levelStates.lvls.get(i).bestTime;
-                    buttonString = game.myState.levelStates.lvls.get(i).name +
+                if (game.levelStates.lvls.get(i).finished){
+                    float time = game.levelStates.lvls.get(i).bestTime;
+                    buttonString = game.levelStates.lvls.get(i).name +
                             "  [ best time: "+ (int)time/60 + "m " + (int)time%60 + "s ]";
                 }
                 else {
-                    buttonString = game.myState.levelStates.lvls.get(i).name + "  [ best time: --m --s ]";
+                    buttonString = game.levelStates.lvls.get(i).name + "  [ best time: --m --s ]";
                 }
                 TextButton lvlButton = new TextButton(buttonString,game.myAssets.skin);
                 final int j = i;
                 lvlButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        game.myState.currentLevel = j;
+                        game.currentLevel = j;
                         game.setScreen(game.gameScreen);
                     }
                 });
                 mainLvlTable.add(lvlButton);
             }
             else {
-                Label label = new Label(game.myState.levelStates.lvls.get(i).name + "  [ locked ]",game.myAssets.skin);
+                Label label = new Label(game.levelStates.lvls.get(i).name + "  [ locked ]",game.myAssets.skin);
                 label.setAlignment(Align.center);
                 mainLvlTable.add(label).fill();
             }
             // empty column (spacing)
             mainLvlTable.add(new Label(" ",game.myAssets.skin)).fill();
             // description label
-            Label lvlLabel = new Label(game.myState.levelStates.lvls.get(i).description,game.myAssets.skin);
+            Label lvlLabel = new Label(game.levelStates.lvls.get(i).description,game.myAssets.skin);
             mainLvlTable.add(lvlLabel).expandX().fill();
 
 
@@ -184,7 +184,7 @@ public class MainScreen implements Screen {
 
 
         final CheckBox pDCB = new CheckBox("Play also the default music", game.myAssets.skin); // play default checkbox
-        if (game.myState.myPlayList.playDefault)
+        if (game.myPlayList.playDefault)
             pDCB.setChecked(true);
         else
             pDCB.setChecked(false);
@@ -192,19 +192,19 @@ public class MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (pDCB.isChecked()){
-                    game.myState.myPlayList.playDefault = true;
-                    game.myState.myPlayList.savePlayList();
+                    game.myPlayList.playDefault = true;
+                    game.myPlayList.savePlayList();
                 }
-                else if (game.myState.myPlayList.numOfDefaultSong == game.myState.myPlayList.songPaths.size){
+                else if (game.myPlayList.numOfDefaultSong == game.myPlayList.songPaths.size){
                     new Dialog("", game.myAssets.skin) {}.text("You need to add some of your own music" +
                             "\n before you can disable default one.").button("Ok").show(stage);
                     pDCB.setChecked(true);
-                    game.myState.myPlayList.playDefault = true;
-                    game.myState.myPlayList.savePlayList();
+                    game.myPlayList.playDefault = true;
+                    game.myPlayList.savePlayList();
                 }
                 else {
-                    game.myState.myPlayList.playDefault = false;
-                    game.myState.myPlayList.savePlayList();
+                    game.myPlayList.playDefault = false;
+                    game.myPlayList.savePlayList();
                 }
             }
         });
@@ -213,23 +213,23 @@ public class MainScreen implements Screen {
 
 
         final List playlist = new List(game.myAssets.skin);
-        playlist.setItems(game.myState.myPlayList.songNames);
+        playlist.setItems(game.myPlayList.songNames);
         ScrollPane scroll = new ScrollPane(playlist);
         TextButton removeButton = new TextButton(" Remove song ",game.myAssets.skin);
         removeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int i = playlist.getSelectedIndex();
-                if (i < game.myState.myPlayList.numOfDefaultSong){
+                if (i < game.myPlayList.numOfDefaultSong){
                     new Dialog("", game.myAssets.skin) {
                    }.text("You can't remove default music...").button("Ok").show(stage);
                 }
                 else {
-                    game.myState.myPlayList.songPaths.removeIndex(i);
-                    game.myState.myPlayList.songNames.removeIndex(i);
-                    playlist.setItems(game.myState.myPlayList.songNames);
+                    game.myPlayList.songPaths.removeIndex(i);
+                    game.myPlayList.songNames.removeIndex(i);
+                    playlist.setItems(game.myPlayList.songNames);
                     pDCB.setChecked(true);
-                    game.myState.myPlayList.savePlayList();
+                    game.myPlayList.savePlayList();
                 }
             }
         });
@@ -243,10 +243,10 @@ public class MainScreen implements Screen {
         MyFileChooser fileChooser = new MyFileChooser(game.myAssets.skin, new FileChooser.Listener() {
             @Override
             public void choose(FileHandle file) {
-                game.myState.myPlayList.songPaths.add(file.path());
-                game.myState.myPlayList.songNames.add(file.name());
-                playlist.setItems(game.myState.myPlayList.songNames);
-                game.myState.myPlayList.savePlayList();
+                game.myPlayList.songPaths.add(file.path());
+                game.myPlayList.songNames.add(file.name());
+                playlist.setItems(game.myPlayList.songNames);
+                game.myPlayList.savePlayList();
             }
 
             @Override
@@ -334,7 +334,7 @@ public class MainScreen implements Screen {
         defaultButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.myState.mySettings.restoreDefaultSettings();
+                game.mySettings.restoreDefaultSettings();
             }
         });
 

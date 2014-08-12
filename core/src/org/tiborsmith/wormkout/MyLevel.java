@@ -92,7 +92,7 @@ public class MyLevel {
         victoryAC-=delta;
         if (victoryAC > 0) {
             // gradually lowers volume to zero
-            game.myAudio.device.setVolume(victoryAC/5.0f*game.myState.mySettings.musicVolume);
+            game.myAudio.device.setVolume(victoryAC/5.0f*game.mySettings.musicVolume);
 
             // white and yellow gradually going to black
             for (int i=0; i< noRG; i++){
@@ -168,7 +168,7 @@ public class MyLevel {
      * @return true if level loaded
      */
     private boolean loadPath(){
-        FileHandle file = Gdx.files.internal(game.myState.levelStates.lvls.get(game.myState.currentLevel).fileName);
+        FileHandle file = Gdx.files.internal(game.levelStates.lvls.get(game.currentLevel).fileName);
         try {
             DataInputStream dis = new DataInputStream(file.read());
             while(dis.available()>0)

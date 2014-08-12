@@ -65,7 +65,7 @@ public class SplashScreen implements Screen {
 
 
         game.myAssets.load();
-        game.myState.load();
+        game.load();
     }
 
     @Override

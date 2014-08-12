@@ -80,18 +80,18 @@ public class MyAudio {
             topValues[i] = 0;
         }
 
-        if (game.myState.currentSong >= game.myState.myPlayList.songPaths.size) {
-            game.myState.currentSong = 0;
+        if (game.currentSong >= game.myPlayList.songPaths.size) {
+            game.currentSong = 0;
         }
-        if (!game.myState.myPlayList.playDefault && game.myState.currentSong < game.myState.myPlayList.numOfDefaultSong)
-            game.myState.currentSong = game.myState.myPlayList.numOfDefaultSong;
+        if (!game.myPlayList.playDefault && game.currentSong < game.myPlayList.numOfDefaultSong)
+            game.currentSong = game.myPlayList.numOfDefaultSong;
 
-        decoder = new Mpg123Decoder(Gdx.files.external(game.myState.myPlayList.songPaths.get(game.myState.currentSong)));
+        decoder = new Mpg123Decoder(Gdx.files.external(game.myPlayList.songPaths.get(game.currentSong)));
 
 
         // Create an audio device for playback
         device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 );
-        device.setVolume(game.myState.mySettings.musicVolume);
+        device.setVolume(game.mySettings.musicVolume);
 
         // start a thread for playback
         playbackThread = new Thread(new Runnable() {
@@ -109,7 +109,7 @@ public class MyAudio {
                 }
                 // if while cycle ended by finishing song, set different one
                 if (!Thread.currentThread().isInterrupted()) {
-                    game.myState.currentSong++;
+                    game.currentSong++;
                 }
                 playing = false;
             }

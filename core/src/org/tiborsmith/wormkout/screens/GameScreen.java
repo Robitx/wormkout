@@ -86,14 +86,14 @@ public class GameScreen implements Screen {
             batch.end();
 
             // sets new best time
-            game.myState.levelStates.lvls.get(game.myState.currentLevel).finished = true;
-            float bestTime = game.myState.levelStates.lvls.get(game.myState.currentLevel).bestTime;
+            game.levelStates.lvls.get(game.currentLevel).finished = true;
+            float bestTime = game.levelStates.lvls.get(game.currentLevel).bestTime;
             if (bestTime > timer)
-                game.myState.levelStates.lvls.get(game.myState.currentLevel).bestTime = timer;
+                game.levelStates.lvls.get(game.currentLevel).bestTime = timer;
             // unlocks next lvl
-            if (game.myState.currentLevel+1 < game.myState.levelStates.lvls.size && game.myState.levelStates.lvls.get(game.myState.currentLevel+1).locked)
-                game.myState.levelStates.lvls.get(game.myState.currentLevel+1).locked = false;
-            game.myState.levelStates.saveLevelProgress();
+            if (game.currentLevel+1 < game.levelStates.lvls.size && game.levelStates.lvls.get(game.currentLevel+1).locked)
+                game.levelStates.lvls.get(game.currentLevel+1).locked = false;
+            game.levelStates.saveLevelProgress();
 
             game.setScreen(game.mainScreen);
             return;
