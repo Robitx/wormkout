@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="baa583528ea0c6b7cae7eedee30af472fac4351e"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.3.0-9908a7e6213959b29293336be9fef121935f66cc.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.3.0/cffac0ca563a28d977523494c33b6daa4de8a357/gdx-backend-android-1.3.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="cffac0ca563a28d977523494c33b6daa4de8a357"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-freetype-1.3.0-f1ae660b4535e5c9e8559bb2fbb5c69c22018b0e.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.3.0/60241de15ce03da08e9ff1856160b36f97a628db/gdx-freetype-1.3.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="60241de15ce03da08e9ff1856160b36f97a628db"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/core-1.0-4a11d10187c26ab0cc9cc069c71f4b35acb0359b.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="627d009c1f3420ae5d06e651aca2b353dc1c4d88"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.0-650b42a53b88dfaf69e5d3a29eb60a5de83107e9.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.0/765fbbc5489f7ddc346c6a39397d41cd2682b80c/gdx-1.3.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="765fbbc5489f7ddc346c6a39397d41cd2682b80c"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-box2d-1.3.0-4049200febbf891203b88a64284428dfa8a233d0.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.3.0/bd6549261f39d3caa1ecec606013df3506f8aead/gdx-box2d-1.3.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="bd6549261f39d3caa1ecec606013df3506f8aead"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/libgdx-utils-0.4.0-SNAPSHOT-da7ca00deb0a3048acba1c4073cb384783333461.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/net.dermetfan.libgdx-utils/libgdx-utils/0.4.0-SNAPSHOT/5e8fd6fb5e810e2e6811089e89ba397b86cd73a8/libgdx-utils-0.4.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="5e8fd6fb5e810e2e6811089e89ba397b86cd73a8"/>
+
+</pre-dex-items>

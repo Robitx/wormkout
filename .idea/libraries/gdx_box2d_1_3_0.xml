@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="gdx-box2d-1.3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.3.0/bd6549261f39d3caa1ecec606013df3506f8aead/gdx-box2d-1.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.3.0/ff1eda657dada34d4e79cac96dbc0a15242ef60f/gdx-box2d-1.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
