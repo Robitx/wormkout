@@ -71,7 +71,7 @@ public class MainScreen implements Screen {
         stage.draw();
 
         if (!game.myAudio.playing)
-            game.myAudio.start();
+            game.myAudio.startMusic();
     }
 
     @Override
@@ -429,7 +429,7 @@ public class MainScreen implements Screen {
 
         modelBatch.dispose();
         environment.clear();
-        game.myAudio.stop();
+        game.myAudio.stopMusic();
 
         game.myLevel.disposeLevel();
 
@@ -437,7 +437,7 @@ public class MainScreen implements Screen {
 
     @Override
     public void pause (){
-        game.myAudio.stop();
+        game.myAudio.stopMusic();
     }
 
     @Override

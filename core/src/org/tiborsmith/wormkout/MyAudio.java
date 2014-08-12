@@ -14,11 +14,12 @@ public class MyAudio {
     private Wormkout game;
     public MyAudio (Wormkout game){ this.game = game; }
 
-    public AudioDevice device;
-    private Mpg123Decoder decoder;
-    private KissFFT fft;
-    private Thread playbackThread;
     public boolean playing;
+    public AudioDevice device;
+    private KissFFT fft;
+    private Mpg123Decoder decoder;
+    private Thread playbackThread;
+
 
     private short[] samples = new short[2048];
     private float[] spectrum = new float[1025];
@@ -71,8 +72,19 @@ public class MyAudio {
 
     }
 
-    public void start(){
 
+    private float avg(int pos, int nb) {
+        int sum = 0;
+        for (int i = 0; i < nb; i++) {
+            sum += spectrum[pos + i];
+        }
+
+        return (float) (sum / nb);
+    }
+
+
+
+    public void startMusic(){
         // fast fourier transform
         fft = new KissFFT(2048);
 
@@ -117,11 +129,10 @@ public class MyAudio {
         playing = true;
         playbackThread.setDaemon(true);
         playbackThread.start();
-
     }
 
 
-    public void stop (){
+    public void stopMusic (){
         // synchronize with the thread
         if (playbackThread != null)
         try {
@@ -131,23 +142,13 @@ public class MyAudio {
             Gdx.app.error("AudioThread", "Thread had problem with ending",e);
         }
 
+        //dispose of stuff if its not null
         if (device != null)
             device.dispose();
         if (decoder != null)
             decoder.dispose();
         if(fft != null)
             fft.dispose();
-
-    }
-
-
-    private float avg(int pos, int nb) {
-        int sum = 0;
-        for (int i = 0; i < nb; i++) {
-            sum += spectrum[pos + i];
-        }
-
-        return (float) (sum / nb);
     }
 }
 

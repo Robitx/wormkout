@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
         batch.end();
 
         if (!game.myAudio.playing)
-            game.myAudio.start();
+            game.myAudio.startMusic();
 }
 
     @Override
@@ -180,7 +180,7 @@ public class GameScreen implements Screen {
         environment.clear();
 
         game.mySensors.unregisterSensorListeners();
-        game.myAudio.stop();
+        game.myAudio.stopMusic();
 
         game.myLevel.disposeLevel();
 
@@ -193,7 +193,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause (){
-        game.myAudio.stop();
+        game.myAudio.stopMusic();
     }
 
     @Override
