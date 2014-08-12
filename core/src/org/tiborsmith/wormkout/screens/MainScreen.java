@@ -180,6 +180,32 @@ public class MainScreen implements Screen {
 
 
 
+        final CheckBox pDCB = new CheckBox("Play also the default music", game.myAssets.skin); // play default checkbox
+        if (game.myState.myPlayList.playDefault)
+            pDCB.setChecked(true);
+        else
+            pDCB.setChecked(false);
+        pDCB.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (pDCB.isChecked()){
+                    game.myState.myPlayList.playDefault = true;
+                    game.myState.myPlayList.savePlayList();
+                }
+                else if (game.myState.myPlayList.numOfDefaultSong == game.myState.myPlayList.songPaths.size){
+                    new Dialog("", game.myAssets.skin) {}.text("You need to add some of your own music" +
+                            "\n before you can disable default one.").button("Ok").show(stage);
+                    pDCB.setChecked(true);
+                    game.myState.myPlayList.playDefault = true;
+                    game.myState.myPlayList.savePlayList();
+                }
+                else {
+                    game.myState.myPlayList.playDefault = false;
+                    game.myState.myPlayList.savePlayList();
+                }
+            }
+        });
+
 
 
 
@@ -199,6 +225,7 @@ public class MainScreen implements Screen {
                     game.myState.myPlayList.songPaths.removeIndex(i);
                     game.myState.myPlayList.songNames.removeIndex(i);
                     playlist.setItems(game.myState.myPlayList.songNames);
+                    pDCB.setChecked(true);
                     game.myState.myPlayList.savePlayList();
                 }
             }
@@ -246,7 +273,7 @@ public class MainScreen implements Screen {
 
 
 
-        CheckBox playDefaultCheckBox = new CheckBox("Play also the default music", game.myAssets.skin);
+
 
 
         musicWindow = new Window("Wormkout - Music playlist",game.myAssets.skin);
@@ -257,7 +284,7 @@ public class MainScreen implements Screen {
         musicWindow.setHeight(stage.getHeight() / 1.0272f);
         musicWindow.setCenterPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         musicWindow.add(divideMusicWindow).expand().fill().row();
-        musicWindow.add(playDefaultCheckBox);
+        musicWindow.add(pDCB);
         stage.addActor(musicWindow);
 
 
