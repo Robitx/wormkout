@@ -1,4 +1,4 @@
-package org.tiborsmith.wormkout.gamestates;
+package org.tiborsmith.wormkout.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

@@ -5,10 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-import org.tiborsmith.wormkout.gamestates.MyLevels;
-import org.tiborsmith.wormkout.gamestates.MyPlayList;
-import org.tiborsmith.wormkout.gamestates.MySettings;
-import org.tiborsmith.wormkout.gamestates.MyState;
+import org.tiborsmith.wormkout.states.MyLevels;
+import org.tiborsmith.wormkout.states.MyPlayList;
+import org.tiborsmith.wormkout.states.MySettings;
 import org.tiborsmith.wormkout.screens.AudioTestScreen;
 import org.tiborsmith.wormkout.screens.GameScreen;
 import org.tiborsmith.wormkout.screens.MainScreen;
@@ -25,19 +24,15 @@ public class Wormkout extends Game {
     //my own control of sensors
     public final MySensors mySensors;
     public final MySensorProcessing mySensorProcessing;
-
     //player class (camera,controls)
     public final MyPlayer myPlayer;
-
     //loading models, music, levels and such
     public final MyAssets myAssets;
-
     public final MyAudio myAudio;
-
     public final MyLevel myLevel;
 
-    public final MyState myState;
 
+    //state classes and variables
     public MyLevels levelStates;
     public MySettings mySettings;
     public MyPlayList myPlayList;
@@ -53,7 +48,6 @@ public class Wormkout extends Game {
         myPlayer = new MyPlayer(this);
         myAudio = new MyAudio(this);
         myLevel = new MyLevel(this);
-        myState = new MyState(this);
     }
 
 
