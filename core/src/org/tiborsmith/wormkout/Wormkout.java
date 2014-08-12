@@ -12,6 +12,8 @@ import org.tiborsmith.wormkout.screens.AudioTestScreen;
 import org.tiborsmith.wormkout.screens.GameScreen;
 import org.tiborsmith.wormkout.screens.MainScreen;
 import org.tiborsmith.wormkout.screens.SplashScreen;
+import org.tiborsmith.wormkout.steady.MySensorProcessing;
+import org.tiborsmith.wormkout.steady.MySensors;
 
 
 public class Wormkout extends Game {

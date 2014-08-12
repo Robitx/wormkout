@@ -1,4 +1,4 @@
-package org.tiborsmith.wormkout;
+package org.tiborsmith.wormkout.steady;
 
 /**
  * Created by tibor on 26.7.14.

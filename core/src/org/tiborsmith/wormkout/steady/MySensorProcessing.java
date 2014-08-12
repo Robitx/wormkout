@@ -1,9 +1,11 @@
-package org.tiborsmith.wormkout;
+package org.tiborsmith.wormkout.steady;
 
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import org.tiborsmith.wormkout.Wormkout;
 
 /**
  * Created by tibor on 28.7.14.

@@ -9,7 +9,7 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
-import org.tiborsmith.wormkout.MySensors;
+import org.tiborsmith.wormkout.steady.MySensors;
 
 /**
  * Created by tibor on 26.7.14.

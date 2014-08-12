@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Array;
 import net.dermetfan.utils.libgdx.scene2d.ui.FileChooser;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.utils.MyFileChooser;
+import org.tiborsmith.wormkout.steady.MyFileChooser;
 
 import java.io.File;
 import java.io.FileFilter;
