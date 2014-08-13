@@ -3,13 +3,11 @@
 
     <string name="app_name">Wormkout</string>
     <string name="app_id">1064446939442</string>
-    <string name="Leaderboard_lvl1">CggItI-DwA8QAhAG</string>
-    <string name="Achievement_customMusic">CgkI5LyN0fMKEAIQAQ</string>
-    <string name="Achievement_visitedHelp">CgkI5LyN0fMKEAIQAg</string>
-    <string name="Achievement_ratedApp">CgkI5LyN0fMKEAIQAw</string>
-    <string name="Achievement_unlockedLvl">CgkI5LyN0fMKEAIQBA</string>
-    <string name="Achievement_visitedCredits">CgkI5LyN0fMKEAIQBQ</string>
-
-
+    <string name="achievement_successfully_logged_in_with_gpgs">CgkIsqLtr_0eEAIQAA</string>
+    <string name="achievement_2">CgkIsqLtr_0eEAIQAQ</string>
+    <string name="achievement_3">CgkIsqLtr_0eEAIQAg</string>
+    <string name="achievement_4">CgkIsqLtr_0eEAIQAw</string>
+    <string name="achievement_unlocking_levels">CgkIsqLtr_0eEAIQBA</string>
+    <string name="leaderboard_best_time_level_1">CgkIsqLtr_0eEAIQBg</string>
 
 </resources>

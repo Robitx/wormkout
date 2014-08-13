@@ -104,7 +104,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
 
     @Override
     public void getLeaderboardGPGS() {
-        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.Leaderboard_lvl1)), REQUEST_CODE);
+        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_best_time_level_1)), REQUEST_CODE);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
 
     @Override
     public void unlockAchievementGPGS(String achievementId) {
-        if (achievementId == getString(R.string.Achievement_unlockedLvl)) {
+        if (achievementId == getString(R.string.achievement_unlocking_levels)) {
             Games.Achievements.increment(gameHelper.getApiClient(), achievementId,1);
         }
         else {

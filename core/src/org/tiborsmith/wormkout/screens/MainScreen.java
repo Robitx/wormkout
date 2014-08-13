@@ -406,7 +406,7 @@ public class MainScreen implements Screen {
         TextButton playButton = new TextButton("    Play    ",game.myAssets.skin);
         final TextButton settingsButton = new TextButton("  Settings  ",game.myAssets.skin);
         TextButton musicButton = new TextButton("    Music    ",game.myAssets.skin);
-        TextButton highScoresButton = new TextButton("High Scores",game.myAssets.skin);
+        TextButton leaderboardsButton = new TextButton("Leaderboards",game.myAssets.skin);
         TextButton achievementsButton = new TextButton("Achievements",game.myAssets.skin);
         TextButton exitButton = new TextButton("    Exit    ",game.myAssets.skin);
         TextButton creditsButton = new TextButton("    Credits    ",game.myAssets.skin);
@@ -423,7 +423,7 @@ public class MainScreen implements Screen {
         mainMenuWindow.add(settingsButton).expand();
         mainMenuWindow.add(musicButton).expand();
         mainMenuWindow.row();
-        mainMenuWindow.add(highScoresButton).expand();
+        mainMenuWindow.add(leaderboardsButton).expand();
         mainMenuWindow.add(achievementsButton).expand();
         mainMenuWindow.row();
         mainMenuWindow.add(creditsButton).expand();
@@ -457,6 +457,56 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 musicWindow.setVisible(true);
                 mainMenuWindow.setVisible(false);
+            }
+        });
+
+        leaderboardsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.myActionResolver.isSignedInGPGS())
+                    game.myActionResolver.getLeaderboardGPGS();
+                else {
+                    Dialog dialog = new Dialog("", game.myAssets.skin);
+                    dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
+                            " before you can use Leaderboards. Do you wish to sign in now?");
+                    TextButton yesButton = new TextButton("Yes", game.myAssets.skin);
+                    dialog.button(yesButton, true);
+                    TextButton noButton = new TextButton("No", game.myAssets.skin);
+                    dialog.button(noButton, false);
+                    dialog.show(stage);
+
+                    yesButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            game.myActionResolver.signInGPGS();
+                        }
+                    });
+                }
+            }
+        });
+
+        achievementsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.myActionResolver.isSignedInGPGS())
+                    game.myActionResolver.getAchivementsGPGS();
+                else {
+                    Dialog dialog = new Dialog("", game.myAssets.skin);
+                    dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
+                            " before you can use Achievements. Do you wish to sign in now?");
+                    TextButton yesButton = new TextButton("Yes", game.myAssets.skin);
+                    dialog.button(yesButton, true);
+                    TextButton noButton = new TextButton("No", game.myAssets.skin);
+                    dialog.button(noButton, false);
+                    dialog.show(stage);
+
+                    yesButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            game.myActionResolver.signInGPGS();
+                        }
+                    });
+                }
             }
         });
 
