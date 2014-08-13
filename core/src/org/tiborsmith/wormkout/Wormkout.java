@@ -43,7 +43,7 @@ public class Wormkout extends Game {
     public MyPlayList myPlayList;
     public int currentLevel = 0;
     public int currentSong = 0;
-
+    public boolean welcomeBack;
 
 
     public Wormkout(MySensors mySensors, MyActionResolver myActionResolver){
@@ -65,6 +65,7 @@ public class Wormkout extends Game {
         audioTestScreen = new AudioTestScreen(this);
         mainScreen = new MainScreen(this);
 
+        welcomeBack = true;
 
         super.setScreen(splashScreen);
 	}
@@ -134,4 +135,18 @@ public class Wormkout extends Game {
         mySettings.saveSettings();
     }
 
+
+    public void signInContorl(){
+        // if not signed in and still has some attempts, try
+        if (!myActionResolver.isSignedInGPGS() && mySettings.singInGPGSAttempts>0){
+            myActionResolver.signInGPGS();
+            mySettings.singInGPGSAttempts--;
+        }
+
+       /* // if signed, sign in and of to get Welcome back popup window (maybe there is better way)
+        if (myActionResolver.isSignedInGPGS()){
+            myActionResolver.signOutGPGS();
+            myActionResolver.signInGPGS();
+        }*/
+    }
 }

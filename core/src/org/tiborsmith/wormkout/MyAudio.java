@@ -95,7 +95,7 @@ public class MyAudio {
         if (game.currentSong >= game.myPlayList.songPaths.size) {
             game.currentSong = 0;
         }
-        if (!game.myPlayList.playDefault && game.currentSong < game.myPlayList.numOfDefaultSong)
+        if ((!game.myPlayList.playDefault) && game.currentSong < game.myPlayList.numOfDefaultSong)
             game.currentSong = game.myPlayList.numOfDefaultSong;
 
         decoder = new Mpg123Decoder(Gdx.files.external(game.myPlayList.songPaths.get(game.currentSong)));

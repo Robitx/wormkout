@@ -34,9 +34,9 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
 
         initialize(new Wormkout(new MyAndroidSensors(this.getContext()),this), config);
 
-        gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES | GameHelper.CLIENT_PLUS);
+        gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES );
         gameHelper.enableDebugLog(false);
-        gameHelper.setMaxAutoSignInAttempts(3);
+        gameHelper.setMaxAutoSignInAttempts(0);
         gameHelper.setup(this);
 	}
 

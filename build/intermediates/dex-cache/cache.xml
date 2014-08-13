@@ -6,7 +6,7 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="511bb0922857300a115658b9a990e6e46c9e3944"/>
+        sha1="ce57ea438d1062a85155462a716871e6a2f3a530"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"
@@ -78,6 +78,6 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="229acc247ff908f2ab78ca5623e7aff15c234e16"/>
+        sha1="9d56d6a350e186eeadb5dbd9c42fb1b73062f2be"/>
 
 </pre-dex-items>

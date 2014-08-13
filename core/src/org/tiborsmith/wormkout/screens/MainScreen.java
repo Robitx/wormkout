@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
@@ -50,6 +52,8 @@ public class MainScreen implements Screen {
     private Window playWindow;
 
 
+
+
     @Override
     public void render (float delta){
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -72,6 +76,12 @@ public class MainScreen implements Screen {
 
         if (!game.myAudio.playing)
             game.myAudio.startMusic();
+
+        if (game.welcomeBack){
+            game.signInContorl();
+            game.welcomeBack = false;
+        }
+
     }
 
     @Override
@@ -96,7 +106,6 @@ public class MainScreen implements Screen {
         settingsMenu();
         musicMenu();
         playMenu();
-
 
 
     }
@@ -228,7 +237,10 @@ public class MainScreen implements Screen {
                     game.myPlayList.songPaths.removeIndex(i);
                     game.myPlayList.songNames.removeIndex(i);
                     playlist.setItems(game.myPlayList.songNames);
-                    pDCB.setChecked(true);
+                    if (game.myPlayList.songPaths.size == game.myPlayList.numOfDefaultSong) {
+                        pDCB.setChecked(true);
+                        game.myPlayList.playDefault = true;
+                    }
                     game.myPlayList.savePlayList();
                 }
             }
@@ -258,14 +270,9 @@ public class MainScreen implements Screen {
         FileFilter filter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                if (pathname.exists()){
-                    if (pathname.isDirectory())
-                        return true;
-                    else if (pathname.getName().endsWith(".mp3"))
-                        return true;
-                    else
-                        return false;
-                    }
+                if (pathname.exists() && (pathname.isDirectory() || pathname.getName().endsWith(".mp3"))){
+                    return true;
+                }
                 return false;
             }
         };
@@ -298,30 +305,8 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void settingsMenu(){
-        TextButton menuButton = new TextButton("Go back to menu",game.myAssets.skin);
-        TextButton defaultButton = new TextButton("Restore default settings",game.myAssets.skin);
-        TextButton audioTestButton = new TextButton("AudioTestscreen",game.myAssets.skin);
-        Slider volumeSlider = new Slider(0.0f,1.0f,0.02f,false,game.myAssets.skin);
-
-
-        settingsWindow = new Window("Wormkout - Settings",game.myAssets.skin);
-        settingsWindow.setVisible(false);
-        settingsWindow.setWidth(stage.getWidth()/1.0272f);
-        settingsWindow.setHeight(stage.getHeight()/1.0272f);
-        settingsWindow.setCenterPosition(stage.getWidth()/2,stage.getHeight()/2);
-        settingsWindow.add(volumeSlider).width(400).height(50).expand().colspan(2);
-        settingsWindow.row();
-        settingsWindow.add(menuButton).width(200).height(100).expand().colspan(2);
-        settingsWindow.row();
-        settingsWindow.add(defaultButton).width(200).height(100).expand().colspan(2);
-        settingsWindow.row();
-        settingsWindow.add(audioTestButton).width(200).height(100).expand().colspan(2);
-        settingsWindow.debug();
-        stage.addActor(settingsWindow);
-
-
-
-        menuButton.addListener(new ClickListener() {
+        TextButton closeButton = new TextButton(" x ",game.myAssets.skin);
+        closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 settingsWindow.setVisible(false);
@@ -331,19 +316,85 @@ public class MainScreen implements Screen {
 
 
 
-        defaultButton.addListener(new ClickListener() {
+        final Label gpgsLabel = new Label("Google Play Game Services",game.myAssets.skin);
+        gpgsLabel.setAlignment(Align.center);
+        final TextButton gpgsButton;
+        if (game.myActionResolver.isSignedInGPGS()) {
+            gpgsButton = new TextButton("Sign out", game.myAssets.skin);
+        }
+        else{
+            gpgsButton = new TextButton("Sign in", game.myAssets.skin);
+        }
+        gpgsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.mySettings.restoreDefaultSettings();
+
+                if (game.myActionResolver.isSignedInGPGS()) {
+                    gpgsButton.getLabel().setText("Sign in");
+                    game.myActionResolver.signOutGPGS();
+                    new Dialog("", game.myAssets.skin) {
+                    }.text("You have just sign out from GPGS.\n" +
+                            "With this setting you can't use LeaderBoards and Achievements.").button("Ok").show(stage);
+                }
+                else {
+                    gpgsButton.getLabel().setText("Sign out");
+                    game.myActionResolver.signInGPGS();
+                }
             }
         });
 
+        final Label musicLabel = new Label("Music volume",game.myAssets.skin);
+        final Label soundLabel = new Label("Sound volume",game.myAssets.skin);
+        musicLabel.setAlignment(Align.center);
+        soundLabel.setAlignment(Align.center);
+        final Slider musicSlider = new Slider(0.0f,1.0f,0.02f,false,game.myAssets.skin);
+        final Slider soundSlider = new Slider(0.0f,1.0f,0.02f,false,game.myAssets.skin);
+        musicSlider.setValue(game.mySettings.musicVolume);
+        soundSlider.setValue(game.mySettings.soundVolume);
+        musicSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.mySettings.musicVolume = musicSlider.getValue();
+                game.mySettings.saveSettings();
+                game.setMusicVolume(game.mySettings.musicVolume);
+            }
+        });
+        soundSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.mySettings.soundVolume = soundSlider.getValue();
+                game.mySettings.saveSettings();
+            }
+        });
+
+
+
+
+        settingsWindow = new Window("Wormkout - Settings",game.myAssets.skin);
+        settingsWindow.getButtonTable().add(closeButton).height(settingsWindow.getPadTop());
+        settingsWindow.setVisible(false);
+        settingsWindow.setWidth(stage.getWidth() / 1.0272f);
+        settingsWindow.setHeight(stage.getHeight() / 1.0272f);
+        settingsWindow.setCenterPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        settingsWindow.add(soundLabel).right().fill().expandX().row();
+        settingsWindow.add(soundSlider).row();
+        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
+        settingsWindow.add(musicLabel).right().fill().expandX().row();
+        settingsWindow.add(musicSlider).row();
+        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
+        settingsWindow.add(gpgsLabel).right().fill().expandX().row();
+        settingsWindow.add(gpgsButton).row();
+        stage.addActor(settingsWindow);
+
+
+
+        /*TextButton audioTestButton = new TextButton("AudioTestscreen",game.myAssets.skin);
         audioTestButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(game.audioTestScreen);
             }
-        });
+        });*/
 
     }
 
