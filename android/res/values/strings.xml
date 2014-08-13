@@ -2,6 +2,14 @@
 <resources>
 
     <string name="app_name">Wormkout</string>
-    <string name="app_id">374637551204</string>
+    <string name="app_id">1064446939442</string>
+    <string name="Leaderboard_lvl1">CggItI-DwA8QAhAG</string>
+    <string name="Achievement_customMusic">CgkI5LyN0fMKEAIQAQ</string>
+    <string name="Achievement_visitedHelp">CgkI5LyN0fMKEAIQAg</string>
+    <string name="Achievement_ratedApp">CgkI5LyN0fMKEAIQAw</string>
+    <string name="Achievement_unlockedLvl">CgkI5LyN0fMKEAIQBA</string>
+    <string name="Achievement_visitedCredits">CgkI5LyN0fMKEAIQBQ</string>
+
+
 
 </resources>
