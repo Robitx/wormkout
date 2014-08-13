@@ -7,5 +7,4 @@ eclipse.project {
     name = appName + "-core"
 }
 dependencies {
-    compile files('gdx-audio.jar')
 }
