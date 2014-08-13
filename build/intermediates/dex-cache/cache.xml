@@ -14,6 +14,12 @@
         revision="19.1.0"
         sha1="cffac0ca563a28d977523494c33b6daa4de8a357"/>
     <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-6f49b5168fdf32b726436dd1d20c814e64487f4b.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="aeb34c937a076aab2db2c8bf5903d2e12f01c715"/>
+    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-freetype-1.3.0-f1ae660b4535e5c9e8559bb2fbb5c69c22018b0e.jar"
         jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype/1.3.0/60241de15ce03da08e9ff1856160b36f97a628db/gdx-freetype-1.3.0.jar"
         jumboMode="false"
@@ -24,7 +30,7 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="e3f0aa1a32776c8634d287cc8cc1819117650867"/>
+        sha1="031f7466a4fcbffe8b46a42949a02ee5febda670"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.0-650b42a53b88dfaf69e5d3a29eb60a5de83107e9.jar"
         jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.0/765fbbc5489f7ddc346c6a39397d41cd2682b80c/gdx-1.3.0.jar"

@@ -34,6 +34,8 @@ project(":android") {
 
     dependencies {
         compile project(":core")
+        compile 'com.google.android.gms:play-services:5.2.+'
+        compile project(":BaseGameUtils")
         compile files('gdx-audio.jar')
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
@@ -55,7 +57,6 @@ project(":core") {
 
 
     dependencies {
-
         compile files('gdx-audio.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
