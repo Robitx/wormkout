@@ -67,7 +67,7 @@ net.dermetfan.utils.libgdx.scene2d.ui.ListFileChooser$Style: {
 net.dermetfan.utils.libgdx.scene2d.ui.TreeFileChooser$Style: {
 	default: { treeStyle: default, selectButtonStyle: default, cancelButtonStyle: default, labelStyle: default }
 },
-org.tiborsmith.wormkout.utils.MyFileChooser$Style: {
+org.tiborsmith.wormkout.steady.MyFileChooser$Style: {
 	default: { treeStyle: default, selectButtonStyle: default, cancelButtonStyle: default, labelStyle: default }
 }
 }

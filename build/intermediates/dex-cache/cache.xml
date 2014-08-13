@@ -24,7 +24,7 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="53bd166f707cf11404ad90a0bce661b57927187b"/>
+        sha1="e3f0aa1a32776c8634d287cc8cc1819117650867"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.0-650b42a53b88dfaf69e5d3a29eb60a5de83107e9.jar"
         jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.0/765fbbc5489f7ddc346c6a39397d41cd2682b80c/gdx-1.3.0.jar"
