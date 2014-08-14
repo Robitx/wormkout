@@ -1,6 +1,7 @@
 package org.tiborsmith.wormkout.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -107,6 +109,30 @@ public class MainScreen implements Screen {
         musicMenu();
         playMenu();
 
+        if (game.playmenu){
+            mainMenuWindow.setVisible(false);
+            playWindow.setVisible(true);
+        }
+
+        stage.addListener(new InputListener(){
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if(keycode == Input.Keys.BACK){
+                    if(!mainMenuWindow.isVisible()){
+                        mainMenuWindow.setVisible(true);
+                        playWindow.setVisible(false);
+                        musicWindow.setVisible(false);
+                        settingsWindow.setVisible(false);
+                    }
+                    else {
+                        Gdx.app.exit();
+                    }
+                    return true;
+                }
+                else
+                    return false;
+            }
+        });
 
     }
 

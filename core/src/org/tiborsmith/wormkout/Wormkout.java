@@ -44,6 +44,7 @@ public class Wormkout extends Game {
     public int currentLevel = 0;
     public int currentSong = 0;
     public boolean welcomeBack;
+    public boolean playmenu;
 
 
     public Wormkout(MySensors mySensors, MyActionResolver myActionResolver){
@@ -66,6 +67,7 @@ public class Wormkout extends Game {
         mainScreen = new MainScreen(this);
 
         welcomeBack = true;
+        Gdx.input.setCatchBackKey(true);
 
         super.setScreen(splashScreen);
 	}

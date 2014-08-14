@@ -1,6 +1,7 @@
 package org.tiborsmith.wormkout.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,10 +12,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import org.tiborsmith.wormkout.Wormkout;
 
@@ -80,6 +80,7 @@ public class GameScreen implements Screen {
 
 
 
+
         if (game.myLevel.gameVictory){
             batch.begin();
             font.draw(batch, "You won", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2-50);
@@ -127,22 +128,29 @@ public class GameScreen implements Screen {
         stage.setViewport(game.myAssets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        TextButton menuButton = new TextButton("Go back to menu",game.myAssets.skin);
+       stage.addListener(new InputListener(){
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if(keycode == Input.Keys.BACK){
+                    game.playmenu = true;
+                    game.myLevel.gameOver = true;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        });
+
+
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(menuButton);
         table.row();
         stage.addActor(table);
 
 
 
-        menuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(game.mainScreen);
-            }
-        });
+
 
 
 

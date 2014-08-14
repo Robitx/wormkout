@@ -110,7 +110,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
     @Override
     public void rateGame() {
         /*
-        String str ="https://play.google.com/store/apps/details?id=org.tiborsmith.wormkout";
+        String str ="https://play.google.com/store/apps/details?id=org.tiborsmith.wormkout.android";
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
         */
     }
