@@ -44,7 +44,7 @@ public class Wormkout extends Game {
     public int currentLevel = 0;
     public int currentSong = 0;
     public boolean welcomeBack;
-    public boolean playmenu;
+    public boolean playMenu;
 
 
     public Wormkout(MySensors mySensors, MyActionResolver myActionResolver){

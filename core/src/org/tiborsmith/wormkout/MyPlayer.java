@@ -16,7 +16,7 @@ public class MyPlayer {
     public PerspectiveCamera cam = null;
     public final Vector3 position = new Vector3(0,0,0);
     public final Vector3 direction = new Vector3(0,0,-1);
-    public float speed = 2.0f;
+    public int speed;
 
 
     private float phi = 0, theta = 0;
@@ -39,9 +39,9 @@ public class MyPlayer {
 
     }
 
-    public void updateCam(float delta){
+    public void updatePlayer(float delta){
         getDirection();
-        position.mulAdd(direction, delta * speed);
+        position.mulAdd(direction, delta * speed * game.myLevel.gateDistance);
         cam.position.set(position);
         cam.lookAt(position.x+direction.x, position.y+direction.y, position.z+direction.z);
         cam.up.set(0,1,0);
@@ -49,7 +49,7 @@ public class MyPlayer {
     }
 
 
-    public void setCam(){
+    public void initPlayer(){
         position.set(0, 0, 0);
         direction.set(0,0,-1);
 
@@ -60,5 +60,8 @@ public class MyPlayer {
         cam.near = 0.1f;
         cam.far = 1000f;
         cam.update();
+
+        //default speed
+        speed = 2;
     }
 }

@@ -14,7 +14,7 @@ public class MyLevel {
     public MyLevel(Wormkout game){ this.game = game; }
 
     private float gateRadius = 1.0f;
-    private float gateDistance = gateRadius*0.618f*0.618f;
+    public float gateDistance = gateRadius*0.618f;
     private int noRG = 25; // number of rendered gates
     private Array<Vector3> path = new Array<Vector3>(); // array with path for level
     private Color[] gateColors= new Color[32]; // array of colors for rendered gates

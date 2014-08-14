@@ -60,9 +60,7 @@ public class MainScreen implements Screen {
     public void render (float delta){
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        // Enable face culling- be careful with spriteBatch, might cull sprites as well!
         Gdx.gl.glEnable(GL20.GL_CULL_FACE);
-        // What faces to remove with the face culling.
         Gdx.gl.glCullFace(GL20.GL_BACK);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -102,14 +100,14 @@ public class MainScreen implements Screen {
 
         //first lvl then player
         game.myLevel.loadLevel();
-        game.myPlayer.setCam();
+        game.myPlayer.initPlayer();
 
         mainMenu();
         settingsMenu();
         musicMenu();
         playMenu();
 
-        if (game.playmenu){
+        if (game.playMenu){
             mainMenuWindow.setVisible(false);
             playWindow.setVisible(true);
         }
