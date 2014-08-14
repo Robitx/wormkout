@@ -35,13 +35,12 @@ public class MyLevels {
     public void makeDefault(){
         lvls.clear();
         lvls.add(getNewLevelInstance());
-        lvls.get(0).set(false,false,3600,"Level 1","levels/Level_1.bin","Only horizontal, few minutes long." +
-                " Straight path, good for seeing music visualization");
+        lvls.get(0).set(false,false,3600,"Level 1",new byte[]{5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},
+                "Tutorial level.");
         lvls.add(getNewLevelInstance());
-        lvls.get(1).set(false,false,3600,"Level 2","levels/Level_2.bin","Only horizontal, few minutes long." +
-                " First non trivial path.");
+        lvls.get(1).set(false,false,3600,"Level 2",new byte[]{5,5,5,0,9,9,0,0,0,0,0,5,2,2,6,5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},"Blabla");
         lvls.add(getNewLevelInstance());
-        lvls.get(2).set(true,false,3600,"Level 3","levels/Level_3.bin","Not yet...");
+        lvls.get(2).set(true,false,3600,"Level 3",new byte[]{5,5,5,0,9,9,0,5,5,5,},"Not yet...");
 
         saveLevelProgress();
     }
@@ -55,15 +54,15 @@ public class MyLevels {
         public boolean finished;
         public float bestTime;
         public String name;
-        public String fileName;
+        public byte[] path;  // maybe make transient and store somewhere else instead
         public String description;
 
-        public void set(boolean locked, boolean finished, float bestTime, String name, String fileName, String description){
+        public void set(boolean locked, boolean finished, float bestTime, String name, byte[] path, String description){
             this.locked = locked;
             this.finished = finished;
             this.bestTime = bestTime;
             this.name = name;
-            this.fileName = fileName;
+            this.path = path;
             this.description = description;
         }
     }

@@ -1,15 +1,10 @@
 package org.tiborsmith.wormkout;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-
-import java.io.DataInputStream;
-import java.io.IOException;
 
 /**
  * Created by tibor on 31.7.14.
@@ -24,7 +19,7 @@ public class MyLevel {
     private Array<Vector3> path = new Array<Vector3>(); // array with path for level
     private Color[] gateColors= new Color[32]; // array of colors for rendered gates
     private Vector3 poLRG = new Vector3(0,0,0); //position of last rendered gate
-    private int noLRG = 0; //number of last rendered gate
+    //private int noLRG = 0; //number of last rendered gate
     private float victoryAC = 5.0f; //victory animation countdown
     private float startAC = 5.0f; //start animation countdown
     private Vector3 tmpVector = new Vector3(0,0,0); // temporary vector
@@ -71,7 +66,7 @@ public class MyLevel {
      * @param delta
      */
     public void update(float delta){
-        if (noLRG < path.size)
+        if (2 <= path.size)
         {
             if(collisionTest()){
                 addNextGate();
@@ -143,14 +138,14 @@ public class MyLevel {
      */
     private void addGate(){
         ModelInstance gate = new ModelInstance(game.myAssets.gate);  //makes new model instance
-        tmpVector.set(path.get(noLRG)).sub(path.get(noLRG-1)).nor();  //get direction vector for next gate
+        tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
         gate.transform.trn(poLRG);  //adds position of current last gate
         gate.transform.getTranslation(poLRG);  //updates pOLGR
-        noLRG++;  //shifts marker of LRG
         gate.transform.scl(gateRadius);  //scale gate
         gates.add(gate);  //add gate to gates
+        path.removeIndex(0); // removes gate from path
     }
 
 
@@ -168,15 +163,10 @@ public class MyLevel {
      * @return true if level loaded
      */
     private boolean loadPath(){
-        FileHandle file = Gdx.files.internal(game.levelStates.lvls.get(game.currentLevel).fileName);
-        try {
-            DataInputStream dis = new DataInputStream(file.read());
-            while(dis.available()>0)
-            {
-                path.add(new Vector3(dis.readFloat(),dis.readFloat(),dis.readFloat()));
-            }
-        } catch (IOException e) {//e.printStackTrace();
-            return false;
+        path.add(new Vector3(0,0,0));
+        path.add(new Vector3(0,0,-1));
+        for (int i=1; i < game.levelStates.lvls.get(game.currentLevel).path.length; i++){
+            game.myAssets.parts.getNextPart(path,game.levelStates.lvls.get(game.currentLevel).path[i]);
         }
         return true;
     }
@@ -195,8 +185,6 @@ public class MyLevel {
         }
 
         poLRG.set(0,0,0);
-        noLRG = 0;
-        //currentGate=0;
         gameOver = false;
         gameVictory = false;
         victoryAC = 5.0f;
@@ -205,7 +193,6 @@ public class MyLevel {
         //zero gate
         ModelInstance zeroInstance = new ModelInstance(game.myAssets.gate);
         gates.add(zeroInstance);
-        noLRG++;
 
         //load first noRG gates
         for (int i=1; i< noRG; i++){

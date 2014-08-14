@@ -22,6 +22,7 @@ public class MyAssets {
     public AssetManager assets;
     public Skin skin;
     public Model gate;
+    public MyLevelParts parts = new MyLevelParts();
 
     public Viewport viewport;
 
@@ -47,6 +48,8 @@ public class MyAssets {
         gate = game.myAssets.assets.get("data/gate.g3db", Model.class);
 
 
+        parts.loadElements();
+
         /*if(Gdx.graphics.getHeight()< 1280 || Gdx.graphics.getWidth() < 800)
             viewport = new FitViewport(1280,800);
         else*/
@@ -59,5 +62,6 @@ public class MyAssets {
 
     public void dispose(){
         assets.dispose();
+        parts.dispose();
     }
 }
