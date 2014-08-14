@@ -28,24 +28,18 @@ public class MyAssets {
 
 
 
-   // public float progress = 0;
-   // public boolean loading=false;
-
-
-
 
 
 
     public void load(){
-        assets.load("data/gate.g3db", Model.class);
-        assets.load("data/default.fnt", BitmapFont.class);
-        assets.load("data/uiskin.json", Skin.class);
-
+        assets.load("graphics/gate.g3db", Model.class);
+        assets.load("graphics/default.fnt", BitmapFont.class);
+        assets.load("graphics/uiskin.json", Skin.class);
     }
 
     public void afterLoading(){
-        skin = game.myAssets.assets.get("data/uiskin.json", Skin.class);
-        gate = game.myAssets.assets.get("data/gate.g3db", Model.class);
+        skin = game.myAssets.assets.get("graphics/uiskin.json", Skin.class);
+        gate = game.myAssets.assets.get("graphics/gate.g3db", Model.class);
 
 
         parts.loadElements();

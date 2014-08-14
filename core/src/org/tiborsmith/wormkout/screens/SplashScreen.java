@@ -53,7 +53,7 @@ public class SplashScreen implements Screen {
         else
             stage.setViewport(new ScreenViewport());
 
-        splashTexture = new Texture(Gdx.files.internal("data/splash.png"));
+        splashTexture = new Texture(Gdx.files.internal("graphics/splash.png"));
         Image splashImage = new Image(splashTexture);
 
         Table table = new Table();
