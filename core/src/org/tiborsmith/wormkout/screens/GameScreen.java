@@ -125,7 +125,9 @@ public class GameScreen implements Screen {
                if (x> stage.getWidth()/2)
                    game.myPlayer.speed++;
                else
-                   game.myPlayer.speed++;
+                   game.myPlayer.speed--;
+               game.myPlayer.speed = (game.myPlayer.speed>0) ? game.myPlayer.speed : 0;
+               game.myPlayer.speed = (game.myPlayer.speed<20) ? game.myPlayer.speed : 20;
                speedLabel.setText("Speed: "+game.myPlayer.speed +" gates/s");
                return true;
            }

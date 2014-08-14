@@ -54,7 +54,7 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         game.myAudio.generateColors(delta, gateColors);
-        for (int i=0; i< noRG; i++){
+        for (int i=game.myPlayer.speed; i< noRG; i++){
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,gateColors[i].g,gateColors[i].b,1));
             //gates.get(i).transform.scl(1+gateColors[i].a);
         }
@@ -66,14 +66,17 @@ public class MyLevel {
      * @param delta
      */
     public void update(float delta){
-        if (2 <= path.size)
-        {
+        if (2 < path.size){
             if(collisionTest()){
                 addNextGate();
             }
             updateColors(delta);
         }
-        else{
+        else {
+            if (path.size == 2 && game.myPlayer.speed > 0){
+                victoryAC = noRG/game.myPlayer.speed;
+                path.removeIndex(1);
+            }
             victoryAnimation(delta);
         }
     }

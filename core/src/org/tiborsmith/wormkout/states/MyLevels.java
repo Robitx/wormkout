@@ -35,12 +35,12 @@ public class MyLevels {
     public void makeDefault(){
         lvls.clear();
         lvls.add(getNewLevelInstance());
-        lvls.get(0).set(false,false,3600,"Level 1",new byte[]{5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},
+        lvls.get(0).set(false,false,3600,"Level 1",new byte[]{4,2,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},
                 "Tutorial level.");
         lvls.add(getNewLevelInstance());
-        lvls.get(1).set(false,false,3600,"Level 2",new byte[]{5,5,5,0,9,9,0,0,0,0,0,5,2,2,6,5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},"Blabla");
+        lvls.get(1).set(false,false,3600,"Level 2",new byte[]{4,7,5,0,9,9,0,0,0,0,0,5,2,2,6,5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},"Blabla");
         lvls.add(getNewLevelInstance());
-        lvls.get(2).set(true,false,3600,"Level 3",new byte[]{5,5,5,0,9,9,0,5,5,5,},"Not yet...");
+        lvls.get(2).set(true,false,3600,"Level 3",new byte[]{4,8,5,0,9,9,0,5,5,5,},"Not yet...");
 
         saveLevelProgress();
     }

@@ -101,6 +101,7 @@ public class MainScreen implements Screen {
         //first lvl then player
         game.myLevel.loadLevel();
         game.myPlayer.initPlayer();
+        game.myPlayer.speed=0;
 
         mainMenu();
         settingsMenu();

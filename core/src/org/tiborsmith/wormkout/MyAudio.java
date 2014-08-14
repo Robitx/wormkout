@@ -28,7 +28,6 @@ public class MyAudio {
 
 
     private int NB_BARS = 32;
-    private float FALLING_SPEED = (1.0f / 10.0f);
 
     /**
      * Need to get better color generation
@@ -38,16 +37,14 @@ public class MyAudio {
     public void generateColors(float delta,Color[] colors){
 
         int nb = 2;
-        for (int i = 0; i < NB_BARS*4; i++) {
-
-            /*if (avg(i*nb, nb) > topValues[i]) {
-                topValues[i] = avg(i*nb, nb);
-            }*/
-
-            topValues[i] = avg(i*nb, nb);
-
-           // topValues[i] -= 256*FALLING_SPEED*delta;
-
+        for (int i = 0; i < 4*NB_BARS; i += 4) {
+            float sum = avg(i*nb,nb)+avg(i*nb+nb,nb)+avg(i*nb+2*nb,nb)+avg(i*nb+3*nb,nb);
+            if (sum>0.0f){
+                for (int j = 0; j < 4; j++) {
+                    topValues[i+j] = (avg(i*nb+j*nb,nb)/sum > topValues[i+j]) ? avg(i*nb+j*nb,nb)/sum : topValues[i+j];
+                    topValues[i+j] -= 0.618f*delta;
+                }
+            }
         }
 
         for (int i = 0; i < NB_BARS; i++) {
