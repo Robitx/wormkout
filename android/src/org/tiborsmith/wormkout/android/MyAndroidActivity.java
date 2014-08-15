@@ -11,7 +11,7 @@ import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.states.MyActionResolver;
+import org.tiborsmith.wormkout.steady.MyActionResolver;
 
 public class MyAndroidActivity extends AndroidApplication implements GameHelper.GameHelperListener, MyActionResolver {
 

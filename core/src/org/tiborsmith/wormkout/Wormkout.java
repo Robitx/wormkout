@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-import org.tiborsmith.wormkout.states.MyActionResolver;
+import org.tiborsmith.wormkout.steady.MyActionResolver;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
 import org.tiborsmith.wormkout.states.MySettings;
