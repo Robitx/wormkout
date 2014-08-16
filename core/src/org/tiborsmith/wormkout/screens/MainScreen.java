@@ -52,6 +52,8 @@ public class MainScreen implements Screen {
     private Window mainWindow;
     private Window musicWindow;
     private Window levelWindow;
+    private Window creditsWindow;
+    private Window helpWindow;
 
 
 
@@ -127,6 +129,8 @@ public class MainScreen implements Screen {
                         mainWindow.setVisible(true);
                         levelWindow.setVisible(false);
                         musicWindow.setVisible(false);
+                        helpWindow.setVisible(false);
+                        creditsWindow.setVisible(false);
                         settingsWindow.setVisible(false);
                     }
                     else {
@@ -138,6 +142,20 @@ public class MainScreen implements Screen {
                     return false;
             }
         });
+
+    }
+
+
+    private void creditsMenu(){
+        creditsWindow = makeWindow("Wormkout - Credits");
+        creditsWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
+
+    }
+
+
+    private void helpMenu(){
+        helpWindow = makeWindow("Wormkout - Help");
+        helpWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
     }
 
@@ -469,6 +487,22 @@ public class MainScreen implements Screen {
             }
         });
 
+        creditsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                creditsWindow.setVisible(true);
+                mainWindow.setVisible(false);
+            }
+        });
+
+        helpButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                helpWindow.setVisible(true);
+                mainWindow.setVisible(false);
+            }
+        });
+
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -506,6 +540,8 @@ public class MainScreen implements Screen {
                 levelWindow.setVisible(false);
                 settingsWindow.setVisible(false);
                 musicWindow.setVisible(false);
+                creditsWindow.setVisible(false);
+                helpWindow.setVisible(false);
                 mainWindow.setVisible(true);
             }
         });

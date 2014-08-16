@@ -24,7 +24,7 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="2297a799775307f20476aacedbbfe0c551540d9e"/>
+        sha1="7d0e9de995e76ae8accd35ea5dbc2f89d3849b6b"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"
