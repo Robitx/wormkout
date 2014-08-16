@@ -258,9 +258,10 @@ public class MyFileChooser extends FileChooser {
     protected void build() {
         clearChildren();
         treePane.setWidget(tree);
+        add().expandX().fill().row();
         add(treePane).colspan(2).expand().fill().row();
-        add(chooseButton).colspan(2);
-        add(cancelButton);
+        add(chooseButton).colspan(2).row();
+        add(cancelButton).colspan(2);
     }
 
     /** @return the {@link #tree} */

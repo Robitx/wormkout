@@ -2,17 +2,35 @@
 <pre-dex-items>
 
     <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-999c84d67e4ff3f5be3fd486cbd734d34b718743.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/libgdx-utils-0.4.0-SNAPSHOT-86bab81d972c116de4bde38eb3315a04e98ba30e.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/net.dermetfan.libgdx-utils/libgdx-utils/0.4.0-SNAPSHOT/5b51b7335e98e2be3da6bcd3371e84e70f6748d2/libgdx-utils-0.4.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="5b51b7335e98e2be3da6bcd3371e84e70f6748d2"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.1-SNAPSHOT-57d148e3e0cf9eda6e764f983f61cf38f222dcb2.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.1-SNAPSHOT/84f4c208b05c6cf4675edbefdca2a1b340ddd9f2/gdx-1.3.1-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="84f4c208b05c6cf4675edbefdca2a1b340ddd9f2"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/core-1.0.0-81551077dd213c605fb4a5982b8fbaacf21b9067.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="2297a799775307f20476aacedbbfe0c551540d9e"/>
+    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="baa583528ea0c6b7cae7eedee30af472fac4351e"/>
-    <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/release/core-1.0.0-81551077dd213c605fb4a5982b8fbaacf21b9067.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="027bbdd01d96ac2033d6e380235b1cf36763b3ef"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-4bdb60113099356f3d3ef494d613f343006fbea1.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
@@ -31,24 +49,6 @@
         jumboMode="false"
         revision="19.1.0"
         sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
-    <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-999c84d67e4ff3f5be3fd486cbd734d34b718743.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
-    <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/libgdx-utils-0.4.0-SNAPSHOT-86bab81d972c116de4bde38eb3315a04e98ba30e.jar"
-        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/net.dermetfan.libgdx-utils/libgdx-utils/0.4.0-SNAPSHOT/5b51b7335e98e2be3da6bcd3371e84e70f6748d2/libgdx-utils-0.4.0-SNAPSHOT.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="5b51b7335e98e2be3da6bcd3371e84e70f6748d2"/>
-    <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.1-SNAPSHOT-57d148e3e0cf9eda6e764f983f61cf38f222dcb2.jar"
-        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.1-SNAPSHOT/84f4c208b05c6cf4675edbefdca2a1b340ddd9f2/gdx-1.3.1-SNAPSHOT.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="84f4c208b05c6cf4675edbefdca2a1b340ddd9f2"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-ac9eecc253fdba2831c82bc0dc80fba11be63671.jar"
         jar="/opt/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
