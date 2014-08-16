@@ -109,6 +109,8 @@ public class MainScreen implements Screen {
         settingsMenu();
         musicMenu();
         levelMenu();
+        helpMenu();
+        creditsMenu();
 
         // from game screen is first window levelWindow
         if (game.playMenu){
