@@ -34,12 +34,12 @@ public class MyLevel {
      * @return true if new gate should be loaded
      */
     private boolean collisionTest(){
-        gates.get(1).transform.getTranslation(tmpVector).sub(game.myPlayer.position);
+        gates.get(1).transform.getTranslation(tmpVector).sub(game.player.position);
         if (tmpVector.len2()<gateRadius*gateRadius){
             return true;
         }
         else {
-            gates.get(0).transform.getTranslation(tmpVector).sub(game.myPlayer.position);
+            gates.get(0).transform.getTranslation(tmpVector).sub(game.player.position);
             if (tmpVector.len2()>gateRadius*gateRadius){
                 gameOver=true;
             }
@@ -53,8 +53,8 @@ public class MyLevel {
      * @param delta
      */
     public void updateColors(float delta){
-        game.myAudio.generateColors(delta, gateColors);
-        for (int i=game.myPlayer.speed; i< noRG; i++){
+        game.audio.generateColors(delta, gateColors);
+        for (int i=game.player.speed; i< noRG; i++){
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,gateColors[i].g,gateColors[i].b,1));
             //gates.get(i).transform.scl(1+gateColors[i].a);
         }
@@ -73,8 +73,8 @@ public class MyLevel {
             updateColors(delta);
         }
         else {
-            if (path.size == 2 && game.myPlayer.speed > 0){
-                victoryAC = noRG/game.myPlayer.speed;
+            if (path.size == 2 && game.player.speed > 0){
+                victoryAC = noRG/game.player.speed;
                 path.removeIndex(1);
             }
             victoryAnimation(delta);
@@ -90,7 +90,7 @@ public class MyLevel {
         victoryAC-=delta;
         if (victoryAC > 0) {
             // gradually lowers volume to zero
-            game.myAudio.device.setVolume(victoryAC/5.0f*game.mySettings.musicVolume);
+            game.audio.device.setVolume(victoryAC/5.0f*game.settings.musicVolume);
 
             // white and yellow gradually going to black
             for (int i=0; i< noRG; i++){
@@ -140,7 +140,7 @@ public class MyLevel {
      * Adds new gate to gates
      */
     private void addGate(){
-        ModelInstance gate = new ModelInstance(game.myAssets.gate);  //makes new model instance
+        ModelInstance gate = new ModelInstance(game.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
@@ -169,7 +169,7 @@ public class MyLevel {
         path.add(new Vector3(0,0,0));
         path.add(new Vector3(0,0,-1));
         for (int i=1; i < game.levelStates.lvls.get(game.currentLevel).path.length; i++){
-            game.myAssets.parts.getNextPart(path,game.levelStates.lvls.get(game.currentLevel).path[i]);
+            game.assets.parts.getNextPart(path,game.levelStates.lvls.get(game.currentLevel).path[i]);
         }
         return true;
     }
@@ -194,7 +194,7 @@ public class MyLevel {
         startAC = 5.0f;
 
         //zero gate
-        ModelInstance zeroInstance = new ModelInstance(game.myAssets.gate);
+        ModelInstance zeroInstance = new ModelInstance(game.assets.gate);
         gates.add(zeroInstance);
 
         //load first noRG gates

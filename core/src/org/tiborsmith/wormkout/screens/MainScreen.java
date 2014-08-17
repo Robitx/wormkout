@@ -13,16 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -31,7 +25,13 @@ import com.badlogic.gdx.utils.Array;
 import net.dermetfan.utils.libgdx.scene2d.ui.FileChooser;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.steady.MyFileChooser;
+import org.tiborsmith.wormkout.steady.ShaderCheckBox;
+import org.tiborsmith.wormkout.steady.ShaderDialog;
+import org.tiborsmith.wormkout.steady.ShaderFileChooser;
+import org.tiborsmith.wormkout.steady.ShaderLabel;
+import org.tiborsmith.wormkout.steady.ShaderList;
+import org.tiborsmith.wormkout.steady.ShaderTextButton;
+import org.tiborsmith.wormkout.steady.ShaderWindow;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -40,20 +40,20 @@ import java.io.FileFilter;
  * Created by tibor on 5.8.14.
  */
 public class MainScreen implements Screen {
-    Wormkout game;
-    public MainScreen(Wormkout game){ this.game = game; }
+    Wormkout g;
+    public MainScreen(Wormkout g){ this.g = g; }
 
 
     private Stage stage;
     private ModelBatch modelBatch;
     private Environment environment;
 
-    private Window settingsWindow;
-    private Window mainWindow;
-    private Window musicWindow;
-    private Window levelWindow;
-    private Window creditsWindow;
-    private Window helpWindow;
+    private ShaderWindow settingsWindow;
+    private ShaderWindow mainWindow;
+    private ShaderWindow musicWindow;
+    private ShaderWindow levelWindow;
+    private ShaderWindow creditsWindow;
+    private ShaderWindow helpWindow;
 
 
 
@@ -66,30 +66,30 @@ public class MainScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 
-        modelBatch.begin(game.myPlayer.cam);
-        modelBatch.render(game.myLevel.gates, environment);
+        modelBatch.begin(g.player.cam);
+        modelBatch.render(g.level.gates, environment);
         modelBatch.end();
-        game.myLevel.update(delta);
+        g.level.update(delta);
 
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        if (!game.myAudio.playing)
-            game.myAudio.startMusic();
+        if (!g.audio.playing)
+            g.audio.startMusic();
 
-        if (game.welcomeBack){
-            game.signInContorl();
-            game.welcomeBack = false;
+        if (g.welcomeBack){
+            g.signInContorl();
+            g.welcomeBack = false;
         }
 
     }
 
     @Override
     public void show (){
-        game.splashScreen.dispose();
+        g.splashScreen.dispose();
         stage = new Stage();
-        stage.setViewport(game.myAssets.viewport);
+        stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
         modelBatch = new ModelBatch();
@@ -100,13 +100,13 @@ public class MainScreen implements Screen {
 
 
         //first lvl then player
-        game.myLevel.loadLevel();
-        game.myPlayer.initPlayer();
-        game.myPlayer.speed=0;
+        g.level.loadLevel();
+        g.player.initPlayer();
+        g.player.speed=0;
 
 
 
-        //separated code for windows on Mainscreen
+        //separated code for MyWindows on Mainscreen
         mainMenu();
         settingsMenu();
         musicMenu();
@@ -114,8 +114,8 @@ public class MainScreen implements Screen {
         helpMenu();
         creditsMenu();
 
-        // from game screen is first window levelWindow
-        if (game.playMenu){
+        // from g screen is first window levelWindow
+        if (g.playMenu){
             mainWindow.setVisible(false);
             levelWindow.setVisible(true);
         }
@@ -168,42 +168,42 @@ public class MainScreen implements Screen {
 
         Table levelTable = new Table();
         ScrollPane scroll = new ScrollPane(levelTable.top());
-        levelTable.add(new Label(" ", game.myAssets.skin)).colspan(2).expandX().fill().row();
+        levelTable.add(new ShaderLabel(" ", g.assets.skin)).colspan(2).expandX().fill().row();
 
-        for (int i=0 ; i < game.levelStates.lvls.size; i++){
+        for (int i=0 ; i < g.levelStates.lvls.size; i++){
             //play button or lock label
-            if (!game.levelStates.lvls.get(i).locked){
+            if (!g.levelStates.lvls.get(i).locked){
                 String buttonString;
-                if (game.levelStates.lvls.get(i).finished){
-                    float time = game.levelStates.lvls.get(i).bestTime;
-                    buttonString = game.levelStates.lvls.get(i).name +
+                if (g.levelStates.lvls.get(i).finished){
+                    float time = g.levelStates.lvls.get(i).bestTime;
+                    buttonString = g.levelStates.lvls.get(i).name +
                             "  [best time: "+ (int)time/60 + "m " + (int)time%60 + "s]";
                 }
                 else {
-                    buttonString = game.levelStates.lvls.get(i).name + "  [best time: --m --s]";
+                    buttonString = g.levelStates.lvls.get(i).name + "  [best time: --m --s]";
                 }
-                TextButton lvlButton = new TextButton(buttonString,game.myAssets.skin);
+                ShaderTextButton lvlButton = new ShaderTextButton(buttonString, g.assets.skin);
                 final int j = i;
                 lvlButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        game.currentLevel = j;
-                        game.setScreen(game.gameScreen);
+                        g.currentLevel = j;
+                        g.setScreen(g.gameScreen);
                     }
                 });
                 levelTable.add(lvlButton).width(400).align(Align.left);
             }
             else {
-                Label label = new Label(game.levelStates.lvls.get(i).name + "  [locked]",game.myAssets.skin);
+                ShaderLabel label = new ShaderLabel(g.levelStates.lvls.get(i).name + "  [locked]", g.assets.skin);
                 label.setAlignment(Align.center);
                 levelTable.add(label).width(400).align(Align.left);
             }
-            Label lvlLabel = new Label(" " + game.levelStates.lvls.get(i).description,game.myAssets.skin);
+            ShaderLabel lvlLabel = new ShaderLabel(" " + g.levelStates.lvls.get(i).description, g.assets.skin);
             lvlLabel.setAlignment(Align.left);
             levelTable.add(lvlLabel).expandX().align(Align.left).fill().row();
-            levelTable.add(new Label(" ", game.myAssets.skin)).expandX().colspan(2).fill().row();
+            levelTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().colspan(2).fill().row();
         }
-        levelTable.add(new Label(" ", game.myAssets.skin)).expand().colspan(2).fill().row();
+        levelTable.add(new ShaderLabel(" ", g.assets.skin)).expand().colspan(2).fill().row();
 
         levelWindow.add(scroll).expand().fill();
     }
@@ -213,8 +213,8 @@ public class MainScreen implements Screen {
         musicWindow = makeWindow("Wormkout - Music Playlist");
         musicWindow.getButtonTable().add(makeCloseButton()).height(musicWindow.getPadTop());
 
-        final CheckBox pDCB = new CheckBox("Play the default music.", game.myAssets.skin);
-        if (game.myPlayList.playDefault)
+        final ShaderCheckBox pDCB = new ShaderCheckBox("Play the default music.", g.assets.skin);
+        if (g.playList.playDefault)
             pDCB.setChecked(true);
         else
             pDCB.setChecked(false);
@@ -222,44 +222,44 @@ public class MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (pDCB.isChecked()){
-                    game.myPlayList.playDefault = true;
-                    game.myPlayList.savePlayList();
+                    g.playList.playDefault = true;
+                    g.playList.savePlayList();
                 }
-                else if (game.myPlayList.numOfDefaultSong == game.myPlayList.songPaths.size){
-                    new Dialog("", game.myAssets.skin){}.text("You need to add some of your own music" +
+                else if (g.playList.numOfDefaultSong == g.playList.songPaths.size){
+                    new ShaderDialog("", g.assets.skin){}.text("You need to add some of your own music" +
                             "\n before you can disable the default one.").button("  Ok  ").show(stage);
                     pDCB.setChecked(true);
-                    game.myPlayList.playDefault = true;
-                    game.myPlayList.savePlayList();
+                    g.playList.playDefault = true;
+                    g.playList.savePlayList();
                 }
                 else {
-                    game.myPlayList.playDefault = false;
-                    game.myPlayList.savePlayList();
+                    g.playList.playDefault = false;
+                    g.playList.savePlayList();
                 }
             }
         });
 
-        final List playlist = new List(game.myAssets.skin);
-        playlist.setItems(game.myPlayList.songNames);
+        final ShaderList playlist = new ShaderList(g.assets.skin);
+        playlist.setItems(g.playList.songNames);
         ScrollPane scroll = new ScrollPane(playlist);
-        TextButton removeButton = new TextButton(" Remove song ",game.myAssets.skin);
+        ShaderTextButton removeButton = new ShaderTextButton(" Remove song ", g.assets.skin);
         removeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int i = playlist.getSelectedIndex();
-                if (i < game.myPlayList.numOfDefaultSong){
-                    new Dialog("", game.myAssets.skin) {
+                if (i < g.playList.numOfDefaultSong){
+                    new ShaderDialog("", g.assets.skin) {
                    }.text("You can't remove default music...").button("  Ok  ").show(stage);
                 }
                 else {
-                    game.myPlayList.songPaths.removeIndex(i);
-                    game.myPlayList.songNames.removeIndex(i);
-                    playlist.setItems(game.myPlayList.songNames);
-                    if (game.myPlayList.songPaths.size == game.myPlayList.numOfDefaultSong) {
+                    g.playList.songPaths.removeIndex(i);
+                    g.playList.songNames.removeIndex(i);
+                    playlist.setItems(g.playList.songNames);
+                    if (g.playList.songPaths.size == g.playList.numOfDefaultSong) {
                         pDCB.setChecked(true);
-                        game.myPlayList.playDefault = true;
+                        g.playList.playDefault = true;
                     }
-                    game.myPlayList.savePlayList();
+                    g.playList.savePlayList();
                 }
             }
         });
@@ -269,13 +269,13 @@ public class MainScreen implements Screen {
         playlistTable.add(pDCB);
 
 
-        MyFileChooser fileChooser = new MyFileChooser(game.myAssets.skin, new FileChooser.Listener() {
+        ShaderFileChooser fileChooser = new ShaderFileChooser(g.assets.skin, new FileChooser.Listener() {
             @Override
             public void choose(FileHandle file) {
-                game.myPlayList.songPaths.add(file.path());
-                game.myPlayList.songNames.add(file.name());
-                playlist.setItems(game.myPlayList.songNames);
-                game.myPlayList.savePlayList();
+                g.playList.songPaths.add(file.path());
+                g.playList.songNames.add(file.name());
+                playlist.setItems(g.playList.songNames);
+                g.playList.savePlayList();
             }
 
             @Override
@@ -294,11 +294,11 @@ public class MainScreen implements Screen {
             }
         };
         fileChooser.setFileFilter(filter);
-        fileChooser.add(Gdx.files.external("")); // root for tree
+        fileChooser.add(Gdx.files.external(""),g.assets.skin); // root for tree
         fileChooser.getTree().getSelection().setMultiple(false);  //disables multiple selection
 
 
-        SplitPane dividedMusicWindow = new SplitPane(playlistTable,fileChooser,false,game.myAssets.skin);
+        SplitPane dividedMusicWindow = new SplitPane(playlistTable,fileChooser,false, g.assets.skin);
         musicWindow.add(dividedMusicWindow).expand().fill().row();
     }
 
@@ -310,76 +310,85 @@ public class MainScreen implements Screen {
         settingsWindow.getButtonTable().add(makeCloseButton()).height(settingsWindow.getPadTop());
 
         //setup for GPGS login logout button
-        final Label gpgsLabel;
-        final TextButton gpgsButton;
-        if (game.myActionResolver.isSignedInGPGS()) {
-            gpgsButton = new TextButton("Sign out", game.myAssets.skin);
-            gpgsLabel = new Label("Google Play Game Services \n [You are successfully signed in.]",game.myAssets.skin);
+        final ShaderLabel gpgsLabel;
+        final ShaderTextButton gpgsButton;
+        if (g.myActionResolver.isSignedInGPGS()) {
+            gpgsButton = new ShaderTextButton("Sign out", g.assets.skin);
+            gpgsLabel = new ShaderLabel("Google Play Game Services \n [You are successfully signed in.]", g.assets.skin);
         }
         else{
-            gpgsButton = new TextButton("Sign in", game.myAssets.skin);
-            gpgsLabel = new Label("Google Play Game Services \n [You are signed out at this moment.]",game.myAssets.skin);
+            gpgsButton = new ShaderTextButton("Sign in", g.assets.skin);
+            gpgsLabel = new ShaderLabel("Google Play Game Services \n [You are signed out at this moment.]", g.assets.skin);
         }
         gpgsLabel.setAlignment(Align.center);
         gpgsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                if (game.myActionResolver.isSignedInGPGS()) {
+                if (g.myActionResolver.isSignedInGPGS()) {
                     gpgsButton.getLabel().setText("Sign in");
                     gpgsLabel.setText("Google Play Game Services \n [You are signed out at this moment]");
-                    game.myActionResolver.signOutGPGS();
-                    new Dialog("", game.myAssets.skin) {
+                    g.myActionResolver.signOutGPGS();
+                    new ShaderDialog("", g.assets.skin) {
                     }.text("You have just sign out from GPGS.\n" +
                             "With this setting you can't use LeaderBoards and Achievements.").button("  Ok  ").show(stage);
                 }
                 else {
                     gpgsButton.getLabel().setText("Sign out");
                     gpgsLabel.setText("Google Play Game Services \n [You are successfully sign in.]");
-                    game.myActionResolver.signInGPGS();
+                    g.myActionResolver.signInGPGS();
                 }
             }
         });
 
         //settings for sound effects and music volume
-        final Label musicLabel = new Label("Music volume",game.myAssets.skin);
-        final Label soundLabel = new Label("Sound effects volume",game.myAssets.skin);
+        final ShaderLabel musicLabel = new ShaderLabel("Music volume", g.assets.skin);
+        final ShaderLabel soundLabel = new ShaderLabel("Sound effects volume", g.assets.skin);
+        musicLabel.setScale(1.0f+g.settings.musicVolume);
+        soundLabel.setScale(1.0f+g.settings.soundVolume);
         musicLabel.setAlignment(Align.center);
         soundLabel.setAlignment(Align.center);
-        final Slider musicSlider = new Slider(0.0f,1.0f,0.02f,false,game.myAssets.skin);
-        final Slider soundSlider = new Slider(0.0f,1.0f,0.02f,false,game.myAssets.skin);
-        musicSlider.setValue(game.mySettings.musicVolume);
-        soundSlider.setValue(game.mySettings.soundVolume);
+        final Slider musicSlider = new Slider(0.0f,1.0f,0.02f,false, g.assets.skin);
+        final Slider soundSlider = new Slider(0.0f,1.0f,0.02f,false, g.assets.skin);
+        musicSlider.setValue(g.settings.musicVolume);
+        soundSlider.setValue(g.settings.soundVolume);
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.mySettings.musicVolume = musicSlider.getValue();
-                game.mySettings.saveSettings();
-                game.setMusicVolume(game.mySettings.musicVolume);
+                g.settings.musicVolume = musicSlider.getValue();
+                g.settings.saveSettings();
+                g.setMusicVolume(g.settings.musicVolume);
+                musicLabel.setScale(1.0f+musicSlider.getValue());
             }
         });
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.mySettings.soundVolume = soundSlider.getValue();
-                game.mySettings.saveSettings();
+                g.settings.soundVolume = soundSlider.getValue();
+                g.settings.saveSettings();
+                soundLabel.setScale(1.0f + soundSlider.getValue());
             }
         });
 
 
-        settingsWindow.add(musicLabel).right().fill().expandX().row();
-        settingsWindow.add(musicSlider).width(stage.getWidth() / 2).row();
-        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
-        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
 
-        settingsWindow.add(soundLabel).right().fill().expandX().row();
-        settingsWindow.add(soundSlider).width(stage.getWidth() / 2).row();
-        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
-        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
+        Table settingTable = new Table(g.assets.skin);
+        settingTable.add(musicLabel).right().fill().expandX().row();
+        settingTable.add(musicSlider).width(stage.getWidth() / 2).row();
+        settingTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().fill().row();
+        settingTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().fill().row();
 
-        settingsWindow.add(gpgsLabel).right().fill().expandX().row();
-        settingsWindow.add(new Label(" ",game.myAssets.skin)).expandX().fill().row();
-        settingsWindow.add(gpgsButton).width(200).row();
+        settingTable.add(soundLabel).right().fill().expandX().row();
+        settingTable.add(soundSlider).width(stage.getWidth() / 2).row();
+        settingTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().fill().row();
+        settingTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().fill().row();
+
+        settingTable.add(gpgsLabel).right().fill().expandX().row();
+        settingTable.add(new ShaderLabel(" ", g.assets.skin)).expandX().fill().row();
+        settingTable.add(gpgsButton).width(200).row();
+
+        ScrollPane scroll = new ScrollPane(settingTable);
+        settingsWindow.add(scroll);
     }
 
 
@@ -390,15 +399,14 @@ public class MainScreen implements Screen {
         mainWindow = makeWindow("Workmout");
         mainWindow.setVisible(true);
 
-        TextButton playButton = new TextButton("    Play    ",game.myAssets.skin);
-        //playButton.setStyle(game.myAssets.skin.get("bold", TextButton.TextButtonStyle.class));
-        TextButton settingsButton = new TextButton("  Settings  ",game.myAssets.skin);
-        TextButton musicButton = new TextButton("    Music    ",game.myAssets.skin);
-        TextButton leaderboardsButton = new TextButton("Leaderboards",game.myAssets.skin);
-        TextButton achievementsButton = new TextButton("Achievements",game.myAssets.skin);
-        TextButton exitButton = new TextButton("    Exit    ",game.myAssets.skin);
-        TextButton creditsButton = new TextButton("    Credits    ",game.myAssets.skin);
-        TextButton helpButton = new TextButton("    Help    ",game.myAssets.skin);
+        ShaderTextButton playButton = new ShaderTextButton("    Play    ", g.assets.skin);
+        ShaderTextButton settingsButton = new ShaderTextButton("  Settings  ", g.assets.skin);
+        ShaderTextButton musicButton = new ShaderTextButton("    Music    ", g.assets.skin);
+        ShaderTextButton leaderboardsButton = new ShaderTextButton("Leaderboards", g.assets.skin);
+        ShaderTextButton achievementsButton = new ShaderTextButton("Achievements", g.assets.skin);
+        ShaderTextButton exitButton = new ShaderTextButton("    Exit    ", g.assets.skin);
+        ShaderTextButton creditsButton = new ShaderTextButton("    Credits    ", g.assets.skin);
+        ShaderTextButton helpButton = new ShaderTextButton("    Help    ", g.assets.skin);
 
 
         float wFB = 200;
@@ -440,22 +448,22 @@ public class MainScreen implements Screen {
         leaderboardsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (game.myActionResolver.isSignedInGPGS())
-                    game.myActionResolver.getLeaderboardGPGS();
+                if (g.myActionResolver.isSignedInGPGS())
+                    g.myActionResolver.getLeaderboardGPGS();
                 else {
-                    Dialog dialog = new Dialog("", game.myAssets.skin);
+                    ShaderDialog dialog = new ShaderDialog("", g.assets.skin);
                     dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
                             "before you can use Leaderboards. Do you wish to sign in now?");
-                    TextButton yesButton = new TextButton("  Yes  ", game.myAssets.skin);
+                    ShaderTextButton yesButton = new ShaderTextButton("  Yes  ", g.assets.skin);
                     dialog.button(yesButton, true);
-                    TextButton noButton = new TextButton("  No  ", game.myAssets.skin);
+                    ShaderTextButton noButton = new ShaderTextButton("  No  ", g.assets.skin);
                     dialog.button(noButton, false);
                     dialog.show(stage);
 
                     yesButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            game.myActionResolver.signInGPGS();
+                            g.myActionResolver.signInGPGS();
                         }
                     });
                 }
@@ -465,29 +473,29 @@ public class MainScreen implements Screen {
         achievementsButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (game.myActionResolver.isSignedInGPGS())
-                    game.myActionResolver.getAchivementsGPGS();
+                if (g.myActionResolver.isSignedInGPGS())
+                    g.myActionResolver.getAchivementsGPGS();
                 else {
-                    Dialog dialog = new Dialog("", game.myAssets.skin);
+                    ShaderDialog dialog = new ShaderDialog("", g.assets.skin);
                     dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
                             "before you can use Achievements. Do you wish to sign in now?");
-                    TextButton yesButton = new TextButton("  Yes  ", game.myAssets.skin);
+                    ShaderTextButton yesButton = new ShaderTextButton("  Yes  ", g.assets.skin);
                     dialog.button(yesButton, true);
-                    TextButton noButton = new TextButton("  No  ", game.myAssets.skin);
+                    ShaderTextButton noButton = new ShaderTextButton("  No  ", g.assets.skin);
                     dialog.button(noButton, false);
                     dialog.show(stage);
 
                     yesButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            game.myActionResolver.signInGPGS();
+                            g.myActionResolver.signInGPGS();
                         }
                     });
                 }
             }
         });
 
-        creditsButton.addListener(new ClickListener(){
+        creditsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
@@ -495,7 +503,7 @@ public class MainScreen implements Screen {
             }
         });
 
-        helpButton.addListener(new ClickListener(){
+        helpButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 helpWindow.setVisible(true);
@@ -516,8 +524,8 @@ public class MainScreen implements Screen {
      * @param title test in title bar
      * @return returns new window with prepared common parameters
      */
-    private Window makeWindow(String title){
-        Window window = new Window(title,game.myAssets.skin);
+    private ShaderWindow makeWindow(String title){
+        ShaderWindow window = new ShaderWindow(title, g.assets.skin);
         window.setVisible(false);
         window.setWidth(stage.getWidth() / 1.0272f);
         window.setHeight(stage.getHeight() / 1.0272f);
@@ -531,8 +539,8 @@ public class MainScreen implements Screen {
     /**
      * @return closeButton for with common code for all secondary windows
      */
-    private TextButton makeCloseButton(){
-        TextButton closeButton = new TextButton(" Back ",game.myAssets.skin);
+    private ShaderTextButton makeCloseButton(){
+        ShaderTextButton closeButton = new ShaderTextButton(" Back ", g.assets.skin);
         closeButton.getLabel().setAlignment(Align.center);
         closeButton.addListener(new ClickListener() {
             @Override
@@ -559,13 +567,13 @@ public class MainScreen implements Screen {
         stage.dispose();
         modelBatch.dispose();
         environment.clear();
-        game.myAudio.stopMusic();
-        game.myLevel.disposeLevel();
+        g.audio.stopMusic();
+        g.level.disposeLevel();
     }
 
     @Override
     public void pause (){
-        game.myAudio.stopMusic();
+        g.audio.stopMusic();
     }
 
     @Override

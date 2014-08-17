@@ -43,20 +43,20 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 
-        modelBatch.begin(game.myPlayer.cam);
-        modelBatch.render(game.myLevel.gates,environment);
+        modelBatch.begin(game.player.cam);
+        modelBatch.render(game.level.gates,environment);
         modelBatch.end();
 
 
-        if (!game.myLevel.gameOver) {
+        if (!game.level.gameOver) {
 
             if (!calibrating) {
-                game.myPlayer.updatePlayer(delta);
-                game.myLevel.update(delta);
+                game.player.updatePlayer(delta);
+                game.level.update(delta);
                 timer += delta;
             }
             else {
-                calibrating = game.myLevel.startingAnimation(delta);
+                calibrating = game.level.startingAnimation(delta);
                 game.mySensorProcessing.calibrate();
                 timer = 0;
                 msgLabel.setText("Please hold still. Calibrating sensors...");
@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
             return;
         }
 
-        if (game.myLevel.gameVictory){
+        if (game.level.gameVictory){
             msgLabel.setText("Victory!");
             msgLabel.setVisible(true);
 
@@ -90,8 +90,8 @@ public class GameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        if (!game.myAudio.playing)
-            game.myAudio.startMusic();
+        if (!game.audio.playing)
+            game.audio.startMusic();
 }
 
     @Override
@@ -102,10 +102,10 @@ public class GameScreen implements Screen {
     @Override
     public void show (){
         stage = new Stage();
-        stage.setViewport(game.myAssets.viewport);
+        stage.setViewport(game.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final Label speedLabel = new Label("Speed: 2 gates/s",game.myAssets.skin);
+        final Label speedLabel = new Label("Speed: 2 gates/s",game.assets.skin);
         speedLabel.setAlignment(Align.left);
 
 
@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(keycode == Input.Keys.BACK){
-                    game.myLevel.gameOver = true;
+                    game.level.gameOver = true;
                     return true;
                 }
                 else
@@ -123,19 +123,19 @@ public class GameScreen implements Screen {
            @Override
            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                if (x> stage.getWidth()/2)
-                   game.myPlayer.speed++;
+                   game.player.speed++;
                else
-                   game.myPlayer.speed--;
-               game.myPlayer.speed = (game.myPlayer.speed>0) ? game.myPlayer.speed : 0;
-               game.myPlayer.speed = (game.myPlayer.speed<20) ? game.myPlayer.speed : 20;
-               speedLabel.setText("Speed: "+game.myPlayer.speed +" gates/s");
+                   game.player.speed--;
+               game.player.speed = (game.player.speed>0) ? game.player.speed : 0;
+               game.player.speed = (game.player.speed<20) ? game.player.speed : 20;
+               speedLabel.setText("Speed: "+game.player.speed +" gates/s");
                return true;
            }
         });
 
 
 
-        msgLabel = new Label(" ",game.myAssets.skin);
+        msgLabel = new Label(" ",game.assets.skin);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);
 
@@ -156,8 +156,8 @@ public class GameScreen implements Screen {
         game.mySensors.registerSensorListeners();
 
         //first lvl then player
-        game.myLevel.loadLevel();
-        game.myPlayer.initPlayer();
+        game.level.loadLevel();
+        game.player.initPlayer();
     }
 
 
@@ -167,14 +167,14 @@ public class GameScreen implements Screen {
         stage.dispose();
         modelBatch.dispose();
         environment.clear();
-        game.myAudio.stopMusic();
-        game.myLevel.disposeLevel();
+        game.audio.stopMusic();
+        game.level.disposeLevel();
         game.mySensors.unregisterSensorListeners();
     }
 
     @Override
     public void pause (){
-        game.myAudio.stopMusic();
+        game.audio.stopMusic();
     }
 
     @Override

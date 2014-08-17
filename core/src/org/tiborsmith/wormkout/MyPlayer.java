@@ -41,7 +41,7 @@ public class MyPlayer {
 
     public void updatePlayer(float delta){
         getDirection();
-        position.mulAdd(direction, delta * speed * game.myLevel.gateDistance);
+        position.mulAdd(direction, delta * speed * game.level.gateDistance);
         cam.position.set(position);
         cam.lookAt(position.x+direction.x, position.y+direction.y, position.z+direction.z);
         cam.up.set(0,1,0);

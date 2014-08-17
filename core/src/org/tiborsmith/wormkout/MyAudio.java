@@ -89,18 +89,18 @@ public class MyAudio {
             topValues[i] = 0;
         }
 
-        if (game.currentSong >= game.myPlayList.songPaths.size) {
+        if (game.currentSong >= game.playList.songPaths.size) {
             game.currentSong = 0;
         }
-        if ((!game.myPlayList.playDefault) && game.currentSong < game.myPlayList.numOfDefaultSong)
-            game.currentSong = game.myPlayList.numOfDefaultSong;
+        if ((!game.playList.playDefault) && game.currentSong < game.playList.numOfDefaultSong)
+            game.currentSong = game.playList.numOfDefaultSong;
 
-        decoder = new Mpg123Decoder(Gdx.files.external(game.myPlayList.songPaths.get(game.currentSong)));
+        decoder = new Mpg123Decoder(Gdx.files.external(game.playList.songPaths.get(game.currentSong)));
 
 
         // Create an audio device for playback
         device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 );
-        device.setVolume(game.mySettings.musicVolume);
+        device.setVolume(game.settings.musicVolume);
 
         // start a thread for playback
         playbackThread = new Thread(new Runnable() {

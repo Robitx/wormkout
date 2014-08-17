@@ -29,8 +29,8 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (game.myAssets.assets.update() && timer > 5.0f) {
-            game.myAssets.afterLoading();
+        if (game.assets.assets.update() && timer > 5.0f) {
+            game.assets.afterLoading();
             game.setScreen(game.mainScreen);
             return;
         }
@@ -64,7 +64,7 @@ public class SplashScreen implements Screen {
         stage.getRoot().addAction(Actions.sequence(Actions.delay(3.1f),Actions.fadeOut(2.0f)));
 
 
-        game.myAssets.load();
+        game.assets.load();
         game.load();
         game.playMenu = false;
     }

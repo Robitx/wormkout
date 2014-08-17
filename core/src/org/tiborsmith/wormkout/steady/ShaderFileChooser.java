@@ -27,23 +27,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Pools;
 
 import net.dermetfan.utils.Function;
-import net.dermetfan.utils.libgdx.scene2d.Scene2DUtils;
 import net.dermetfan.utils.libgdx.scene2d.ui.FileChooser;
 
 import java.io.File;
 import java.io.FileFilter;
 
-/** A {@link net.dermetfan.utils.libgdx.scene2d.ui.FileChooser} that uses a {@link com.badlogic.gdx.scenes.scene2d.ui.Tree}. <strong>DO NOT FORGET TO {@link #add(com.badlogic.gdx.files.FileHandle) ADD ROOTS}!</strong>
- *  @author dermetfan */
-public class MyFileChooser extends FileChooser {
+public class ShaderFileChooser extends FileChooser {
 
     /** @see #fileNode(com.badlogic.gdx.files.FileHandle, com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle, net.dermetfan.utils.Function) */
     public static Tree.Node fileNode(FileHandle file, Label.LabelStyle labelStyle) {
@@ -70,7 +64,7 @@ public class MyFileChooser extends FileChooser {
                 String name = file.name();
                 if(file.isDirectory())
                     name += File.separator;
-                return new Label(name, labelStyle);
+                return new ShaderLabel(name, labelStyle);
             }
         }, nodeConsumer);
     }
@@ -129,9 +123,6 @@ public class MyFileChooser extends FileChooser {
         return node;
     }
 
-    /** the style of this MyFileChooser */
-    private Style style;
-
     /** the Tree used to show files and folders */
     private Tree tree;
 
@@ -139,7 +130,7 @@ public class MyFileChooser extends FileChooser {
     private ScrollPane treePane;
 
     /** basic operation buttons */
-    private Button chooseButton, cancelButton;
+    private ShaderTextButton chooseButton, cancelButton;
 
     /** Listener for {@link #tree}.
      *  {@link Button#setDisabled(boolean) Disables/enables} {@link #chooseButton} based on the {@link Tree#getSelection() selection} of {@link #tree} and {@link #isDirectoriesChoosable()} */
@@ -209,47 +200,35 @@ public class MyFileChooser extends FileChooser {
         }
     };
 
-    /** @param skin the skin to get a {@link Style} from
-     *  @param listener the {@link #setListener(Listener) listener}
-     *  @see #MyFileChooser(Style, Listener) */
-    public MyFileChooser(Skin skin, Listener listener) {
-        this(skin.get(Style.class), listener);
-        setSkin(skin);
-    }
 
-    /** @param skin the skin holding the {@link Style} to use
-     *  @param styleName the {@link Skin#get(String, Class) name} of the {@link Style} to use
-     *  @param listener the {@link #setListener(Listener) listener}
-     *  @see #MyFileChooser(Style, Listener)*/
-    public MyFileChooser(Skin skin, String styleName, Listener listener) {
-        this(skin.get(styleName, Style.class), listener);
-        setSkin(skin);
-    }
-
-    /** @param style the {@link #style}
-     *  @param listener the {@link #setListener(Listener) listener} */
-    public MyFileChooser(Style style, Listener listener) {
+    public ShaderFileChooser(Skin skin, Listener listener) {
         super(listener);
-        this.style = style;
-        buildWidgets();
+        buildWidgets(skin);
+        setSkin(skin);
         build();
     }
 
+
+
     /** @param file the {@link File} to {@link Tree#add(com.badlogic.gdx.scenes.scene2d.ui.Tree.Node) add a root} for
      *  @return the added {@link #fileNode(FileHandle, java.io.FileFilter, com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle) file node} */
-    public Tree.Node add(FileHandle file) {
-        Tree.Node node = fileNode(file, handlingFileFilter, style.labelStyle);
+    public Tree.Node add(FileHandle file, Skin skin) {
+        Tree.Node node = fileNode(file, handlingFileFilter, skin.get(Label.LabelStyle.class));
         tree.add(node);
         return node;
     }
 
     /** builds {@link #chooseButton}, {@link #cancelButtonListener}, {@link #tree}, {@link #treePane} */
-    protected void buildWidgets() {
-        (tree = new Tree(style.treeStyle)).addListener(treeListener);
+    protected void buildWidgets(Skin skin) {
+        tree = new Tree(skin);
+        tree.addListener(treeListener);
         treePane = new ScrollPane(tree);
-        (chooseButton = Scene2DUtils.newButton(style.selectButtonStyle, "  Add song  ")).addListener(chooseButtonListener);
+        chooseButton = new ShaderTextButton("  Add song  ",skin);
+        chooseButton.addListener(chooseButtonListener);
         chooseButton.setDisabled(true);
-        (cancelButton = Scene2DUtils.newButton(style.cancelButtonStyle, "cancel")).addListener(cancelButtonListener);
+
+
+        (cancelButton = new ShaderTextButton("  Add song  ",skin)).addListener(cancelButtonListener);
         cancelButton.setVisible(false);
         cancelButton.setDisabled(true);
     }
@@ -260,7 +239,7 @@ public class MyFileChooser extends FileChooser {
         treePane.setWidget(tree);
         add().expandX().fill().row();
         add(treePane).colspan(2).expand().fill().row();
-        add(chooseButton).colspan(2).row();
+        add(chooseButton).colspan(2).width(200).row();
         add(cancelButton).colspan(2);
     }
 
@@ -275,59 +254,4 @@ public class MyFileChooser extends FileChooser {
             throw new IllegalArgumentException("tree must not be null");
         this.tree = tree;
     }
-
-    /** @return the {@link #style} */
-    public Style getStyle() {
-        return style;
-    }
-
-    /** @param style the {@link #style} to set */
-    public void setStyle(Style style) {
-        this.style = style;
-        setBackground(style.background);
-        tree.setStyle(style.treeStyle);
-        chooseButton.setStyle(style.selectButtonStyle);
-        cancelButton.setStyle(style.cancelButtonStyle);
-    }
-
-    /** defines styles for the widgets of a {@link MyFileChooser}
-     *  @author dermetfan */
-    public static class Style implements Json.Serializable {
-
-        /** the style for the {@link MyFileChooser#tree tree} */
-        public Tree.TreeStyle treeStyle;
-
-        /** the style for {@link MyFileChooser#treePane} */
-        public ScrollPane.ScrollPaneStyle scrollPaneStyle;
-
-        /** the style for the labels in the tree */
-        public Label.LabelStyle labelStyle;
-
-        /** the button styles */
-        public Button.ButtonStyle selectButtonStyle, cancelButtonStyle;
-
-        /** optional */
-        public Drawable background;
-
-        @Override
-        public void write(Json json) {
-            json.writeObjectStart("");
-            json.writeFields(this);
-            json.writeObjectEnd();
-        }
-
-        @Override
-        public void read(Json json, JsonValue jsonData) {
-            treeStyle = json.readValue("treeStyle", Tree.TreeStyle.class, jsonData);
-            if(jsonData.has("scrollPaneStyle"))
-                scrollPaneStyle = json.readValue("scrollPaneStyle", ScrollPane.ScrollPaneStyle.class, jsonData);
-            labelStyle = json.readValue("labelStyle", Label.LabelStyle.class, jsonData);
-            selectButtonStyle = Scene2DUtils.readButtonStyle("selectButtonStyle", json, jsonData);
-            cancelButtonStyle = Scene2DUtils.readButtonStyle("cancelButtonStyle", json, jsonData);
-            if(jsonData.has("background"))
-                background = json.readValue("background", Drawable.class, jsonData);
-        }
-
-    }
-
 }

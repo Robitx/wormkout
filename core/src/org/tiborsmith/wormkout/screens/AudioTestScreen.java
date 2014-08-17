@@ -110,7 +110,7 @@ public class AudioTestScreen implements Screen {
     @Override
     public void show (){
         stage = new Stage();
-        TextButton menuButton = new TextButton("Go back to menu",game.myAssets.skin);
+        TextButton menuButton = new TextButton("Go back to menu",game.assets.skin);
 
         Table table = new Table();
         table.setFillParent(true);

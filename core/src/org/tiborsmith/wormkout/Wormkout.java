@@ -30,17 +30,17 @@ public class Wormkout extends Game {
 
     public final MyActionResolver myActionResolver;
     //player class (camera,controls)
-    public final MyPlayer myPlayer;
+    public final MyPlayer player;
     //loading models, music, levels and such
-    public final MyAssets myAssets;
-    public final MyAudio myAudio;
-    public final MyLevel myLevel;
+    public final MyAssets assets;
+    public final MyAudio audio;
+    public final MyLevel level;
 
 
     //state classes and variables
     public MyLevels levelStates;
-    public MySettings mySettings;
-    public MyPlayList myPlayList;
+    public MySettings settings;
+    public MyPlayList playList;
     public int currentLevel = 0;
     public int currentSong = 0;
     public boolean welcomeBack;
@@ -52,10 +52,10 @@ public class Wormkout extends Game {
         this.mySensors = mySensors;
         this.myActionResolver = myActionResolver;
         mySensorProcessing = new MySensorProcessing(this);
-        myAssets = new MyAssets(this);
-        myPlayer = new MyPlayer(this);
-        myAudio = new MyAudio(this);
-        myLevel = new MyLevel(this);
+        assets = new MyAssets(this);
+        player = new MyPlayer(this);
+        audio = new MyAudio(this);
+        level = new MyLevel(this);
     }
 
 
@@ -74,7 +74,7 @@ public class Wormkout extends Game {
 
     @Override
     public void dispose(){
-        myAssets.dispose();
+        assets.dispose();
 
         mainScreen.dispose();
         audioTestScreen.dispose();
@@ -94,11 +94,11 @@ public class Wormkout extends Game {
         FileHandle settingsFile = Gdx.files.local("settings.json");
         if (settingsFile.exists()) {
             Json json = new Json();
-            mySettings = json.fromJson(MySettings.class, settingsFile.readString());
-            setMusicVolume(mySettings.musicVolume);
+            settings = json.fromJson(MySettings.class, settingsFile.readString());
+            setMusicVolume(settings.musicVolume);
         } else {
-            mySettings = new MySettings();
-            mySettings.restoreDefaultSettings();
+            settings = new MySettings();
+            settings.restoreDefaultSettings();
         }
 
         //game progress
@@ -115,12 +115,12 @@ public class Wormkout extends Game {
         FileHandle playlistFile = Gdx.files.local("playlist.json");
         if (playlistFile.exists()) {
             Json json = new Json();
-            myPlayList = json.fromJson(MyPlayList.class, playlistFile.readString());
+            playList = json.fromJson(MyPlayList.class, playlistFile.readString());
         } else {
-            myPlayList = new MyPlayList();
-            myPlayList.makeDefaultPlaylist();
+            playList = new MyPlayList();
+            playList.makeDefaultPlaylist();
         }
-        myPlayList.checkPlaylistconsistency();
+        playList.checkPlaylistconsistency();
     }
 
 
@@ -130,19 +130,19 @@ public class Wormkout extends Game {
      */
     public void setMusicVolume(float volume){
         if (volume>=0 && volume <=1) {
-            mySettings.musicVolume = volume;
-            if (myAudio.device != null)
-                myAudio.device.setVolume(volume);
+            settings.musicVolume = volume;
+            if (audio.device != null)
+                audio.device.setVolume(volume);
         }
-        mySettings.saveSettings();
+        settings.saveSettings();
     }
 
 
     public void signInContorl(){
         // if not signed in and still has some attempts, try
-        if (!myActionResolver.isSignedInGPGS() && mySettings.singInGPGSAttempts>0){
+        if (!myActionResolver.isSignedInGPGS() && settings.singInGPGSAttempts>0){
             myActionResolver.signInGPGS();
-            mySettings.singInGPGSAttempts--;
+            settings.singInGPGSAttempts--;
         }
 
        /* // if signed, sign in and of to get Welcome back popup window (maybe there is better way)
