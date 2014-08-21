@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -11,78 +12,89 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import org.tiborsmith.wormkout.Wormkout;
+import org.tiborsmith.wormkout.steady.sBackground;
+import org.tiborsmith.wormkout.steady.sLabel;
 
 /**
  * Created by tibor on 28.7.14.
  */
 
 public class GameScreen implements Screen {
-    Wormkout game;
-    public GameScreen(Wormkout game){ this.game = game; }
+    Wormkout g;
+    public GameScreen(Wormkout game){ this.g = game; }
 
     private Stage stage;
-    private Label msgLabel;
+    private Batch batch;
+    private sLabel msgLabel;
     private ModelBatch modelBatch;
     private Environment environment;
 
     private boolean calibrating;
     private float timer;
+    private sBackground background;
+    private Image backgnd;
 
 
     @Override
     public void render (float delta){
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+       Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(GL20.GL_CULL_FACE);
         Gdx.gl.glCullFace(GL20.GL_BACK);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 
-        modelBatch.begin(game.player.cam);
-        modelBatch.render(game.level.gates,environment);
+
+        modelBatch.begin(g.player.cam);
+        modelBatch.render(g.level.skybox);
+        modelBatch.render(g.level.gates,environment);
         modelBatch.end();
 
 
-        if (!game.level.gameOver) {
+
+        if (!g.level.gameOver) {
 
             if (!calibrating) {
-                game.player.updatePlayer(delta);
-                game.level.update(delta);
+                g.player.updatePlayer(delta);
+                g.level.update(delta);
                 timer += delta;
+
+                msgLabel.setText("FPS "+ Gdx.graphics.getFramesPerSecond());
             }
             else {
-                calibrating = game.level.startingAnimation(delta);
-                game.mySensorProcessing.calibrate();
+                calibrating = g.level.startingAnimation(delta);
+                g.mySensorProcessing.calibrate();
                 timer = 0;
                 msgLabel.setText("Please hold still. Calibrating sensors...");
                 msgLabel.setVisible(calibrating);
+
+                msgLabel.setVisible(true);
             }
         }
         else {
-            game.setScreen(game.mainScreen);
+            g.setScreen(g.mainScreen);
             return;
         }
 
-        if (game.level.gameVictory){
+        if (g.level.gameVictory){
             msgLabel.setText("Victory!");
             msgLabel.setVisible(true);
 
             // sets new best time
-            game.levelStates.lvls.get(game.currentLevel).finished = true;
-            float bestTime = game.levelStates.lvls.get(game.currentLevel).bestTime;
+            g.levelStates.lvls.get(g.currentLevel).finished = true;
+            float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
             if (bestTime > timer)
-                game.levelStates.lvls.get(game.currentLevel).bestTime = timer;
+                g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
             // unlocks next lvl
-            if (game.currentLevel+1 < game.levelStates.lvls.size && game.levelStates.lvls.get(game.currentLevel+1).locked)
-                game.levelStates.lvls.get(game.currentLevel+1).locked = false;
-            game.levelStates.saveLevelProgress();
+            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked)
+                g.levelStates.lvls.get(g.currentLevel+1).locked = false;
+            g.levelStates.saveLevelProgress();
 
-            game.setScreen(game.mainScreen);
+            g.setScreen(g.mainScreen);
             return;
         }
 
@@ -90,8 +102,10 @@ public class GameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        if (!game.audio.playing)
-            game.audio.startMusic();
+
+
+        if (!g.audio.playing)
+            g.audio.startMusic();
 }
 
     @Override
@@ -101,11 +115,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void show (){
+        Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1);
+        sLabel.setShader(g.assets.fontShader);
         stage = new Stage();
-        stage.setViewport(game.assets.viewport);
+        stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final Label speedLabel = new Label("Speed: 2 gates/s",game.assets.skin);
+        final sLabel speedLabel = new sLabel("Speed: 2 gates/s", g.assets.skin);
         speedLabel.setAlignment(Align.left);
 
 
@@ -113,7 +129,7 @@ public class GameScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(keycode == Input.Keys.BACK){
-                    game.level.gameOver = true;
+                    g.level.gameOver = true;
                     return true;
                 }
                 else
@@ -123,19 +139,19 @@ public class GameScreen implements Screen {
            @Override
            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                if (x> stage.getWidth()/2)
-                   game.player.speed++;
+                   g.player.speed++;
                else
-                   game.player.speed--;
-               game.player.speed = (game.player.speed>0) ? game.player.speed : 0;
-               game.player.speed = (game.player.speed<20) ? game.player.speed : 20;
-               speedLabel.setText("Speed: "+game.player.speed +" gates/s");
+                   g.player.speed--;
+               g.player.speed = (g.player.speed>0) ? g.player.speed : 0;
+               g.player.speed = (g.player.speed<20) ? g.player.speed : 20;
+               speedLabel.setText("Speed: "+ g.player.speed +" gates/s");
                return true;
            }
         });
 
 
 
-        msgLabel = new Label(" ",game.assets.skin);
+        msgLabel = new sLabel(" ", g.assets.skin);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);
 
@@ -148,16 +164,17 @@ public class GameScreen implements Screen {
 
         modelBatch = new ModelBatch();
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.9f, 0.9f, 0.9f, 1f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         calibrating = true;
-        game.playMenu = true;
-        game.mySensors.registerSensorListeners();
+        g.playMenu = true;
+        g.mySensors.registerSensorListeners();
+
 
         //first lvl then player
-        game.level.loadLevel();
-        game.player.initPlayer();
+        g.level.loadLevel();
+        g.player.initPlayer();
     }
 
 
@@ -167,14 +184,14 @@ public class GameScreen implements Screen {
         stage.dispose();
         modelBatch.dispose();
         environment.clear();
-        game.audio.stopMusic();
-        game.level.disposeLevel();
-        game.mySensors.unregisterSensorListeners();
+        g.audio.stopMusic();
+        g.level.disposeLevel();
+        g.mySensors.unregisterSensorListeners();
     }
 
     @Override
     public void pause (){
-        game.audio.stopMusic();
+        g.audio.stopMusic();
     }
 
     @Override

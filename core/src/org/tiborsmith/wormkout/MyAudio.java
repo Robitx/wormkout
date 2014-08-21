@@ -37,31 +37,30 @@ public class MyAudio {
     public void generateColors(float delta,Color[] colors){
 
         int nb = 2;
-        for (int i = 0; i < 4*NB_BARS; i += 4) {
-            float sum = avg(i*nb,nb)+avg(i*nb+nb,nb)+avg(i*nb+2*nb,nb)+avg(i*nb+3*nb,nb);
+        for (int i = 0; i < 3*NB_BARS; i += 3) {
+            float sum = avg(i*nb,nb)+avg(i*nb+nb,nb)+avg(i*nb+2*nb,nb);
             if (sum>0.0f){
-                for (int j = 0; j < 4; j++) {
-                    topValues[i+j] = (avg(i*nb+j*nb,nb)/sum > topValues[i+j]) ? avg(i*nb+j*nb,nb)/sum : topValues[i+j];
+                for (int j = 0; j < 3; j++) {
                     topValues[i+j] -= 0.618f*delta;
+                    topValues[i+j] = (avg(i*nb+j*nb,nb)/sum > topValues[i+j]) ? avg(i*nb+j*nb,nb)/sum : topValues[i+j];
+
                 }
             }
         }
 
         for (int i = 0; i < NB_BARS; i++) {
-            float sum = topValues[4*i]+topValues[4*i+1]+topValues[4*i+2]+topValues[4*i+3];
-            if (sum>0.0f)
-                colors[i].set(topValues[4*i]/sum,topValues[4*i+1]/sum,topValues[4*i+2]/sum,topValues[4*i+3]/sum);
+            colors[i].set(topValues[3*i],topValues[3*i+1],topValues[3*i+2],1.0f);
             // almost black => use randomized color
             if(colors[i].r+colors[i].g+colors[i].b<0.0000001f){
-                colors[i].set(2*(float)Math.random(),2*(float)Math.random(),0.01f+2*(float)Math.random(),1.0f);
-                //colors[i].set(Color.DARK_GRAY);
+                //colors[i].set(2*(float)Math.random(),2*(float)Math.random(),0.01f+2*(float)Math.random(),1.0f);
+                colors[i].set(Color.DARK_GRAY);
             }
 
             float max = colors[i].r;
             if (colors[i].g>max) max = colors[i].g;
             if (colors[i].b>max) max = colors[i].b;
 
-            colors[i].mul(0.75f/max);
+            colors[i].mul(0.618f/max);
             colors[i].clamp();
 
 

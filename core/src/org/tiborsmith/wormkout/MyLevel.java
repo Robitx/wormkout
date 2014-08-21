@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Array;
  * Created by tibor on 31.7.14.
  */
 public class MyLevel {
-    private Wormkout game;
-    public MyLevel(Wormkout game){ this.game = game; }
+    private Wormkout g;
+    public MyLevel(Wormkout game){ this.g = game; }
 
     private float gateRadius = 1.0f;
     public float gateDistance = gateRadius*0.618f;
@@ -27,6 +27,7 @@ public class MyLevel {
     public boolean gameOver = false;
     public boolean gameVictory = false;
     public Array<ModelInstance> gates = new Array<ModelInstance>();
+    public ModelInstance skybox;
 
 
     /**
@@ -34,12 +35,12 @@ public class MyLevel {
      * @return true if new gate should be loaded
      */
     private boolean collisionTest(){
-        gates.get(1).transform.getTranslation(tmpVector).sub(game.player.position);
+        gates.get(1).transform.getTranslation(tmpVector).sub(g.player.position);
         if (tmpVector.len2()<gateRadius*gateRadius){
             return true;
         }
         else {
-            gates.get(0).transform.getTranslation(tmpVector).sub(game.player.position);
+            gates.get(0).transform.getTranslation(tmpVector).sub(g.player.position);
             if (tmpVector.len2()>gateRadius*gateRadius){
                 gameOver=true;
             }
@@ -53,8 +54,8 @@ public class MyLevel {
      * @param delta
      */
     public void updateColors(float delta){
-        game.audio.generateColors(delta, gateColors);
-        for (int i=game.player.speed; i< noRG; i++){
+        g.audio.generateColors(delta, gateColors);
+        for (int i= g.player.speed; i< noRG; i++){
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,gateColors[i].g,gateColors[i].b,1));
             //gates.get(i).transform.scl(1+gateColors[i].a);
         }
@@ -73,8 +74,8 @@ public class MyLevel {
             updateColors(delta);
         }
         else {
-            if (path.size == 2 && game.player.speed > 0){
-                victoryAC = noRG/game.player.speed;
+            if (path.size == 2 && g.player.speed > 0){
+                victoryAC = noRG/ g.player.speed;
                 path.removeIndex(1);
             }
             victoryAnimation(delta);
@@ -90,7 +91,7 @@ public class MyLevel {
         victoryAC-=delta;
         if (victoryAC > 0) {
             // gradually lowers volume to zero
-            game.audio.device.setVolume(victoryAC/5.0f*game.settings.musicVolume);
+            g.audio.device.setVolume(victoryAC/5.0f* g.settings.musicVolume);
 
             // white and yellow gradually going to black
             for (int i=0; i< noRG; i++){
@@ -140,7 +141,7 @@ public class MyLevel {
      * Adds new gate to gates
      */
     private void addGate(){
-        ModelInstance gate = new ModelInstance(game.assets.gate);  //makes new model instance
+        ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
@@ -168,8 +169,8 @@ public class MyLevel {
     private boolean loadPath(){
         path.add(new Vector3(0,0,0));
         path.add(new Vector3(0,0,-1));
-        for (int i=1; i < game.levelStates.lvls.get(game.currentLevel).path.length; i++){
-            game.assets.parts.getNextPart(path,game.levelStates.lvls.get(game.currentLevel).path[i]);
+        for (int i=1; i < g.levelStates.lvls.get(g.currentLevel).path.length; i++){
+            g.assets.parts.getNextPart(path, g.levelStates.lvls.get(g.currentLevel).path[i]);
         }
         return true;
     }
@@ -194,13 +195,15 @@ public class MyLevel {
         startAC = 5.0f;
 
         //zero gate
-        ModelInstance zeroInstance = new ModelInstance(game.assets.gate);
+        ModelInstance zeroInstance = new ModelInstance(g.assets.gate);
         gates.add(zeroInstance);
 
         //load first noRG gates
         for (int i=1; i< noRG; i++){
             addGate();
         }
+
+        skybox = new ModelInstance(g.assets.skybox);
     }
 
 

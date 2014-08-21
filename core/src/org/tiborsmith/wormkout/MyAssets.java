@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,9 +27,15 @@ public class MyAssets {
     public AssetManager assets;
     public Skin skin;
     public Model gate;
+    public Model skybox;
     public MyLevelParts parts = new MyLevelParts();
 
     public Viewport viewport;
+
+    public ShaderProgram fontShader;
+   // public ShaderProgram bgShader;
+   // public ShaderProgram glowShader;
+
 
 
 
@@ -36,12 +43,7 @@ public class MyAssets {
 
     public void load(){
         assets.load("graphics/gate.g3db", Model.class);
-        //TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
-        //param.minFilter = Texture.TextureFilter.MipMapLinearNearest;
-        //param.magFilter = Texture.TextureFilter.Linear;
-        //param.genMipMaps = true;
-        //assets.load("graphics/myfont.png", Texture.class, param);
-        //assets.load("graphics/myfont.fnt", BitmapFont.class);
+        assets.load("graphics/skybox.g3db", Model.class);
 
         TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
         param.minFilter = Texture.TextureFilter.MipMapLinearNearest;
@@ -64,17 +66,18 @@ public class MyAssets {
         skin.load(Gdx.files.internal("graphics/uiskin.json"));
 
 
+        fontShader = new ShaderProgram(Gdx.files.internal("shaders/font.vsh"), Gdx.files.internal("shaders/font.fsh"));
+        //bgShader = new ShaderProgram(Gdx.files.internal("shaders/background.vsh"), Gdx.files.internal("shaders/background.fsh"));
+        //glowShader = new ShaderProgram(Gdx.files.internal("shaders/glow.vert.glsl"), Gdx.files.internal("shaders/glow.frag.glsl"));
 
 
 
-        gate = game.assets.assets.get("graphics/gate.g3db", Model.class);
 
+
+        gate = assets.get("graphics/gate.g3db", Model.class);
+        skybox = assets.get("graphics/skybox.g3db", Model.class);
 
         parts.loadElements();
-
-        /*if(Gdx.graphics.getHeight()< 1280 || Gdx.graphics.getWidth() < 800)
-            viewport = new FitViewport(1280,800);
-        else*/
         viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),true);
     }
@@ -85,5 +88,7 @@ public class MyAssets {
     public void dispose(){
         assets.dispose();
         parts.dispose();
+
+        fontShader.dispose();
     }
 }

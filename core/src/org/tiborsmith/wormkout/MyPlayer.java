@@ -46,6 +46,8 @@ public class MyPlayer {
         cam.lookAt(position.x+direction.x, position.y+direction.y, position.z+direction.z);
         cam.up.set(0,1,0);
         cam.update();
+
+        game.level.skybox.transform.setToTranslation(position);
     }
 
 
@@ -58,7 +60,7 @@ public class MyPlayer {
         cam.lookAt(position.x+direction.x, position.y+direction.y, position.z+direction.z);
         cam.up.set(0,1,0);
         cam.near = 0.1f;
-        cam.far = 1000f;
+        cam.far = 20000f;
         cam.update();
 
         //default speed

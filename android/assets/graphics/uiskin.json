@@ -17,7 +17,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	bold: { down: default-round-down, up: default-round, font: bold-font, fontColor: white },
 	toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
 },
-org.tiborsmith.wormkout.steady.ShaderTextButton$TextButtonStyle: {
+org.tiborsmith.wormkout.steady.sTextButton$TextButtonStyle: {
 	default: { down: default-round-down, up: default-round, font: default-font, fontColor: white },
 	bold: { down: default-round-down, up: default-round, font: bold-font, fontColor: white },
 	toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
@@ -40,7 +40,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: { titleFont: default-font, background: default-window, titleFontColor: white },
 	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, stageBackground: dialogDim }
 },
-org.tiborsmith.wormkout.steady.ShaderWindow$WindowStyle: {
+org.tiborsmith.wormkout.steady.sWindow$WindowStyle: {
 	default: { titleFont: default-font, background: default-window, titleFontColor: white },
 	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, stageBackground: dialogDim }
 },
@@ -65,7 +65,7 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 	default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }
 },
-org.tiborsmith.wormkout.steady.ShaderList$ListStyle: {
+org.tiborsmith.wormkout.steady.sList$ListStyle: {
 	default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {

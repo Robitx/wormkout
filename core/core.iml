@@ -26,8 +26,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="gdx-1.3.1" level="project" />
     <orderEntry type="library" exported="" name="libgdx-utils-0.4.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="gdx-1.3.1-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="gdx-audio" level="project" />
   </component>
 </module>
