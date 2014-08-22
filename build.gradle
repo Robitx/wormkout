@@ -51,7 +51,6 @@ project(":core") {
     dependencies {
         compile files('gdx-audio.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile 'net.dermetfan.libgdx-utils:libgdx-utils:0.4.0-SNAPSHOT'
     }
 }
 

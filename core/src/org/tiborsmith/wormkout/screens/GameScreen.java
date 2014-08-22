@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.steady.sBackground;
-import org.tiborsmith.wormkout.steady.sLabel;
+import org.tiborsmith.wormkout.ui.sBackground;
+import org.tiborsmith.wormkout.ui.sLabel;
 
 /**
  * Created by tibor on 28.7.14.
@@ -81,6 +81,7 @@ public class GameScreen implements Screen {
         }
 
         if (g.level.gameVictory){
+
             msgLabel.setText("Victory!");
             msgLabel.setVisible(true);
 

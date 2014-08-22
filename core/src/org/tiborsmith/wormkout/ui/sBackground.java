@@ -1,4 +1,4 @@
-package org.tiborsmith.wormkout.steady;
+package org.tiborsmith.wormkout.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

@@ -1,4 +1,4 @@
-package org.tiborsmith.wormkout.steady;
+package org.tiborsmith.wormkout.ui;
 
 /**
  * Created by tibor on 10.8.14.
@@ -31,8 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
 
-import net.dermetfan.utils.Function;
-import net.dermetfan.utils.libgdx.scene2d.ui.FileChooser;
 
 import java.io.File;
 import java.io.FileFilter;

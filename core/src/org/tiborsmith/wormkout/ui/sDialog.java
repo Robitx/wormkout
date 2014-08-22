@@ -1,5 +1,6 @@
-package org.tiborsmith.wormkout.steady;
+package org.tiborsmith.wormkout.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -117,7 +119,9 @@ public class sDialog extends sWindow {
 
     /** Adds the given Label to the content table */
     public sDialog text (sLabel label) {
-        contentTable.add(label);
+        label.setWrap(true);
+        label.setAlignment(Align.center);
+        contentTable.add(label).width(Gdx.graphics.getWidth()/2);
         return this;
     }
 

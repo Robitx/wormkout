@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
+import org.tiborsmith.wormkout.steady.Constants;
 import org.tiborsmith.wormkout.steady.MyActionResolver;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
@@ -15,6 +16,7 @@ import org.tiborsmith.wormkout.screens.MainScreen;
 import org.tiborsmith.wormkout.screens.SplashScreen;
 import org.tiborsmith.wormkout.steady.MySensorProcessing;
 import org.tiborsmith.wormkout.steady.MySensors;
+import org.tiborsmith.wormkout.steady.MyTTS;
 
 
 public class Wormkout extends Game {
@@ -27,14 +29,18 @@ public class Wormkout extends Game {
     //my own control of sensors
     public final MySensors mySensors;
     public final MySensorProcessing mySensorProcessing;
-
+    //action resolver for interaction with GPGS
     public final MyActionResolver myActionResolver;
+    //interface for text to speech
+    public final MyTTS tts;
     //player class (camera,controls)
     public final MyPlayer player;
     //loading models, music, levels and such
     public final MyAssets assets;
     public final MyAudio audio;
     public final MyLevel level;
+    //strings and other constants
+    public final Constants str;
 
 
     //state classes and variables
@@ -43,19 +49,24 @@ public class Wormkout extends Game {
     public MyPlayList playList;
     public int currentLevel = 0;
     public int currentSong = 0;
+
+    //some flags
     public boolean welcomeBack;
     public boolean playMenu;
+    public boolean firstLaunch;
 
 
-    public Wormkout(MySensors mySensors, MyActionResolver myActionResolver){
+    public Wormkout(MySensors mySensors, MyActionResolver myActionResolver, MyTTS myTTS){
         super();
         this.mySensors = mySensors;
         this.myActionResolver = myActionResolver;
+        this.tts = myTTS;
         mySensorProcessing = new MySensorProcessing(this);
         assets = new MyAssets(this);
         player = new MyPlayer(this);
         audio = new MyAudio(this);
         level = new MyLevel(this);
+        str = new Constants();
     }
 
 
@@ -66,7 +77,7 @@ public class Wormkout extends Game {
         audioTestScreen = new AudioTestScreen(this);
         mainScreen = new MainScreen(this);
 
-        welcomeBack = true;
+
         Gdx.input.setCatchBackKey(true);
 
         super.setScreen(splashScreen);
@@ -99,6 +110,7 @@ public class Wormkout extends Game {
         } else {
             settings = new MySettings();
             settings.restoreDefaultSettings();
+            firstLaunch = true;
         }
 
         //game progress

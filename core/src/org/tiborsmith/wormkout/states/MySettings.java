@@ -21,7 +21,7 @@ public class MySettings{
     public void restoreDefaultSettings(){
         FileHandle settingsFile = Gdx.files.local("settings.json");
         singInGPGSAttempts = 3;
-        musicVolume = 1.0f;
+        musicVolume = 0.25f;
         soundVolume = 1.0f;
         Json json = new Json();
         settingsFile.writeString(json.prettyPrint(this), false);

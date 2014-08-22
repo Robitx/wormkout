@@ -22,16 +22,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
-import net.dermetfan.utils.libgdx.scene2d.ui.FileChooser;
-
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.steady.sCheckBox;
-import org.tiborsmith.wormkout.steady.sDialog;
-import org.tiborsmith.wormkout.steady.sFileChooser;
-import org.tiborsmith.wormkout.steady.sLabel;
-import org.tiborsmith.wormkout.steady.sList;
-import org.tiborsmith.wormkout.steady.sTextButton;
-import org.tiborsmith.wormkout.steady.sWindow;
+import org.tiborsmith.wormkout.ui.FileChooser;
+import org.tiborsmith.wormkout.ui.sCheckBox;
+import org.tiborsmith.wormkout.ui.sDialog;
+import org.tiborsmith.wormkout.ui.sFileChooser;
+import org.tiborsmith.wormkout.ui.sLabel;
+import org.tiborsmith.wormkout.ui.sList;
+import org.tiborsmith.wormkout.ui.sTextButton;
+import org.tiborsmith.wormkout.ui.sWindow;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -78,12 +77,6 @@ public class MainScreen implements Screen {
 
         if (!g.audio.playing)
             g.audio.startMusic();
-
-        if (g.welcomeBack){
-            g.signInContorl();
-            g.welcomeBack = false;
-        }
-
     }
 
     @Override
@@ -146,6 +139,20 @@ public class MainScreen implements Screen {
                     return false;
             }
         });
+
+
+        if (g.welcomeBack){
+            g.signInContorl();
+            g.welcomeBack = false;
+
+        }
+        if (g.firstLaunch) {
+            Dialog(g.str.dFirstWelcome,true);
+            g.firstLaunch = false;
+        }
+        else if (!g.playMenu){
+            g.tts.say(g.str.sNormalWelcome, g.settings.soundVolume);
+        }
 
     }
 
@@ -230,8 +237,7 @@ public class MainScreen implements Screen {
                     g.playList.savePlayList();
                 }
                 else if (g.playList.numOfDefaultSong == g.playList.songPaths.size){
-                    new sDialog("", g.assets.skin){}.text("You need to add some of your own music" +
-                            "\n before you can disable the default one.").button("  Ok  ").show(stage);
+                    Dialog(g.str.dDisableDefaultMusic,true);
                     pDCB.setChecked(true);
                     g.playList.playDefault = true;
                     g.playList.savePlayList();
@@ -246,14 +252,13 @@ public class MainScreen implements Screen {
         final sList playlist = new sList(g.assets.skin,g.assets.fontShader);
         playlist.setItems(g.playList.songNames);
         ScrollPane scroll = new ScrollPane(playlist);
-        sTextButton removeButton = new sTextButton(" Remove song ", g.assets.skin);
+        sTextButton removeButton = new sTextButton("Remove song", g.assets.skin);
         removeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int i = playlist.getSelectedIndex();
                 if (i < g.playList.numOfDefaultSong){
-                    new sDialog("", g.assets.skin) {
-                   }.text("You can't remove default music...").button("  Ok  ").show(stage);
+                    Dialog(g.str.dAttemptToRemoveDefaultMusic,true);
                 }
                 else {
                     g.playList.songPaths.removeIndex(i);
@@ -269,7 +274,7 @@ public class MainScreen implements Screen {
         });
         Table playlistTable = new Table();
         playlistTable.add(scroll).expand().fill().row();
-        playlistTable.add(removeButton).expandX().row();
+        playlistTable.add(removeButton).width(200).row();
         playlistTable.add(pDCB);
 
 
@@ -333,9 +338,7 @@ public class MainScreen implements Screen {
                     gpgsButton.getLabel().setText("Sign in");
                     gpgsLabel.setText("Google Play Game Services \n [You are signed out at this moment]");
                     g.myActionResolver.signOutGPGS();
-                    new sDialog("", g.assets.skin) {
-                    }.text("You have just sign out from GPGS.\n" +
-                            "With this setting you can't use LeaderBoards and Achievements.").button("  Ok  ").show(stage);
+                    Dialog(g.str.dPlayerManuallySignOffGPGS,true);
                 }
                 else {
                     gpgsButton.getLabel().setText("Sign out");
@@ -371,6 +374,12 @@ public class MainScreen implements Screen {
                 g.settings.soundVolume = soundSlider.getValue();
                 g.settings.saveSettings();
                 soundLabel.setScale(0.5f + soundSlider.getValue());
+                if (g.settings.soundVolume > 0.75)
+                    g.tts.say("Testing testing. Good. I like this volume.",g.settings.soundVolume);
+                else if (g.settings.soundVolume > 0.25)
+                    g.tts.say("I hope you won't mute me completely.",g.settings.soundVolume);
+                else
+                    g.tts.say("You don't like me? Well let me tell you, I don't like you either.",g.settings.soundVolume);
             }
         });
 
@@ -407,14 +416,14 @@ public class MainScreen implements Screen {
         mainWindow = makeWindow("Workmout");
         mainWindow.setVisible(true);
 
-        sTextButton playButton = new sTextButton("    Play    ", g.assets.skin);
-        sTextButton settingsButton = new sTextButton("  Settings  ", g.assets.skin);
-        sTextButton musicButton = new sTextButton("    Music    ", g.assets.skin);
+        sTextButton playButton = new sTextButton("Play", g.assets.skin);
+        sTextButton settingsButton = new sTextButton("Settings", g.assets.skin);
+        sTextButton musicButton = new sTextButton("Music", g.assets.skin);
         sTextButton leaderboardsButton = new sTextButton("Leaderboards", g.assets.skin);
         sTextButton achievementsButton = new sTextButton("Achievements", g.assets.skin);
-        sTextButton exitButton = new sTextButton("    Exit    ", g.assets.skin);
-        sTextButton creditsButton = new sTextButton("    Credits    ", g.assets.skin);
-        sTextButton helpButton = new sTextButton("    Help    ", g.assets.skin);
+        sTextButton exitButton = new sTextButton("Exit", g.assets.skin);
+        sTextButton creditsButton = new sTextButton("Credits", g.assets.skin);
+        sTextButton helpButton = new sTextButton("Help", g.assets.skin);
 
 
         float wFB = 200;
@@ -460,8 +469,7 @@ public class MainScreen implements Screen {
                     g.myActionResolver.getLeaderboardGPGS();
                 else {
                     sDialog dialog = new sDialog("", g.assets.skin);
-                    dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
-                            "before you can use Leaderboards. Do you wish to sign in now?");
+                    dialog.text(g.str.dNoCanDoWithoutSignInGPGS);
                     sTextButton yesButton = new sTextButton("  Yes  ", g.assets.skin);
                     dialog.button(yesButton, true);
                     sTextButton noButton = new sTextButton("  No  ", g.assets.skin);
@@ -474,6 +482,7 @@ public class MainScreen implements Screen {
                             g.myActionResolver.signInGPGS();
                         }
                     });
+                    g.tts.say(g.str.dNoCanDoWithoutSignInGPGS,g.settings.soundVolume);
                 }
             }
         });
@@ -485,8 +494,7 @@ public class MainScreen implements Screen {
                     g.myActionResolver.getAchivementsGPGS();
                 else {
                     sDialog dialog = new sDialog("", g.assets.skin);
-                    dialog.text("You need to be logged in with GPGS (Google Play Game Services),\n" +
-                            "before you can use Achievements. Do you wish to sign in now?");
+                    dialog.text(g.str.dNoCanDoWithoutSignInGPGS);
                     sTextButton yesButton = new sTextButton("  Yes  ", g.assets.skin);
                     dialog.button(yesButton, true);
                     sTextButton noButton = new sTextButton("  No  ", g.assets.skin);
@@ -499,6 +507,7 @@ public class MainScreen implements Screen {
                             g.myActionResolver.signInGPGS();
                         }
                     });
+                    g.tts.say(g.str.dNoCanDoWithoutSignInGPGS,g.settings.soundVolume);
                 }
             }
         });
@@ -564,6 +573,11 @@ public class MainScreen implements Screen {
         return closeButton;
     }
 
+    private void Dialog(String msg, boolean speak){
+        new sDialog("", g.assets.skin){}.text(msg).button("Ok").show(stage);
+        if (speak)
+            g.tts.say(msg, g.settings.soundVolume);
+    }
 
     @Override
     public void resize (int width, int height){

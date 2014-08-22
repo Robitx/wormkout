@@ -8,17 +8,11 @@
         revision="19.1.0"
         sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
     <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/libgdx-utils-0.4.0-SNAPSHOT-86bab81d972c116de4bde38eb3315a04e98ba30e.jar"
-        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/net.dermetfan.libgdx-utils/libgdx-utils/0.4.0-SNAPSHOT/5b51b7335e98e2be3da6bcd3371e84e70f6748d2/libgdx-utils-0.4.0-SNAPSHOT.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="5b51b7335e98e2be3da6bcd3371e84e70f6748d2"/>
-    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/core-1.0.0-81551077dd213c605fb4a5982b8fbaacf21b9067.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="9463def913fecd0943fa3753be602d06d0303021"/>
+        sha1="487924ca00093a08209cf2cef0ca437b72be685e"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"

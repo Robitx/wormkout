@@ -17,8 +17,8 @@ import org.tiborsmith.wormkout.Wormkout;
  * Created by tibor on 28.7.14.
  */
 public class SplashScreen implements Screen {
-    Wormkout game;
-    public SplashScreen (Wormkout game){   this.game = game; }
+    Wormkout g;
+    public SplashScreen (Wormkout game){   this.g = game; }
 
     private Stage stage;
     private Texture  splashTexture;
@@ -29,9 +29,9 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (game.assets.assets.update() && timer > 5.0f) {
-            game.assets.afterLoading();
-            game.setScreen(game.mainScreen);
+        if (g.assets.assets.update() && timer > 5.0f) {
+            g.assets.afterLoading();
+            g.setScreen(g.mainScreen);
             return;
         }
 
@@ -64,9 +64,12 @@ public class SplashScreen implements Screen {
         stage.getRoot().addAction(Actions.sequence(Actions.delay(3.1f),Actions.fadeOut(2.0f)));
 
 
-        game.assets.load();
-        game.load();
-        game.playMenu = false;
+        g.playMenu = false;
+        g.welcomeBack = true;
+        g.firstLaunch = false;
+
+        g.assets.load();
+        g.load();
     }
 
     @Override

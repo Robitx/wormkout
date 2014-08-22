@@ -2,7 +2,9 @@ package org.tiborsmith.wormkout.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -12,10 +14,16 @@ import com.google.example.games.basegameutils.GameHelper;
 
 import org.tiborsmith.wormkout.Wormkout;
 import org.tiborsmith.wormkout.steady.MyActionResolver;
+import org.tiborsmith.wormkout.steady.MyTTS;
 
-public class MyAndroidActivity extends AndroidApplication implements GameHelper.GameHelperListener, MyActionResolver {
+import java.util.HashMap;
+import java.util.Locale;
+
+public class MyAndroidActivity extends AndroidApplication implements GameHelper.GameHelperListener,
+        MyActionResolver, TextToSpeech.OnInitListener, MyTTS {
 
     private GameHelper gameHelper;
+    private TextToSpeech tts;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -32,12 +40,14 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
         //keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        initialize(new Wormkout(new MyAndroidSensors(this.getContext()),this), config);
+        initialize(new Wormkout(new MyAndroidSensors(this.getContext()),this, this), config);
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES );
         gameHelper.enableDebugLog(false);
         gameHelper.setMaxAutoSignInAttempts(0);
         gameHelper.setup(this);
+
+        tts = new TextToSpeech(this,this);
 	}
 
     /**
@@ -161,4 +171,42 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
     }
 
 
+    /**
+     * My Text to speech implementation
+     */
+
+
+    @Override
+    public void onInit(int status) {
+        if (status==TextToSpeech.SUCCESS) {
+            tts.setLanguage(Locale.ENGLISH);
+
+
+        } else {
+            tts = null;
+            Toast.makeText(this, "Failed to initialize TTS engine.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void say(String phrase, float volume) {
+        if (tts!=null) {
+            HashMap<String,String> param = new HashMap<String, String>();
+            param.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, ""+volume);
+            tts.speak(phrase, TextToSpeech.QUEUE_FLUSH, param);
+        }
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (tts!=null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
+    }
 }

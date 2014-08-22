@@ -1,10 +1,16 @@
 package org.tiborsmith.wormkout;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by tibor on 31.7.14.
@@ -163,14 +169,22 @@ public class MyLevel {
 
 
     /**
-     * later loading from file and so on
      * @return true if level loaded
      */
     private boolean loadPath(){
         path.add(new Vector3(0,0,0));
         path.add(new Vector3(0,0,-1));
-        for (int i=1; i < g.levelStates.lvls.get(g.currentLevel).path.length; i++){
-            g.assets.parts.getNextPart(path, g.levelStates.lvls.get(g.currentLevel).path[i]);
+
+        FileHandle lvl = Gdx.files.internal(g.levelStates.lvls.get(g.currentLevel).path);
+        try {
+            InputStream is = lvl.read();
+            DataInputStream dis = new DataInputStream(is);
+            while(dis.available()>0){
+                g.assets.parts.getNextPart(path, dis.readByte());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }

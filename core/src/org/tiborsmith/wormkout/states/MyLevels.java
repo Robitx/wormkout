@@ -34,14 +34,11 @@ public class MyLevels {
      */
     public void makeDefault(){
         lvls.clear();
-        lvls.add(getNewLevelInstance());
-        lvls.get(0).set(false,false,3600,"Level 1",new byte[]{4,2,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},
-                "Tutorial level.");
-        lvls.add(getNewLevelInstance());
-        lvls.get(1).set(false,false,3600,"Level 2",new byte[]{4,7,5,0,9,9,0,0,0,0,0,5,2,2,6,5,5,5,0,9,9,0,9,9,9,9,5,2,2,6,5,5,5},"Blabla");
-        lvls.add(getNewLevelInstance());
-        lvls.get(2).set(true,false,3600,"Level 3",new byte[]{4,8,5,0,9,9,0,5,5,5,},"Not yet...");
-
+        lvls.add(getNewLevelInstance(false,false,3600,"Level 0","levels/level0.bin",
+                "Quick for testing"));
+        lvls.add(getNewLevelInstance(false,false,3600,"Level 1","levels/level1.bin",
+                "Tutorial level."));
+ 
         saveLevelProgress();
     }
 
@@ -54,10 +51,10 @@ public class MyLevels {
         public boolean finished;
         public float bestTime;
         public String name;
-        public byte[] path;  // maybe make transient and store somewhere else instead
+        public String path;
         public String description;
 
-        public void set(boolean locked, boolean finished, float bestTime, String name, byte[] path, String description){
+        public void set(boolean locked, boolean finished, float bestTime, String name, String path, String description){
             this.locked = locked;
             this.finished = finished;
             this.bestTime = bestTime;
@@ -65,6 +62,18 @@ public class MyLevels {
             this.path = path;
             this.description = description;
         }
+    }
+
+
+    public MyLevelState getNewLevelInstance(boolean locked, boolean finished, float bestTime, String name, String path, String description){
+        MyLevelState lvl= new MyLevelState();
+        lvl.locked = locked;
+        lvl.finished = finished;
+        lvl.bestTime = bestTime;
+        lvl.name = name;
+        lvl.path = path;
+        lvl.description = description;
+        return lvl;
     }
 
 
