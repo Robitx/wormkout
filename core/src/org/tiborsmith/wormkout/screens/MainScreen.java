@@ -537,7 +537,6 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.setScreen(g.audioTestScreen);
             }
         });
 

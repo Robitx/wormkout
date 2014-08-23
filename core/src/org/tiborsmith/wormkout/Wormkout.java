@@ -5,15 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-import org.tiborsmith.wormkout.steady.Constants;
-import org.tiborsmith.wormkout.steady.MyActionResolver;
-import org.tiborsmith.wormkout.states.MyLevels;
-import org.tiborsmith.wormkout.states.MyPlayList;
-import org.tiborsmith.wormkout.states.MySettings;
-import org.tiborsmith.wormkout.screens.AudioTestScreen;
 import org.tiborsmith.wormkout.screens.GameScreen;
 import org.tiborsmith.wormkout.screens.MainScreen;
 import org.tiborsmith.wormkout.screens.SplashScreen;
+import org.tiborsmith.wormkout.states.MyLevels;
+import org.tiborsmith.wormkout.states.MyPlayList;
+import org.tiborsmith.wormkout.states.MySettings;
+import org.tiborsmith.wormkout.steady.Constants;
+import org.tiborsmith.wormkout.steady.MyActionResolver;
 import org.tiborsmith.wormkout.steady.MySensorProcessing;
 import org.tiborsmith.wormkout.steady.MySensors;
 import org.tiborsmith.wormkout.steady.MyTTS;
@@ -23,7 +22,6 @@ public class Wormkout extends Game {
     //screens in game
     public SplashScreen splashScreen;
     public GameScreen gameScreen;
-    public AudioTestScreen audioTestScreen;
     public MainScreen mainScreen;
 
     //my own control of sensors
@@ -74,7 +72,6 @@ public class Wormkout extends Game {
 	public void create () {
         splashScreen = new SplashScreen(this);
         gameScreen = new GameScreen(this);
-        audioTestScreen = new AudioTestScreen(this);
         mainScreen = new MainScreen(this);
 
 
@@ -88,7 +85,6 @@ public class Wormkout extends Game {
         assets.dispose();
 
         mainScreen.dispose();
-        audioTestScreen.dispose();
         gameScreen.dispose();
     }
 
