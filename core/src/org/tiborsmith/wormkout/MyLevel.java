@@ -25,8 +25,7 @@ public class MyLevel {
     private Array<Vector3> path = new Array<Vector3>(); // array with path for level
     private Color[] gateColors= new Color[32]; // array of colors for rendered gates
     private Vector3 poLRG = new Vector3(0,0,0); //position of last rendered gate
-    //private int noLRG = 0; //number of last rendered gate
-    private float victoryAC = 5.0f; //victory animation countdown
+    private int gN = 0; //gate number
     private float startAC = 5.0f; //start animation countdown
     private Vector3 tmpVector = new Vector3(0,0,0); // temporary vector
 
@@ -41,12 +40,12 @@ public class MyLevel {
      * @return true if new gate should be loaded
      */
     private boolean collisionTest(){
-        gates.get(1).transform.getTranslation(tmpVector).sub(g.player.position);
+        gates.get(1+gN).transform.getTranslation(tmpVector).sub(g.player.position);
         if (tmpVector.len2()<gateRadius*gateRadius){
             return true;
         }
         else {
-            gates.get(0).transform.getTranslation(tmpVector).sub(g.player.position);
+            gates.get(0+gN).transform.getTranslation(tmpVector).sub(g.player.position);
             if (tmpVector.len2()>gateRadius*gateRadius){
                 gameOver=true;
             }
@@ -61,9 +60,9 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
-        for (int i= g.player.speed; i< noRG; i++){
-            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,gateColors[i].g,gateColors[i].b,1));
-            //gates.get(i).transform.scl(1+gateColors[i].a);
+        for (int i= g.player.speed+2; i< noRG; i++){
+            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,
+                    gateColors[i].g,gateColors[i].b,1));
         }
     }
 
@@ -73,48 +72,28 @@ public class MyLevel {
      * @param delta
      */
     public void update(float delta){
-        if (2 < path.size){
+        updateColors(delta);
+        if (1 < path.size){
             if(collisionTest()){
                 addNextGate();
             }
-            updateColors(delta);
         }
         else {
-            if (path.size == 2 && g.player.speed > 0){
-                victoryAC = noRG/ g.player.speed;
-                path.removeIndex(1);
+            path.clear();
+            if (gN < noRG-1){
+                if(collisionTest())
+                    gN++;
+                g.audio.device.setVolume((float)(noRG-gN)/(float)noRG * g.settings.musicVolume);
+                startAC = 0.5f;
             }
-            victoryAnimation(delta);
-        }
-    }
-
-
-    /**
-     * animates gate colors, lowers music volume to zero
-     * @param delta
-     */
-    private void victoryAnimation(float delta) {
-        victoryAC-=delta;
-        if (victoryAC > 0) {
-            // gradually lowers volume to zero
-            g.audio.device.setVolume(victoryAC/5.0f* g.settings.musicVolume);
-
-            // white and yellow gradually going to black
-            for (int i=0; i< noRG; i++){
-                gateColors[0].set(Color.WHITE).mul(victoryAC/5.0f);
-                if ((int)(victoryAC/0.2f)%2 == 1){
-                    gateColors[0].set(Color.YELLOW).mul(victoryAC/5.0f);
-                }
-                gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[0]));
-            }
-        } else {
-            gameVictory = true;
-            for (int i=0; i< noRG; i++){
-                gateColors[0].set(0,0,0,0);
-                gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[0]));
+            else {
+                startAC-=delta;
+                if (startAC < 0)
+                    gameVictory = true;
             }
         }
     }
+
 
     /**
      * play three beeps and go from red to orange to green
@@ -125,10 +104,19 @@ public class MyLevel {
         startAC-=delta;
         if (startAC > 0) {
             if (startAC>2.0f) {
-                gateColors[0].set((5.0f-startAC)/3.0f,0,0,1);
+                gateColors[0].set(1,0,0,1);
+                if (startAC>3.0){
+                    gateColors[0].set(Color.DARK_GRAY).mul((5.0f-startAC)/2);
+                }
+                if (startAC>3.0f && startAC<3.1f)
+                    g.tts.say("Three.",g.settings.soundVolume);
+                if (startAC<2.1f)
+                    g.tts.say("Two.",g.settings.soundVolume);
             }
             else if (startAC>1.0f){
                 gateColors[0].set(Color.ORANGE);
+                if (startAC<1.1f)
+                    g.tts.say("One.",g.settings.soundVolume);
             }
             else{
                 gateColors[0].set(Color.GREEN);
@@ -139,7 +127,10 @@ public class MyLevel {
             }
             return true;
         }
-        else return false;
+        else {
+            g.tts.say("Go.",g.settings.soundVolume);
+            return false;
+        }
     }
 
 
@@ -205,8 +196,8 @@ public class MyLevel {
         poLRG.set(0,0,0);
         gameOver = false;
         gameVictory = false;
-        victoryAC = 5.0f;
         startAC = 5.0f;
+        gN = 0;
 
         //zero gate
         ModelInstance zeroInstance = new ModelInstance(g.assets.gate);

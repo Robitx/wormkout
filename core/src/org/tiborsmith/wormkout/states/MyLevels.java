@@ -36,7 +36,7 @@ public class MyLevels {
         lvls.clear();
         lvls.add(getNewLevelInstance(false,false,3600,"Level 0","levels/level0.bin",
                 "Quick for testing"));
-        lvls.add(getNewLevelInstance(false,false,3600,"Level 1","levels/level1.bin",
+        lvls.add(getNewLevelInstance(true,false,3600,"Level 1","levels/level1.bin",
                 "Tutorial level."));
  
         saveLevelProgress();

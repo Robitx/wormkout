@@ -12,12 +12,10 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.ui.sBackground;
 import org.tiborsmith.wormkout.ui.sLabel;
 
 /**
@@ -36,8 +34,6 @@ public class GameScreen implements Screen {
 
     private boolean calibrating;
     private float timer;
-    private sBackground background;
-    private Image backgnd;
 
 
     @Override
@@ -48,51 +44,49 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 
-
         modelBatch.begin(g.player.cam);
         modelBatch.render(g.level.skybox);
         modelBatch.render(g.level.gates,environment);
         modelBatch.end();
 
 
-
-        if (!g.level.gameOver) {
-
-            if (!calibrating) {
-                g.player.updatePlayer(delta);
-                g.level.update(delta);
-                timer += delta;
-
-                msgLabel.setText("FPS "+ Gdx.graphics.getFramesPerSecond());
-            }
-            else {
-                calibrating = g.level.startingAnimation(delta);
-                g.mySensorProcessing.calibrate();
-                timer = 0;
-                msgLabel.setText("Please hold still. Calibrating sensors...");
-                msgLabel.setVisible(calibrating);
-
-                msgLabel.setVisible(true);
-            }
+        if (!calibrating) {
+            g.player.updatePlayer(delta);
+            g.level.update(delta);
+            timer += delta;
         }
         else {
+            calibrating = g.level.startingAnimation(delta);
+            g.mySensorProcessing.calibrate();
+            msgLabel.setText("Please hold still.\n Commencing sensor calibration.");
+            msgLabel.setScale(2.0f);
+            msgLabel.setVisible(calibrating);
+            timer = 0;
+        }
+
+        if (g.level.gameOver) {
+            g.tts.say("Oops. It looks like you have lost this one.",g.settings.soundVolume);
+
             g.setScreen(g.mainScreen);
             return;
         }
 
         if (g.level.gameVictory){
-
-            msgLabel.setText("Victory!");
-            msgLabel.setVisible(true);
-
             // sets new best time
             g.levelStates.lvls.get(g.currentLevel).finished = true;
             float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
-            if (bestTime > timer)
+            if (bestTime > timer) {
                 g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
+                g.tts.say("Great, you made new best time.",g.settings.soundVolume);
+            }
+            else {
+                g.tts.say("I knew you would make it. Eventually.",g.settings.soundVolume);
+            }
             // unlocks next lvl
-            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked)
-                g.levelStates.lvls.get(g.currentLevel+1).locked = false;
+            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
+                g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
+                g.tts.appendSay("You have also unlocked the next level.",g.settings.soundVolume);
+            }
             g.levelStates.saveLevelProgress();
 
             g.setScreen(g.mainScreen);

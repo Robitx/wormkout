@@ -41,7 +41,7 @@ public class MyAudio {
             float sum = avg(i*nb,nb)+avg(i*nb+nb,nb)+avg(i*nb+2*nb,nb);
             if (sum>0.0f){
                 for (int j = 0; j < 3; j++) {
-                    topValues[i+j] -= 0.618f*delta;
+                    topValues[i+j] -= 1.618f*delta;
                     topValues[i+j] = (avg(i*nb+j*nb,nb)/sum > topValues[i+j]) ? avg(i*nb+j*nb,nb)/sum : topValues[i+j];
 
                 }
@@ -56,11 +56,65 @@ public class MyAudio {
                 colors[i].set(Color.DARK_GRAY);
             }
 
-            float max = colors[i].r;
-            if (colors[i].g>max) max = colors[i].g;
-            if (colors[i].b>max) max = colors[i].b;
 
-            colors[i].mul(0.618f/max);
+            if (colors[i].r > colors[i].g && colors[i].g > colors[i].b){
+                if (colors[i].r - colors[i].g <0.125)
+                    colors[i].g = colors[i].r;
+                else
+                    colors[i].g *=0.5;
+                colors[i].b *=0.25;
+                colors[i].mul(0.618f/colors[i].r);
+            }
+            else if (colors[i].r > colors[i].b && colors[i].g < colors[i].b){
+                colors[i].g *=0.25;
+                if (colors[i].r - colors[i].b <0.125)
+                    colors[i].b = colors[i].r;
+                else
+                    colors[i].b *=0.5;
+                colors[i].mul(0.618f/colors[i].r);
+            }
+            else if (colors[i].g > colors[i].r && colors[i].r > colors[i].b){
+                if (colors[i].g - colors[i].r <0.125)
+                    colors[i].r = colors[i].g;
+                else
+                    colors[i].r *=0.5;
+                colors[i].b *=0.25;
+                colors[i].mul(0.618f/colors[i].g);
+            }
+            else if (colors[i].g > colors[i].b && colors[i].r < colors[i].b){
+                colors[i].r *=0.25;
+                if (colors[i].g - colors[i].b <0.125)
+                    colors[i].b = colors[i].g;
+                else
+                    colors[i].b *=0.5;
+                colors[i].mul(0.618f/colors[i].g);
+            }
+            else if (colors[i].b > colors[i].r && colors[i].r > colors[i].g){
+                if (colors[i].b - colors[i].r <0.125)
+                    colors[i].r = colors[i].b;
+                else
+                    colors[i].r *=0.5;
+                colors[i].g *=0.25;
+                colors[i].mul(0.618f/colors[i].b);
+            }
+            else if (colors[i].b > colors[i].g && colors[i].r < colors[i].g){
+                colors[i].r *=0.25;
+                if (colors[i].b - colors[i].g <0.125)
+                    colors[i].g = colors[i].b;
+                else
+                    colors[i].g *=0.5;
+                colors[i].mul(0.618f/colors[i].b);
+            }
+            else {
+                float max = colors[i].r;
+                if (colors[i].g>max) {
+                    max = colors[i].g;
+                }
+                if (colors[i].b>max)
+                    max = colors[i].b;
+                colors[i].mul(0.618f/max);
+            }
+
             colors[i].clamp();
 
 
@@ -116,9 +170,9 @@ public class MyAudio {
                     device.writeSamples(samples, 0, readSamples);
                 }
                 // if while cycle ended by finishing song, set different one
-                if (!Thread.currentThread().isInterrupted()) {
-                    game.currentSong++;
-                }
+                //if (!Thread.currentThread().isInterrupted()) {
+                game.currentSong++;
+                //}
                 playing = false;
             }
         });

@@ -131,6 +131,7 @@ public class MainScreen implements Screen {
                         settingsWindow.setVisible(false);
                     }
                     else {
+                        g.tts.say("Bye",g.settings.soundVolume);
                         Gdx.app.exit();
                     }
                     return true;
@@ -315,8 +316,8 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void settingsMenu(){
-        settingsWindow = makeWindow("Workmout - Settings");
-        settingsWindow.getButtonTable().add(makeCloseButton()).height(settingsWindow.getPadTop());
+        settingsWindow = makeWindow("Wormkout - Settings");
+        settingsWindow.getButtonTable().add(makeCloseButton()).height(settingsWindow.getPadTop()).row();
 
         //setup for GPGS login logout button
         final sLabel gpgsLabel;
@@ -365,7 +366,14 @@ public class MainScreen implements Screen {
                 g.settings.musicVolume = musicSlider.getValue();
                 g.settings.saveSettings();
                 g.setMusicVolume(g.settings.musicVolume);
-                musicLabel.setScale(0.5f+musicSlider.getValue());
+                musicLabel.setScale(0.5f + musicSlider.getValue());
+            }
+        });
+        musicSlider.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+                return false;
             }
         });
         soundSlider.addListener(new ChangeListener() {
@@ -374,14 +382,24 @@ public class MainScreen implements Screen {
                 g.settings.soundVolume = soundSlider.getValue();
                 g.settings.saveSettings();
                 soundLabel.setScale(0.5f + soundSlider.getValue());
-                if (g.settings.soundVolume > 0.75)
-                    g.tts.say("Testing testing. Good. I like this volume.",g.settings.soundVolume);
-                else if (g.settings.soundVolume > 0.25)
-                    g.tts.say("I hope you won't mute me completely.",g.settings.soundVolume);
+                if (g.settings.soundVolume > 0.66)
+                    g.tts.say("Testing testing. Good. I like this volume.", g.settings.soundVolume);
+                else if (g.settings.soundVolume > 0.33)
+                    g.tts.say("I have feelings too you know. And you just hurt them.", g.settings.soundVolume);
+                //else if (g.settings.soundVolume > 0.25)
+                //    g.tts.say("I just hope you won't mute me completely.", g.settings.soundVolume);
                 else
-                    g.tts.say("You don't like me? Well let me tell you, I don't like you either.",g.settings.soundVolume);
+                    g.tts.say("You don't like me? Well let me tell you something. I don't like you either.", g.settings.soundVolume);
             }
         });
+        soundSlider.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                event.stop();
+                return false;
+            }
+        });
+
 
 
 
@@ -402,10 +420,9 @@ public class MainScreen implements Screen {
         settingTable.add(gpgsButton).width(200).row();
 
 
-        //settingTable.setFillParent(true);
-        //ScrollPane scroll = new ScrollPane(settingTable);
-        //scroll.setFillParent(true);
-        settingsWindow.add(settingTable).expand().fill().center();
+        settingTable.setFillParent(true);
+        ScrollPane scroll = new ScrollPane(settingTable);
+        settingsWindow.add(scroll).expand().fill().center();
     }
 
 
@@ -413,7 +430,7 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void mainMenu(){
-        mainWindow = makeWindow("Workmout");
+        mainWindow = makeWindow("Wormkout");
         mainWindow.setVisible(true);
 
         sTextButton playButton = new sTextButton("Play", g.assets.skin);
@@ -443,6 +460,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.tts.say("Finally. By the way it's good time to stand up.",g.settings.soundVolume);
             }
         });
 
@@ -451,6 +469,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.tts.say("Settings are boring. Leave this place at once and don't touch my volume.",g.settings.soundVolume);
             }
         });
 
@@ -459,6 +478,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 musicWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.tts.say("I like music too. We have so much in common. My darling.",g.settings.soundVolume);
             }
         });
 
@@ -517,6 +537,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.setScreen(g.audioTestScreen);
             }
         });
 
@@ -525,12 +546,14 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 helpWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.tts.say("It looks like you have lost your way. I am always here for ya.",g.settings.soundVolume);
             }
         });
 
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                g.tts.say("Bye",g.settings.soundVolume);
                 Gdx.app.exit();
             }
         });

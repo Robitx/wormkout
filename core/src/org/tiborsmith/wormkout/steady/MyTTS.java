@@ -5,4 +5,5 @@ package org.tiborsmith.wormkout.steady;
  */
 public interface MyTTS {
     public void say(String phrase, float volume);
+    public void appendSay(String phrase, float volume);
 }

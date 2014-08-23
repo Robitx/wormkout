@@ -180,8 +180,6 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
     public void onInit(int status) {
         if (status==TextToSpeech.SUCCESS) {
             tts.setLanguage(Locale.ENGLISH);
-
-
         } else {
             tts = null;
             Toast.makeText(this, "Failed to initialize TTS engine.",
@@ -197,9 +195,17 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
             param.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, ""+volume);
             tts.speak(phrase, TextToSpeech.QUEUE_FLUSH, param);
         }
-
     }
 
+    @Override
+    public void appendSay(String phrase, float volume) {
+        if (tts!=null) {
+            HashMap<String,String> param = new HashMap<String, String>();
+            param.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, ""+volume);
+            param.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS,"true");
+            tts.speak(phrase, TextToSpeech.QUEUE_ADD, param);
+        }
+    }
 
     @Override
     protected void onDestroy() {
