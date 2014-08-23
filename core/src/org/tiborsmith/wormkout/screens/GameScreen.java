@@ -58,14 +58,14 @@ public class GameScreen implements Screen {
         else {
             calibrating = g.level.startingAnimation(delta);
             g.mySensorProcessing.calibrate();
-            msgLabel.setText("Please hold still.\n Commencing sensor calibration.");
+            msgLabel.setText(g.str.mCalibration);
             msgLabel.setScale(2.0f);
             msgLabel.setVisible(calibrating);
             timer = 0;
         }
 
         if (g.level.gameOver) {
-            g.tts.say("Oops. It looks like you have lost this one.",g.settings.soundVolume);
+            g.tts.say(g.str.sGameOver1,g.settings.soundVolume);
 
             g.setScreen(g.mainScreen);
             return;
@@ -77,15 +77,15 @@ public class GameScreen implements Screen {
             float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
             if (bestTime > timer) {
                 g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
-                g.tts.say("Great, you made new best time.",g.settings.soundVolume);
+                g.tts.say(g.str.sVictoryNewBestTime,g.settings.soundVolume);
             }
             else {
-                g.tts.say("I knew you would make it. Eventually.",g.settings.soundVolume);
+                g.tts.say(g.str.sVictoryslow,g.settings.soundVolume);
             }
             // unlocks next lvl
             if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
                 g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
-                g.tts.appendSay("You have also unlocked the next level.",g.settings.soundVolume);
+                g.tts.appendSay(g.str.sLevelUnlock,g.settings.soundVolume);
             }
             g.levelStates.saveLevelProgress();
 

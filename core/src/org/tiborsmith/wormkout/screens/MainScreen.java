@@ -152,7 +152,7 @@ public class MainScreen implements Screen {
             g.firstLaunch = false;
         }
         else if (!g.playMenu){
-            g.tts.say(g.str.sNormalWelcome, g.settings.soundVolume);
+            g.tts.say(g.str.sNormalWelcome1, g.settings.soundVolume);
         }
 
     }
@@ -383,13 +383,11 @@ public class MainScreen implements Screen {
                 g.settings.saveSettings();
                 soundLabel.setScale(0.5f + soundSlider.getValue());
                 if (g.settings.soundVolume > 0.66)
-                    g.tts.say("Testing testing. Good. I like this volume.", g.settings.soundVolume);
+                    g.tts.say(g.str.sSoundSliderJoke1, g.settings.soundVolume);
                 else if (g.settings.soundVolume > 0.33)
-                    g.tts.say("I have feelings too you know. And you just hurt them.", g.settings.soundVolume);
-                //else if (g.settings.soundVolume > 0.25)
-                //    g.tts.say("I just hope you won't mute me completely.", g.settings.soundVolume);
+                    g.tts.say(g.str.sSoundSliderJoke2, g.settings.soundVolume);
                 else
-                    g.tts.say("You don't like me? Well let me tell you something. I don't like you either.", g.settings.soundVolume);
+                    g.tts.say(g.str.sSoundSliderJoke3, g.settings.soundVolume);
             }
         });
         soundSlider.addListener(new InputListener() {
@@ -460,7 +458,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say("Finally. By the way it's good time to stand up.",g.settings.soundVolume);
+                g.tts.say(g.str.sLevelWindow,g.settings.soundVolume);
             }
         });
 
@@ -469,7 +467,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say("Settings are boring. Leave this place at once and don't touch my volume.",g.settings.soundVolume);
+                g.tts.say(g.str.sSettingsWindow,g.settings.soundVolume);
             }
         });
 
@@ -478,15 +476,17 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 musicWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say("I like music too. We have so much in common. My darling.",g.settings.soundVolume);
+                g.tts.say(g.str.sMusicWindow,g.settings.soundVolume);
             }
         });
 
         leaderboardsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (g.myActionResolver.isSignedInGPGS())
+                if (g.myActionResolver.isSignedInGPGS()) {
+                    g.tts.say(g.str.sLeaderBoardWindow,g.settings.soundVolume);
                     g.myActionResolver.getLeaderboardGPGS();
+                }
                 else {
                     sDialog dialog = new sDialog("", g.assets.skin);
                     dialog.text(g.str.dNoCanDoWithoutSignInGPGS);
@@ -537,6 +537,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
                 mainWindow.setVisible(false);
+                g.tts.say(g.str.sCreditsWindow,g.settings.soundVolume);
             }
         });
 
@@ -545,7 +546,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 helpWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say("It looks like you have lost your way. I am always here for ya.",g.settings.soundVolume);
+                g.tts.say(g.str.sHelpWindow,g.settings.soundVolume);
             }
         });
 

@@ -50,7 +50,6 @@ public class MyAssets {
         param.magFilter = Texture.TextureFilter.Linear;
         param.genMipMaps = true;
         assets.load("graphics/myfont.png", Texture.class, param);
-        assets.load("graphics/bold.png", Texture.class, param);
         assets.load("graphics/uiskin.atlas", TextureAtlas.class);
     }
 
@@ -58,10 +57,8 @@ public class MyAssets {
         skin = new Skin();
         BitmapFont font = new BitmapFont(Gdx.files.internal("graphics/myfont.fnt"),
                 new TextureRegion(assets.get("graphics/myfont.png", Texture.class)), false);
-        BitmapFont fontBold = new BitmapFont(Gdx.files.internal("graphics/bold.fnt"),
-                new TextureRegion(assets.get("graphics/bold.png", Texture.class)), false);
-        skin.add("default-font", fontBold, BitmapFont.class);
-        skin.add("bold-font", fontBold, BitmapFont.class);
+        skin.add("default-font", font, BitmapFont.class);
+        skin.add("bold-font", font, BitmapFont.class);
         skin.addRegions(assets.get("graphics/uiskin.atlas", TextureAtlas.class));
         skin.load(Gdx.files.internal("graphics/uiskin.json"));
 
