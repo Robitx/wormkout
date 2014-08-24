@@ -33,7 +33,7 @@ public class MyPlayList {
      */
     public void makeDefaultPlaylist(){
         playDefault = true;
-        numOfDefaultSong = 4;
+        numOfDefaultSong = 3;
         for (int i = 0; i < numOfDefaultSong; i++) {
             songNames.add("default"+i+".mp3");
             songPaths.add(Gdx.files.external(".Wormkout/default" + i + ".mp3").path());

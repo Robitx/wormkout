@@ -146,17 +146,9 @@ public class Wormkout extends Game {
     }
 
 
-    public void signInContorl(){
-        // if not signed in and still has some attempts, try
-        if (!myActionResolver.isSignedInGPGS() && settings.singInGPGSAttempts>0){
+    public void signInControl(){
+        if (!myActionResolver.isSignedInGPGS() && settings.automaticSignInGPGS){
             myActionResolver.signInGPGS();
-            settings.singInGPGSAttempts--;
         }
-
-       /* // if signed, sign in and of to get Welcome back popup window (maybe there is better way)
-        if (myActionResolver.isSignedInGPGS()){
-            myActionResolver.signOutGPGS();
-            myActionResolver.signInGPGS();
-        }*/
     }
 }

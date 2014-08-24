@@ -60,9 +60,10 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
-        for (int i= g.player.speed+2; i< noRG; i++){
-            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,
-                    gateColors[i].g,gateColors[i].b,1));
+        for (int i=7; i< noRG; i++){
+            int j = i-2+g.player.speed%3;
+            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[j].r,
+                    gateColors[j].g,gateColors[j].b,1));
         }
     }
 

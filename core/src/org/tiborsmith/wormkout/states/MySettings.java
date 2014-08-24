@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Json;
 public class MySettings{
     public float musicVolume;
     public float soundVolume;
-    public int singInGPGSAttempts;
+    public boolean automaticSignInGPGS;
 
 
 
@@ -20,7 +20,7 @@ public class MySettings{
 
     public void restoreDefaultSettings(){
         FileHandle settingsFile = Gdx.files.local("settings.json");
-        singInGPGSAttempts = 3;
+        automaticSignInGPGS = true;
         musicVolume = 0.25f;
         soundVolume = 1.0f;
         Json json = new Json();

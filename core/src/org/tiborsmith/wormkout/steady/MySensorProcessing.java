@@ -17,6 +17,7 @@ public class MySensorProcessing {
 
     final private Vector3 calibrationVector = new Vector3(0,0,1);
     final private Vector3 orientationVector = new Vector3(0,0,1);
+    public boolean newCalibration = true;
 
     final private Vector2 tmp1 = new Vector2(), tmp2 = new Vector2();
 
@@ -24,7 +25,14 @@ public class MySensorProcessing {
      *  maybe will have to be more complicated - calibration over time interval
      */
     public void calibrate(){
-        getOrientationVector(calibrationVector);
+        if (newCalibration){
+            getOrientationVector(calibrationVector);
+            newCalibration = false;
+        }
+        else {
+            getOrientationVector(orientationVector);
+            calibrationVector.add(orientationVector).scl(0.5f).nor();
+        }
     }
 
 

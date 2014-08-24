@@ -56,12 +56,16 @@ public class GameScreen implements Screen {
             timer += delta;
         }
         else {
+            timer += delta;
             calibrating = g.level.startingAnimation(delta);
-            g.mySensorProcessing.calibrate();
+            if (!calibrating)
+                timer = 0;
+            if (timer > 2.0f)
+                g.mySensorProcessing.calibrate();
             msgLabel.setText(g.str.mCalibration);
             msgLabel.setScale(2.0f);
             msgLabel.setVisible(calibrating);
-            timer = 0;
+
         }
 
         if (g.level.gameOver) {
@@ -137,7 +141,7 @@ public class GameScreen implements Screen {
                    g.player.speed++;
                else
                    g.player.speed--;
-               g.player.speed = (g.player.speed>0) ? g.player.speed : 0;
+               g.player.speed = (g.player.speed>1) ? g.player.speed : 1;
                g.player.speed = (g.player.speed<20) ? g.player.speed : 20;
                speedLabel.setText("Speed: "+ g.player.speed +" gates/s");
                return true;
@@ -164,8 +168,9 @@ public class GameScreen implements Screen {
 
         calibrating = true;
         g.playMenu = true;
+        timer = 0;
         g.mySensors.registerSensorListeners();
-
+        g.mySensorProcessing.newCalibration = true;
 
         //first lvl then player
         g.level.loadLevel();

@@ -145,16 +145,27 @@ public class MainScreen implements Screen {
 
 
         if (g.welcomeBack){
-            g.signInContorl();
+            g.signInControl();
+            g.tts.say(g.str.sNormalWelcome1, g.settings.soundVolume);
             g.welcomeBack = false;
-
         }
         if (g.firstLaunch) {
-            Dialog(g.str.dFirstWelcome,true);
+            sDialog dialog = new sDialog("", g.assets.skin);
+            dialog.text(g.str.dFirstWelcome);
+            sTextButton yesButton = new sTextButton(" Visit ", g.assets.skin);
+            dialog.button(yesButton, true);
+            sTextButton noButton = new sTextButton(" Ignore ", g.assets.skin);
+            dialog.button(noButton, false);
+            dialog.show(stage);
+            yesButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mainWindow.setVisible(false);
+                    helpWindow.setVisible(true);
+                }
+            });
+            g.tts.say(g.str.dFirstWelcome,g.settings.soundVolume);
             g.firstLaunch = false;
-        }
-        else if (!g.playMenu){
-            g.tts.say(g.str.sNormalWelcome1, g.settings.soundVolume);
         }
 
     }
@@ -182,35 +193,25 @@ public class MainScreen implements Screen {
         aboutWormkoutLabel1.setWrap(true);
         creditsTable.add(new sLabel(" ", g.assets.skin));
         creditsTable.add(aboutWormkoutLabel1).expandX().fill().row();
-        sLabel aboutWormkoutLabel2 = new sLabel(g.str.lAboutWormkout2,g.assets.skin);
-        aboutWormkoutLabel2.setWrap(true);
-        creditsTable.add(new sLabel(" ", g.assets.skin));
-        creditsTable.add(aboutWormkoutLabel2).expandX().fill().row();
 
 
         creditsTable.add(ImageButtonWithDescription(g.assets.lplaystore.getDrawable(),
-                "https://play.google.com/store/apps/",//details?id=org.tiborsmith.wormkout.android
-                g.str.lPlaystore)).colspan(2).expandX().fill().row();
+                g.str.playstoreLink, g.str.lPlaystore,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.lgplus.getDrawable(),
-                "https://plus.google.com/u/0/",
-                g.str.lGooglePlus)).colspan(2).expandX().fill().row();
+               g.str.gplusLink,g.str.lGooglePlus,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.lfacebook.getDrawable(),
-                "https://www.facebook.com",
-                g.str.lFacebook)).colspan(2).expandX().fill().row();
+                g.str.facebookLink,g.str.lFacebook,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.ltwitter.getDrawable(),
-                "https://twitter.com/",
-                g.str.lTwitter)).colspan(2).expandX().fill().row();
+               g.str.twitterLink,g.str.lTwitter,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.lyoutube.getDrawable(),
-                "https://www.youtube.com/results?search_query=wormkout",
-                g.str.lYoutube)).colspan(2).expandX().fill().row();
+               g.str.youtubeLink,g.str.lYoutube,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.ldonate.getDrawable(),
-                "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GRYBACZYBGGY8",
-                g.str.lDonatePaypal)).colspan(2).expandX().fill().row();
+                g.str.paypalLink,g.str.lDonatePaypal,true)).colspan(2).expandX().fill().row();
 
 
         sLabel creditsTitle = new sLabel("Credits",g.assets.skin);
@@ -221,12 +222,10 @@ public class MainScreen implements Screen {
 
 
         creditsTable.add(ImageButtonWithDescription(g.assets.lgdx.getDrawable(),
-                "http://libgdx.badlogicgames.com/",
-                g.str.llibGDXCredits)).colspan(2).expandX().fill().row();
+                g.str.libgdxLink,g.str.llibGDXCredits,true)).colspan(2).expandX().fill().row();
         creditsTable.add(new sLabel(" ", g.assets.skin)).row();
         creditsTable.add(ImageButtonWithDescription(g.assets.lincompetech.getDrawable(),
-                "http://incompetech.com/",
-                g.str.lIncompetechCredits)).colspan(2).expandX().fill().row();
+                g.str.incompetechLink,g.str.lIncompetechCredits,true)).colspan(2).expandX().fill().row();
 
 
 
@@ -237,13 +236,14 @@ public class MainScreen implements Screen {
         creditsWindow.add(scroll).expand().fill().center();
     }
 
-    public Table ImageButtonWithDescription(Drawable icon, final String link, String description){
+    public Table ImageButtonWithDescription(Drawable icon, final String link, String description, final boolean button){
         Table table = new Table();
         ImageButton logo = new ImageButton(icon);
         logo.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI(link);
+                if (button)
+                    Gdx.net.openURI(link);
             }
         });
         sLabel label = new sLabel(description ,g.assets.skin);
@@ -260,6 +260,33 @@ public class MainScreen implements Screen {
         helpWindow = makeWindow("Wormkout - Help");
         helpWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
+
+        Table helpTable = new Table();
+        sLabel howPlayLabel = new sLabel("How to play Wormkout",g.assets.skin);
+        howPlayLabel.setScale(2);
+        howPlayLabel.setAlignment(Align.center);
+        helpTable.add(howPlayLabel).colspan(2).expandX().fill().row();
+
+        sLabel helpIntro = new sLabel(g.str.lHowPlay0,g.assets.skin);
+        helpIntro.setWrap(true);
+        helpTable.add(new sLabel(" ", g.assets.skin));
+        helpTable.add(helpIntro).expandX().fill().row();
+        helpTable.add(ImageButtonWithDescription(g.assets.lcontrol.getDrawable(),
+                "",
+                g.str.lHowPlay1,false)).colspan(2).expandX().fill().row();
+
+        sLabel musichelpLabel = new sLabel("Music and sound effects",g.assets.skin);
+        musichelpLabel.setScale(2);
+        musichelpLabel.setAlignment(Align.center);
+        helpTable.add(musichelpLabel).colspan(2).expandX().fill().row();
+        sLabel musicHelpIntro = new sLabel(g.str.lHowMusic,g.assets.skin);
+        musicHelpIntro.setWrap(true);
+        helpTable.add(new sLabel(" ", g.assets.skin));
+        helpTable.add(musicHelpIntro).expandX().fill().row();
+
+        helpTable.add(new sLabel(" ", g.assets.skin)).row();
+        ScrollPane scroll = new ScrollPane(helpTable);
+        helpWindow.add(scroll).expand().fill().center();
     }
 
 
@@ -414,11 +441,11 @@ public class MainScreen implements Screen {
         final sLabel gpgsLabel;
         final sTextButton gpgsButton;
         if (g.myActionResolver.isSignedInGPGS()) {
-            gpgsButton = new sTextButton("Sign out", g.assets.skin);
+            gpgsButton = new sTextButton("Disable", g.assets.skin);
             gpgsLabel = new sLabel("Google Play Game Services \n [You are successfully signed in.]", g.assets.skin);
         }
         else{
-            gpgsButton = new sTextButton("Sign in", g.assets.skin);
+            gpgsButton = new sTextButton("Enable", g.assets.skin);
             gpgsLabel = new sLabel("Google Play Game Services \n [You are signed out at this moment.]", g.assets.skin);
         }
         gpgsLabel.setAlignment(Align.center);
@@ -427,14 +454,18 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 if (g.myActionResolver.isSignedInGPGS()) {
-                    gpgsButton.getLabel().setText("Sign in");
+                    gpgsButton.getLabel().setText("Enable");
                     gpgsLabel.setText("Google Play Game Services \n [You are signed out at this moment]");
                     g.myActionResolver.signOutGPGS();
-                    Dialog(g.str.dPlayerManuallySignOffGPGS,true);
+                    g.settings.automaticSignInGPGS = false;
+                    g.settings.saveSettings();
+                    Dialog(g.str.dPlayerManuallySignOffGPGS, true);
                 }
                 else {
-                    gpgsButton.getLabel().setText("Sign out");
+                    gpgsButton.getLabel().setText("Disable");
                     gpgsLabel.setText("Google Play Game Services \n [You are successfully sign in.]");
+                    g.settings.automaticSignInGPGS = true;
+                    g.settings.saveSettings();
                     g.myActionResolver.signInGPGS();
                 }
             }

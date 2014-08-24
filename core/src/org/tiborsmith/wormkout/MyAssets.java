@@ -36,7 +36,7 @@ public class MyAssets {
     public ShaderProgram fontShader;
 
     public Image lgdx, lincompetech;
-    public Image lgplus, lfacebook, ltwitter, lplaystore, ldonate, lyoutube;
+    public Image lgplus, lfacebook, ltwitter, lplaystore, ldonate, lyoutube, lcontrol;
 
 
 
@@ -62,6 +62,7 @@ public class MyAssets {
         assets.load("graphics/playstore.png", Texture.class);
         assets.load("graphics/donate.gif", Texture.class);
         assets.load("graphics/youtube.png", Texture.class);
+        assets.load("graphics/howtocontrol.png", Texture.class);
     }
 
     public void afterLoading(){
@@ -86,6 +87,7 @@ public class MyAssets {
         lplaystore = new Image(assets.get("graphics/playstore.png", Texture.class));
         ldonate = new Image(assets.get("graphics/donate.gif", Texture.class));
         lyoutube = new Image(assets.get("graphics/youtube.png", Texture.class));
+        lcontrol = new Image(assets.get("graphics/howtocontrol.png", Texture.class));
 
 
         gate = assets.get("graphics/gate.g3db", Model.class);
