@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 
 import org.tiborsmith.wormkout.Wormkout;
@@ -162,6 +164,95 @@ public class MainScreen implements Screen {
         creditsWindow = makeWindow("Wormkout - Credits");
         creditsWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
+        Table creditsTable = new Table();
+        sLabel authorLabel = new sLabel("About the author",g.assets.skin);
+        authorLabel.setScale(2);
+        authorLabel.setAlignment(Align.center);
+        creditsTable.add(authorLabel).colspan(2).expandX().fill().row();
+
+        sLabel aboutMeLabel = new sLabel(g.str.lAboutMe,g.assets.skin);
+        aboutMeLabel.setWrap(true);
+        creditsTable.add(new sLabel(" ", g.assets.skin));
+        creditsTable.add(aboutMeLabel).expandX().fill().row();
+        sLabel manifestLabel = new sLabel("Quick manifesto",g.assets.skin);
+        manifestLabel.setScale(2);
+        manifestLabel.setAlignment(Align.center);
+        creditsTable.add(manifestLabel).colspan(2).expandX().fill().row();
+        sLabel aboutWormkoutLabel1 = new sLabel(g.str.lAboutWormkout1,g.assets.skin);
+        aboutWormkoutLabel1.setWrap(true);
+        creditsTable.add(new sLabel(" ", g.assets.skin));
+        creditsTable.add(aboutWormkoutLabel1).expandX().fill().row();
+        sLabel aboutWormkoutLabel2 = new sLabel(g.str.lAboutWormkout2,g.assets.skin);
+        aboutWormkoutLabel2.setWrap(true);
+        creditsTable.add(new sLabel(" ", g.assets.skin));
+        creditsTable.add(aboutWormkoutLabel2).expandX().fill().row();
+
+
+        creditsTable.add(ImageButtonWithDescription(g.assets.lplaystore.getDrawable(),
+                "https://play.google.com/store/apps/",//details?id=org.tiborsmith.wormkout.android
+                g.str.lPlaystore)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.lgplus.getDrawable(),
+                "https://plus.google.com/u/0/",
+                g.str.lGooglePlus)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.lfacebook.getDrawable(),
+                "https://www.facebook.com",
+                g.str.lFacebook)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.ltwitter.getDrawable(),
+                "https://twitter.com/",
+                g.str.lTwitter)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.lyoutube.getDrawable(),
+                "https://www.youtube.com/results?search_query=wormkout",
+                g.str.lYoutube)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.ldonate.getDrawable(),
+                "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GRYBACZYBGGY8",
+                g.str.lDonatePaypal)).colspan(2).expandX().fill().row();
+
+
+        sLabel creditsTitle = new sLabel("Credits",g.assets.skin);
+        creditsTitle.setScale(2);
+        creditsTitle.setAlignment(Align.center);
+        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
+        creditsTable.add(creditsTitle).colspan(2).expandX().fill().row();
+
+
+        creditsTable.add(ImageButtonWithDescription(g.assets.lgdx.getDrawable(),
+                "http://libgdx.badlogicgames.com/",
+                g.str.llibGDXCredits)).colspan(2).expandX().fill().row();
+        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
+        creditsTable.add(ImageButtonWithDescription(g.assets.lincompetech.getDrawable(),
+                "http://incompetech.com/",
+                g.str.lIncompetechCredits)).colspan(2).expandX().fill().row();
+
+
+
+
+
+        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
+        ScrollPane scroll = new ScrollPane(creditsTable);
+        creditsWindow.add(scroll).expand().fill().center();
+    }
+
+    public Table ImageButtonWithDescription(Drawable icon, final String link, String description){
+        Table table = new Table();
+        ImageButton logo = new ImageButton(icon);
+        logo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI(link);
+            }
+        });
+        sLabel label = new sLabel(description ,g.assets.skin);
+        label.setWrap(true);
+        table.add(new sLabel(" ", g.assets.skin));
+        table.add(logo).fill();
+        table.add(new sLabel(" ", g.assets.skin));
+        table.add(label).expandX().fill().row();
+        return table;
     }
 
 

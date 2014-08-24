@@ -58,7 +58,7 @@ public class MyAudio {
 
 
             if (colors[i].r > colors[i].g && colors[i].g > colors[i].b){
-                if (colors[i].r - colors[i].g <0.125)
+                if (colors[i].r - colors[i].g <0.15)
                     colors[i].g = colors[i].r;
                 else
                     colors[i].g *=0.5;
@@ -67,14 +67,14 @@ public class MyAudio {
             }
             else if (colors[i].r > colors[i].b && colors[i].g < colors[i].b){
                 colors[i].g *=0.25;
-                if (colors[i].r - colors[i].b <0.125)
+                if (colors[i].r - colors[i].b <0.15)
                     colors[i].b = colors[i].r;
                 else
                     colors[i].b *=0.5;
                 colors[i].mul(0.618f/colors[i].r);
             }
             else if (colors[i].g > colors[i].r && colors[i].r > colors[i].b){
-                if (colors[i].g - colors[i].r <0.125)
+                if (colors[i].g - colors[i].r <0.15)
                     colors[i].r = colors[i].g;
                 else
                     colors[i].r *=0.5;
@@ -83,14 +83,14 @@ public class MyAudio {
             }
             else if (colors[i].g > colors[i].b && colors[i].r < colors[i].b){
                 colors[i].r *=0.25;
-                if (colors[i].g - colors[i].b <0.125)
+                if (colors[i].g - colors[i].b <0.15)
                     colors[i].b = colors[i].g;
                 else
                     colors[i].b *=0.5;
                 colors[i].mul(0.618f/colors[i].g);
             }
             else if (colors[i].b > colors[i].r && colors[i].r > colors[i].g){
-                if (colors[i].b - colors[i].r <0.125)
+                if (colors[i].b - colors[i].r <0.15)
                     colors[i].r = colors[i].b;
                 else
                     colors[i].r *=0.5;
@@ -99,7 +99,7 @@ public class MyAudio {
             }
             else if (colors[i].b > colors[i].g && colors[i].r < colors[i].g){
                 colors[i].r *=0.25;
-                if (colors[i].b - colors[i].g <0.125)
+                if (colors[i].b - colors[i].g <0.15)
                     colors[i].g = colors[i].b;
                 else
                     colors[i].g *=0.5;
