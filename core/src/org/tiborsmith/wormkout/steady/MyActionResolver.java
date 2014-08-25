@@ -9,9 +9,10 @@ public interface MyActionResolver {
     public void signInGPGS();
     public void signOutGPGS();
     public void rateGame();
-    public void submitScoreGPGS(String scoreId,int score);
-    public void unlockAchievementGPGS(String achievementId);
-    public void getLeaderboardGPGS();
-    public void getAchivementsGPGS();
+    public void submitScoreGPGS(String levelName,int score);
+    public void unlockAchievementGPGS(String achievement);
+    public void incrementAchievementGPGS(String achievement,int score);
+    public void getLeaderboardGPGS(String levelName);
+    public void getAchievementsGPGS();
 
 }

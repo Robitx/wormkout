@@ -153,7 +153,7 @@ public final class R {
 		public static final int common_google_play_services_update_title = 0x7f0a002a;
 		public static final int common_signin_button_text = 0x7f0a002b;
 		public static final int common_signin_button_text_long = 0x7f0a002c;
-		public static final int wallet_buy_button_place_holder = 0x7f0a0032;
+		public static final int wallet_buy_button_place_holder = 0x7f0a0036;
 	}
 	public static final class style {
 		public static final int Theme_IAPTheme = 0x7f0b003c;

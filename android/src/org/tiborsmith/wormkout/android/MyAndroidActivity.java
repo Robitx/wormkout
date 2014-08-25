@@ -106,15 +106,17 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
     private final static int REQUEST_CODE = 9002;
 
     @Override
-    public void getAchivementsGPGS() {
+    public void getAchievementsGPGS() {
         startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), REQUEST_CODE);
     }
 
 
 
     @Override
-    public void getLeaderboardGPGS() {
-        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_best_time_level_1)), REQUEST_CODE);
+    public void getLeaderboardGPGS(String level) {
+        String tmp = "leaderboard_"+level.replace(" ","_").toLowerCase();
+        tmp = getString(getResources().getIdentifier(tmp,"string",getPackageName()));
+        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), tmp), REQUEST_CODE);
     }
 
     @Override
@@ -155,18 +157,39 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
     }
 
     @Override
-    public void submitScoreGPGS(String scoreId, int score) {
-        Games.Leaderboards.submitScore(gameHelper.getApiClient(), scoreId, score);
-        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), scoreId), REQUEST_CODE);
+    public void submitScoreGPGS(String level, int score) {
+        String tmp = "leaderboard_"+level.replace(" ","_").toLowerCase();
+        tmp = getString(getResources().getIdentifier(tmp,"string",getPackageName()));
+        Games.Leaderboards.submitScore(gameHelper.getApiClient(), tmp, score);
+        //startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), level), REQUEST_CODE);
     }
 
     @Override
-    public void unlockAchievementGPGS(String achievementId) {
-        if (achievementId == getString(R.string.achievement_unlocking_levels)) {
-            Games.Achievements.increment(gameHelper.getApiClient(), achievementId,1);
+    public void incrementAchievementGPGS(String achievement, int score) {
+        if (achievement == "achievement_level_progress") {
+            Games.Achievements.increment(gameHelper.getApiClient(),
+                    getString(R.string.achievement_level_progress),score);
         }
-        else {
-            Games.Achievements.unlock(gameHelper.getApiClient(), achievementId);
+    }
+
+    @Override
+    public void unlockAchievementGPGS(String achievement) {
+
+        if (achievement == "achievement_customized_music") {
+            Games.Achievements.unlock(gameHelper.getApiClient(),
+                    getString(R.string.achievement_customized_music));
+        }
+        if (achievement == "achievement_link_exploration") {
+            Games.Achievements.increment(gameHelper.getApiClient(),
+                    getString(R.string.achievement_link_exploration),1);
+        }
+        if (achievement == "achievement_visited_help") {
+            Games.Achievements.unlock(gameHelper.getApiClient(),
+                    getString(R.string.achievement_visited_help));
+        }
+        if (achievement == "achievement_visited_credits") {
+            Games.Achievements.unlock(gameHelper.getApiClient(),
+                    getString(R.string.achievement_visited_credits));
         }
     }
 

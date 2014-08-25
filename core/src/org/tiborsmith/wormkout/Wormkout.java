@@ -11,7 +11,6 @@ import org.tiborsmith.wormkout.screens.SplashScreen;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
 import org.tiborsmith.wormkout.states.MySettings;
-import org.tiborsmith.wormkout.steady.Constants;
 import org.tiborsmith.wormkout.steady.MyActionResolver;
 import org.tiborsmith.wormkout.steady.MySensorProcessing;
 import org.tiborsmith.wormkout.steady.MySensors;
@@ -34,11 +33,11 @@ public class Wormkout extends Game {
     //player class (camera,controls)
     public final MyPlayer player;
     //loading models, music, levels and such
-    public final MyAssets assets;
+    public final MyAssets myAssets;
     public final MyAudio audio;
     public final MyLevel level;
     //strings and other constants
-    public final Constants str;
+   // public final Constants str;
 
 
     //state classes and variables
@@ -60,11 +59,11 @@ public class Wormkout extends Game {
         this.myActionResolver = myActionResolver;
         this.tts = myTTS;
         mySensorProcessing = new MySensorProcessing(this);
-        assets = new MyAssets(this);
+        myAssets = new MyAssets(this);
         player = new MyPlayer(this);
         audio = new MyAudio(this);
         level = new MyLevel(this);
-        str = new Constants();
+    //    str = new Constants();
     }
 
 
@@ -82,7 +81,7 @@ public class Wormkout extends Game {
 
     @Override
     public void dispose(){
-        assets.dispose();
+        myAssets.dispose();
 
         mainScreen.dispose();
         gameScreen.dispose();
@@ -114,8 +113,10 @@ public class Wormkout extends Game {
         if (levelFile.exists()) {
             Json json = new Json();
             levelStates = json.fromJson(MyLevels.class, levelFile.readString());
+            levelStates.g = this;
         } else {
             levelStates = new MyLevels();
+            levelStates.g = this;
             levelStates.makeDefault();
         }
 
@@ -145,10 +146,4 @@ public class Wormkout extends Game {
         settings.saveSettings();
     }
 
-
-    public void signInControl(){
-        if (!myActionResolver.isSignedInGPGS() && settings.automaticSignInGPGS){
-            myActionResolver.signInGPGS();
-        }
-    }
 }

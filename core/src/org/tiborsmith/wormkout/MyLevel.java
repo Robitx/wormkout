@@ -139,7 +139,7 @@ public class MyLevel {
      * Adds new gate to gates
      */
     private void addGate(){
-        ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
+        ModelInstance gate = new ModelInstance(g.myAssets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
@@ -172,7 +172,7 @@ public class MyLevel {
             InputStream is = lvl.read();
             DataInputStream dis = new DataInputStream(is);
             while(dis.available()>0){
-                g.assets.parts.getNextPart(path, dis.readByte());
+                g.myAssets.parts.getNextPart(path, dis.readByte());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -201,7 +201,7 @@ public class MyLevel {
         gN = 0;
 
         //zero gate
-        ModelInstance zeroInstance = new ModelInstance(g.assets.gate);
+        ModelInstance zeroInstance = new ModelInstance(g.myAssets.gate);
         gates.add(zeroInstance);
 
         //load first noRG gates
@@ -209,7 +209,7 @@ public class MyLevel {
             addGate();
         }
 
-        skybox = new ModelInstance(g.assets.skybox);
+        skybox = new ModelInstance(g.myAssets.skybox);
     }
 
 

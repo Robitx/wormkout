@@ -5,11 +5,14 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
+import org.tiborsmith.wormkout.Wormkout;
+
 /**
  * Created by tibor on 10.8.14.
  */
 public class MyLevels {
-
+    public transient Wormkout g;
+    public int unlockingBuffer;
     public Array<MyLevelState> lvls;
 
     public MyLevels(){
@@ -22,6 +25,16 @@ public class MyLevels {
      * later add encryption
      */
     public void saveLevelProgress(){
+        //try to update leaderboards and achievements
+        if (g.myActionResolver.isSignedInGPGS()) {
+            for (int i=0; i< lvls.size ; i++)
+                g.myActionResolver.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
+            if ( unlockingBuffer > 0) {
+                g.myActionResolver.incrementAchievementGPGS("achievement_level_progress", unlockingBuffer);
+                unlockingBuffer = 0;
+            }
+        }
+        //save locally
         FileHandle levelFile = Gdx.files.local("levelStates.json");
         Json json = new Json();
         levelFile.writeString(json.prettyPrint(this), false);
@@ -33,10 +46,17 @@ public class MyLevels {
      * later add encryption
      */
     public void makeDefault(){
+        unlockingBuffer = 0;
         lvls.clear();
-        lvls.add(getNewLevelInstance(false,false,3600,"Level 0","levels/level0.bin",
+        lvls.add(getNewLevelInstance(false,false,3600,"Pi 1","levels/level0.bin",
                 "Quick for testing"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Level 1","levels/level1.bin",
+        lvls.add(getNewLevelInstance(true,false,3600,"Pi 2","levels/level1.bin",
+                "Tutorial level."));
+        lvls.add(getNewLevelInstance(true,false,3600,"Pi 3","levels/level1.bin",
+                "Tutorial level."));
+        lvls.add(getNewLevelInstance(true,false,3600,"Pi 4","levels/level1.bin",
+                "Tutorial level."));
+        lvls.add(getNewLevelInstance(true,false,3600,"Pi 5","levels/level1.bin",
                 "Tutorial level."));
  
         saveLevelProgress();

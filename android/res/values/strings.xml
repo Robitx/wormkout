@@ -2,12 +2,17 @@
 <resources>
 
     <string name="app_name">Wormkout</string>
+
     <string name="app_id">1064446939442</string>
-    <string name="achievement_successfully_logged_in_with_gpgs">CgkIsqLtr_0eEAIQAA</string>
-    <string name="achievement_2">CgkIsqLtr_0eEAIQAQ</string>
-    <string name="achievement_3">CgkIsqLtr_0eEAIQAg</string>
-    <string name="achievement_4">CgkIsqLtr_0eEAIQAw</string>
-    <string name="achievement_unlocking_levels">CgkIsqLtr_0eEAIQBA</string>
-    <string name="leaderboard_best_time_level_1">CgkIsqLtr_0eEAIQBg</string>
+    <string name="achievement_level_progress">CgkIsqLtr_0eEAIQBA</string>
+    <string name="achievement_customized_music">CgkIsqLtr_0eEAIQAQ</string>
+    <string name="achievement_visited_help">CgkIsqLtr_0eEAIQBw</string>
+    <string name="achievement_visited_credits">CgkIsqLtr_0eEAIQAw</string>
+    <string name="achievement_link_exploration">CgkIsqLtr_0eEAIQAg</string>
+    <string name="leaderboard_pi_1">CgkIsqLtr_0eEAIQDA</string>
+    <string name="leaderboard_pi_2">CgkIsqLtr_0eEAIQDQ</string>
+    <string name="leaderboard_pi_3">CgkIsqLtr_0eEAIQCQ</string>
+    <string name="leaderboard_pi_4">CgkIsqLtr_0eEAIQCg</string>
+    <string name="leaderboard_pi_5">CgkIsqLtr_0eEAIQCw</string>
 
 </resources>

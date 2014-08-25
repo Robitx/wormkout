@@ -1429,11 +1429,11 @@ containing a value of this type.
         public static final int abc_searchview_description_voice=0x7f0a000a;
         public static final int abc_shareactionprovider_share_with=0x7f0a000b;
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000c;
-        public static final int achievement_2=0x7f0a000d;
-        public static final int achievement_3=0x7f0a000e;
-        public static final int achievement_4=0x7f0a000f;
-        public static final int achievement_successfully_logged_in_with_gpgs=0x7f0a0010;
-        public static final int achievement_unlocking_levels=0x7f0a0011;
+        public static final int achievement_customized_music=0x7f0a000d;
+        public static final int achievement_level_progress=0x7f0a000e;
+        public static final int achievement_link_exploration=0x7f0a000f;
+        public static final int achievement_visited_credits=0x7f0a0010;
+        public static final int achievement_visited_help=0x7f0a0011;
         public static final int app_id=0x7f0a0012;
         public static final int app_name=0x7f0a0013;
         public static final int common_google_play_services_enable_button=0x7f0a0014;
@@ -1465,8 +1465,12 @@ containing a value of this type.
         public static final int gamehelper_license_failed=0x7f0a002e;
         public static final int gamehelper_sign_in_failed=0x7f0a002f;
         public static final int gamehelper_unknown_error=0x7f0a0030;
-        public static final int leaderboard_best_time_level_1=0x7f0a0031;
-        public static final int wallet_buy_button_place_holder=0x7f0a0032;
+        public static final int leaderboard_pi_1=0x7f0a0031;
+        public static final int leaderboard_pi_2=0x7f0a0032;
+        public static final int leaderboard_pi_3=0x7f0a0033;
+        public static final int leaderboard_pi_4=0x7f0a0034;
+        public static final int leaderboard_pi_5=0x7f0a0035;
+        public static final int wallet_buy_button_place_holder=0x7f0a0036;
     }
     public static final class style {
         public static final int GdxTheme=0x7f0b0000;

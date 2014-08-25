@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -21,9 +22,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 
+import org.tiborsmith.wormkout.MyAssets;
 import org.tiborsmith.wormkout.Wormkout;
 import org.tiborsmith.wormkout.ui.FileChooser;
 import org.tiborsmith.wormkout.ui.sCheckBox;
@@ -42,7 +44,15 @@ import java.io.FileFilter;
  */
 public class MainScreen implements Screen {
     Wormkout g;
-    public MainScreen(Wormkout g){ this.g = g; }
+    MyAssets assets;
+    public MainScreen(Wormkout g){
+        this.g = g;
+        assets = g.myAssets;
+    }
+
+
+    //bundle with strings
+    I18NBundle str;
 
 
     private Stage stage;
@@ -56,6 +66,8 @@ public class MainScreen implements Screen {
     private sWindow creditsWindow;
     private sWindow helpWindow;
 
+    private sLabel gpgsLabel;
+    private sTextButton gpgsButton;
 
 
     @Override
@@ -83,11 +95,12 @@ public class MainScreen implements Screen {
 
     @Override
     public void show (){
-        sLabel.setShader(g.assets.fontShader);
+        sLabel.setShader(assets.fontShader);
+        str = g.myAssets.str;
 
         g.splashScreen.dispose();
         stage = new Stage();
-        stage.setViewport(g.assets.viewport);
+        stage.setViewport(assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
         modelBatch = new ModelBatch();
@@ -133,7 +146,7 @@ public class MainScreen implements Screen {
                         settingsWindow.setVisible(false);
                     }
                     else {
-                        g.tts.say("Bye",g.settings.soundVolume);
+                        g.tts.say(str.get("Bye"),g.settings.soundVolume);
                         Gdx.app.exit();
                     }
                     return true;
@@ -145,16 +158,19 @@ public class MainScreen implements Screen {
 
 
         if (g.welcomeBack){
-            g.signInControl();
-            g.tts.say(g.str.sNormalWelcome1, g.settings.soundVolume);
+            if (g.settings.automaticSignInGPGS) {
+                g.myActionResolver.signInGPGS();
+                g.levelStates.saveLevelProgress();
+            }
+            g.tts.say(str.get("sNormalWelcome1"), g.settings.soundVolume);
             g.welcomeBack = false;
         }
         if (g.firstLaunch) {
-            sDialog dialog = new sDialog("", g.assets.skin);
-            dialog.text(g.str.dFirstWelcome);
-            sTextButton yesButton = new sTextButton(" Visit ", g.assets.skin);
+            sDialog dialog = new sDialog("", assets.skin);
+            dialog.text(str.get("sdFirstWelcome"));
+            sTextButton yesButton = new sTextButton(str.get("Visit"), assets.skin);
             dialog.button(yesButton, true);
-            sTextButton noButton = new sTextButton(" Ignore ", g.assets.skin);
+            sTextButton noButton = new sTextButton(str.get("Ignore"), assets.skin);
             dialog.button(noButton, false);
             dialog.show(stage);
             yesButton.addListener(new ClickListener() {
@@ -162,188 +178,231 @@ public class MainScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     mainWindow.setVisible(false);
                     helpWindow.setVisible(true);
+                    g.myActionResolver.unlockAchievementGPGS("achievement_visited_help");
                 }
             });
-            g.tts.say(g.str.dFirstWelcome,g.settings.soundVolume);
+            g.tts.say(str.get("sdFirstWelcome"),g.settings.soundVolume);
             g.firstLaunch = false;
         }
 
     }
 
+    private sLabel emptyLine(){
+        return new sLabel(" ", assets.skin);
+    }
+
+    private sLabel titleLabel(String title ,float scale){
+        sLabel label = new sLabel(title, assets.skin);
+        label.setScale(scale);
+        label.setAlignment(Align.center);
+        return label;
+    }
+
+
 
     private void creditsMenu(){
-        creditsWindow = makeWindow("Wormkout - Credits");
+        creditsWindow = makeWindow(str.get("cWTitle"));
         creditsWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
         Table creditsTable = new Table();
-        sLabel authorLabel = new sLabel("About the author",g.assets.skin);
-        authorLabel.setScale(2);
-        authorLabel.setAlignment(Align.center);
-        creditsTable.add(authorLabel).colspan(2).expandX().fill().row();
+        creditsTable.add(titleLabel(str.get("cWAboutTheAuthorTitle"),2)).colspan(2).expandX().fill().row();
 
-        sLabel aboutMeLabel = new sLabel(g.str.lAboutMe,g.assets.skin);
+        sLabel aboutMeLabel = new sLabel(str.get("cwAboutMeText"),assets.skin);
         aboutMeLabel.setWrap(true);
-        creditsTable.add(new sLabel(" ", g.assets.skin));
+        creditsTable.add(emptyLine());
         creditsTable.add(aboutMeLabel).expandX().fill().row();
-        sLabel manifestLabel = new sLabel("Quick manifesto",g.assets.skin);
-        manifestLabel.setScale(2);
-        manifestLabel.setAlignment(Align.center);
-        creditsTable.add(manifestLabel).colspan(2).expandX().fill().row();
-        sLabel aboutWormkoutLabel1 = new sLabel(g.str.lAboutWormkout1,g.assets.skin);
+        creditsTable.add(titleLabel(str.get("cWManifestoTitle"),2)).colspan(2).expandX().fill().row();
+        sLabel aboutWormkoutLabel1 = new sLabel(str.get("cwAboutWormkoutText"),assets.skin);
         aboutWormkoutLabel1.setWrap(true);
-        creditsTable.add(new sLabel(" ", g.assets.skin));
+        creditsTable.add(emptyLine());
         creditsTable.add(aboutWormkoutLabel1).expandX().fill().row();
 
 
-        creditsTable.add(ImageButtonWithDescription(g.assets.lplaystore.getDrawable(),
-                g.str.playstoreLink, g.str.lPlaystore,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.lgplus.getDrawable(),
-               g.str.gplusLink,g.str.lGooglePlus,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.lfacebook.getDrawable(),
-                g.str.facebookLink,g.str.lFacebook,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.ltwitter.getDrawable(),
-               g.str.twitterLink,g.str.lTwitter,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.lyoutube.getDrawable(),
-               g.str.youtubeLink,g.str.lYoutube,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).colspan(2).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.ldonate.getDrawable(),
-                g.str.paypalLink,g.str.lDonatePaypal,true)).colspan(2).expandX().fill().row();
+
+        creditsTable.add(ImageButtonWithDescription("playstore",str.get("cWplaystoreLink"),
+                str.get("cWPlaystoreText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription("gplus",str.get("cWgplusLink"),
+                str.get("cWGooglePlusText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription("facebook",str.get("cWfacebookLink"),
+                str.get("cWFacebookText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription("twitter",str.get("cWtwitterLink"),
+                str.get("cWTwitterText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription("youtube",str.get("cWyoutubeLink"),
+                str.get("cWYoutubeText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).colspan(2).row();
+        creditsTable.add(ImageButtonWithDescription("donate",str.get("cWpaypalLink"),
+                str.get("cWDonatePaypalText"),true)).colspan(2).expandX().fill().row();
 
 
-        sLabel creditsTitle = new sLabel("Credits",g.assets.skin);
-        creditsTitle.setScale(2);
-        creditsTitle.setAlignment(Align.center);
-        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
-        creditsTable.add(creditsTitle).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).row();
+        creditsTable.add(titleLabel(str.get("cWCreditsTitle"),2)).colspan(2).expandX().fill().row();
 
 
-        creditsTable.add(ImageButtonWithDescription(g.assets.lgdx.getDrawable(),
-                g.str.libgdxLink,g.str.llibGDXCredits,true)).colspan(2).expandX().fill().row();
-        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
-        creditsTable.add(ImageButtonWithDescription(g.assets.lincompetech.getDrawable(),
-                g.str.incompetechLink,g.str.lIncompetechCredits,true)).colspan(2).expandX().fill().row();
+        creditsTable.add(ImageButtonWithDescription("gdx",str.get("cWlibgdxLink"),
+                str.get("cWlibGDXCreditsText"),true)).colspan(2).expandX().fill().row();
+        creditsTable.add(emptyLine()).row();
+        creditsTable.add(ImageButtonWithDescription("incompetech",str.get("cWincompetechLink"),
+                str.get("cWIncompetechCreditsText"),true)).colspan(2).expandX().fill().row();
 
 
-
-
-
-        creditsTable.add(new sLabel(" ", g.assets.skin)).row();
+        creditsTable.add(emptyLine()).row();
         ScrollPane scroll = new ScrollPane(creditsTable);
         creditsWindow.add(scroll).expand().fill().center();
     }
 
-    public Table ImageButtonWithDescription(Drawable icon, final String link, String description, final boolean button){
+    public Table ImageButtonWithDescription(String imgname, final String link, String description, final boolean button){
         Table table = new Table();
-        ImageButton logo = new ImageButton(icon);
+        ImageButton logo = new ImageButton(new Image(assets.images.findRegion(imgname)).getDrawable());
         logo.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (button)
+                if (button) {
                     Gdx.net.openURI(link);
+                    g.myActionResolver.unlockAchievementGPGS("achievement_link_exploration");
+                }
             }
         });
-        sLabel label = new sLabel(description ,g.assets.skin);
+        sLabel label = new sLabel(description ,assets.skin);
         label.setWrap(true);
-        table.add(new sLabel(" ", g.assets.skin));
+        table.add(emptyLine());
         table.add(logo).fill();
-        table.add(new sLabel(" ", g.assets.skin));
+        table.add(emptyLine());
         table.add(label).expandX().fill().row();
         return table;
     }
 
 
     private void helpMenu(){
-        helpWindow = makeWindow("Wormkout - Help");
+        helpWindow = makeWindow(str.get("hWTitle"));
         helpWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
 
         Table helpTable = new Table();
-        sLabel howPlayLabel = new sLabel("How to play Wormkout",g.assets.skin);
-        howPlayLabel.setScale(2);
-        howPlayLabel.setAlignment(Align.center);
-        helpTable.add(howPlayLabel).colspan(2).expandX().fill().row();
+        helpTable.add(titleLabel(str.get("hWHTPTitle"),2)).colspan(2).expandX().fill().row();
 
-        sLabel helpIntro = new sLabel(g.str.lHowPlay0,g.assets.skin);
+        sLabel helpIntro = new sLabel(str.get("hWHowPlayIntroText"),assets.skin);
         helpIntro.setWrap(true);
-        helpTable.add(new sLabel(" ", g.assets.skin));
+        helpTable.add(emptyLine());
         helpTable.add(helpIntro).expandX().fill().row();
-        helpTable.add(ImageButtonWithDescription(g.assets.lcontrol.getDrawable(),
-                "",
-                g.str.lHowPlay1,false)).colspan(2).expandX().fill().row();
+        helpTable.add(ImageButtonWithDescription("howtocontrol","",
+                str.get("hWHowPlayText"),false)).colspan(2).expandX().fill().row();
 
-        sLabel musichelpLabel = new sLabel("Music and sound effects",g.assets.skin);
-        musichelpLabel.setScale(2);
-        musichelpLabel.setAlignment(Align.center);
-        helpTable.add(musichelpLabel).colspan(2).expandX().fill().row();
-        sLabel musicHelpIntro = new sLabel(g.str.lHowMusic,g.assets.skin);
+
+        helpTable.add(titleLabel(str.get("hWMASETitle"),2)).colspan(2).expandX().fill().row();
+        sLabel musicHelpIntro = new sLabel(str.get("hWHowMusicText"),assets.skin);
         musicHelpIntro.setWrap(true);
-        helpTable.add(new sLabel(" ", g.assets.skin));
+        helpTable.add(emptyLine());
         helpTable.add(musicHelpIntro).expandX().fill().row();
 
-        helpTable.add(new sLabel(" ", g.assets.skin)).row();
+        helpTable.add(emptyLine()).row();
         ScrollPane scroll = new ScrollPane(helpTable);
         helpWindow.add(scroll).expand().fill().center();
     }
 
 
 
+    private Table generateLevelTable(final int level){
+        Table table = new Table();
+
+        //play button or lock label
+        if (!g.levelStates.lvls.get(level).locked){
+            sTextButton lvlButton = new sTextButton(g.levelStates.lvls.get(level).name, assets.skin);
+            lvlButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    g.currentLevel = level;
+                    g.setScreen(g.gameScreen);
+                }
+            });
+            table.add(lvlButton).width(200).padLeft(10).align(Align.left);
+        }
+        else {
+            sLabel label = new sLabel(g.levelStates.lvls.get(level).name+" " + str.get("locked"), assets.skin);
+            label.setAlignment(Align.center);
+            table.add(label).width(200).padLeft(10).align(Align.left);
+        }
+
+        //level description
+        sLabel lvlLabel = new sLabel(g.levelStates.lvls.get(level).description, assets.skin);
+        lvlLabel.setAlignment(Align.left);
+        table.add(lvlLabel).expandX().align(Align.left).padLeft(10).fill();
+
+        //leaderboard button with best time
+        String LBString;
+        if (g.levelStates.lvls.get(level).finished){
+            float time = g.levelStates.lvls.get(level).bestTime;
+            LBString = str.format("TimeScore",  (int)time/60, (int)time%60, (int)(time*1000)%1000);
+        }
+        else {
+            LBString = str.get("emptyTimeScore");
+        }
+        sTextButton LBButton = new sTextButton( LBString, assets.skin);
+        LBButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (g.myActionResolver.isSignedInGPGS()) {
+                    g.levelStates.saveLevelProgress();
+                    g.tts.say(str.get("sayLeaderBoardWindowOpen"),g.settings.soundVolume);
+                    g.myActionResolver.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
+                }
+                else {
+                    sDialog dialog = new sDialog("", assets.skin);
+                    dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
+                    sTextButton yesButton = new sTextButton(str.get("Yes"), assets.skin);
+                    dialog.button(yesButton, true);
+                    dialog.button(new sTextButton(str.get("No"), assets.skin), false);
+                    dialog.show(stage);
+
+                    yesButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            GPGSSignIn();
+                        }
+                    });
+                    g.tts.say(str.get("sdNoCanDoWithoutSignInGPGS"),g.settings.soundVolume);
+                }
+            }
+        });
+        table.add(LBButton).width(175).padLeft(10).padRight(10).align(Align.left).row();
+
+
+        table.add(emptyLine()).expandX().colspan(3).fill().row();
+        return table;
+    }
+
     private void levelMenu(){
-        levelWindow = makeWindow("Wormkout - Level Chooser");
+        levelWindow = makeWindow(str.get("lWTitle"));
         levelWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
 
         Table levelTable = new Table();
         ScrollPane scroll = new ScrollPane(levelTable.top());
-        levelTable.add(new sLabel(" ", g.assets.skin)).colspan(2).expandX().fill().row();
+        //levelTable.add(new sLabel(" ", g.as.skin)).expandX().fill().row();
 
+        Table table = new Table();
+        table.add(titleLabel(str.get("Level"),1.25f)).width(200).align(Align.left).padLeft(10).fill();
+        table.add(titleLabel(str.get("Description"),1.25f)).expandX().align(Align.left).padLeft(10).fill();
+        table.add(titleLabel(str.get("Time"),1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
+
+        levelTable.add(table).expand().fill().row();
         for (int i=0 ; i < g.levelStates.lvls.size; i++){
-            //play button or lock label
-            if (!g.levelStates.lvls.get(i).locked){
-                String buttonString;
-                if (g.levelStates.lvls.get(i).finished){
-                    float time = g.levelStates.lvls.get(i).bestTime;
-                    buttonString = g.levelStates.lvls.get(i).name +
-                            "  [best time: "+ (int)time/60 + "m " + (int)time%60 + "s]";
-                }
-                else {
-                    buttonString = g.levelStates.lvls.get(i).name + "  [best time: --m --s]";
-                }
-                sTextButton lvlButton = new sTextButton(buttonString, g.assets.skin);
-                final int j = i;
-                lvlButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        g.currentLevel = j;
-                        g.setScreen(g.gameScreen);
-                    }
-                });
-                levelTable.add(lvlButton).width(400).align(Align.left);
-            }
-            else {
-                sLabel label = new sLabel(g.levelStates.lvls.get(i).name + "  [locked]", g.assets.skin);
-                label.setAlignment(Align.center);
-                levelTable.add(label).width(400).align(Align.left);
-            }
-            sLabel lvlLabel = new sLabel(" " + g.levelStates.lvls.get(i).description, g.assets.skin);
-            lvlLabel.setAlignment(Align.left);
-            levelTable.add(lvlLabel).expandX().align(Align.left).fill().row();
-            levelTable.add(new sLabel(" ", g.assets.skin)).expandX().colspan(2).fill().row();
+            levelTable.add(generateLevelTable(i)).expandX().fill().row();
         }
-        levelTable.add(new sLabel(" ", g.assets.skin)).expand().colspan(2).fill().row();
+        levelTable.add(emptyLine()).expand().fill().row();
 
         levelWindow.add(scroll).expand().fill();
     }
 
 
     private void musicMenu(){
-        musicWindow = makeWindow("Wormkout - Music Playlist");
+        musicWindow = makeWindow(str.get("mWTitle"));
         musicWindow.getButtonTable().add(makeCloseButton()).height(musicWindow.getPadTop());
 
-        final sCheckBox pDCB = new sCheckBox("Play the default music.", g.assets.skin);
+        final sCheckBox pDCB = new sCheckBox(str.get("mWPDMCheckbox"), assets.skin);
         if (g.playList.playDefault)
             pDCB.setChecked(true);
         else
@@ -356,7 +415,7 @@ public class MainScreen implements Screen {
                     g.playList.savePlayList();
                 }
                 else if (g.playList.numOfDefaultSong == g.playList.songPaths.size){
-                    Dialog(g.str.dDisableDefaultMusic,true);
+                    okDialog(str.get("sdDisableDefaultMusic"), true);
                     pDCB.setChecked(true);
                     g.playList.playDefault = true;
                     g.playList.savePlayList();
@@ -368,16 +427,16 @@ public class MainScreen implements Screen {
             }
         });
 
-        final sList playlist = new sList(g.assets.skin,g.assets.fontShader);
+        final sList playlist = new sList(assets.skin,assets.fontShader);
         playlist.setItems(g.playList.songNames);
         ScrollPane scroll = new ScrollPane(playlist);
-        sTextButton removeButton = new sTextButton("Remove song", g.assets.skin);
+        sTextButton removeButton = new sTextButton(str.get("mWRSButton"), assets.skin);
         removeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int i = playlist.getSelectedIndex();
                 if (i < g.playList.numOfDefaultSong){
-                    Dialog(g.str.dAttemptToRemoveDefaultMusic,true);
+                    okDialog(str.get("sdAttemptToRemoveDefaultMusic"), true);
                 }
                 else {
                     g.playList.songPaths.removeIndex(i);
@@ -397,13 +456,14 @@ public class MainScreen implements Screen {
         playlistTable.add(pDCB);
 
 
-        sFileChooser fileChooser = new sFileChooser(g.assets.skin, new FileChooser.Listener() {
+        sFileChooser fileChooser = new sFileChooser(assets.skin, new FileChooser.Listener() {
             @Override
             public void choose(FileHandle file) {
                 g.playList.songPaths.add(file.path());
                 g.playList.songNames.add(file.name());
                 playlist.setItems(g.playList.songNames);
                 g.playList.savePlayList();
+                g.myActionResolver.unlockAchievementGPGS("achievement_customized_music");
             }
 
             @Override
@@ -411,7 +471,7 @@ public class MainScreen implements Screen {
 
             @Override
             public void cancel() {}
-        });
+        },str.get("mWASButton"));
         FileFilter filter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -422,11 +482,11 @@ public class MainScreen implements Screen {
             }
         };
         fileChooser.setFileFilter(filter);
-        fileChooser.add(Gdx.files.external(""),g.assets.skin); // root for tree
+        fileChooser.add(Gdx.files.external(""),assets.skin); // root for tree
         fileChooser.getTree().getSelection().setMultiple(false);  //disables multiple selection
 
 
-        SplitPane dividedMusicWindow = new SplitPane(playlistTable,fileChooser,false, g.assets.skin);
+        SplitPane dividedMusicWindow = new SplitPane(playlistTable,fileChooser,false, assets.skin);
         musicWindow.add(dividedMusicWindow).expand().fill().row();
     }
 
@@ -434,19 +494,17 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void settingsMenu(){
-        settingsWindow = makeWindow("Wormkout - Settings");
+        settingsWindow = makeWindow(str.get("sWTitle"));
         settingsWindow.getButtonTable().add(makeCloseButton()).height(settingsWindow.getPadTop()).row();
 
         //setup for GPGS login logout button
-        final sLabel gpgsLabel;
-        final sTextButton gpgsButton;
         if (g.myActionResolver.isSignedInGPGS()) {
-            gpgsButton = new sTextButton("Disable", g.assets.skin);
-            gpgsLabel = new sLabel("Google Play Game Services \n [You are successfully signed in.]", g.assets.skin);
+            gpgsButton = new sTextButton(str.get("Disable"), assets.skin);
+            gpgsLabel = new sLabel(str.get("sWGPGSInLabel"), assets.skin);
         }
         else{
-            gpgsButton = new sTextButton("Enable", g.assets.skin);
-            gpgsLabel = new sLabel("Google Play Game Services \n [You are signed out at this moment.]", g.assets.skin);
+            gpgsButton = new sTextButton(str.get("Enable"), assets.skin);
+            gpgsLabel = new sLabel(str.get("sWGPGSOutLabel"), assets.skin);
         }
         gpgsLabel.setAlignment(Align.center);
         gpgsButton.addListener(new ClickListener() {
@@ -454,32 +512,28 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 if (g.myActionResolver.isSignedInGPGS()) {
-                    gpgsButton.getLabel().setText("Enable");
-                    gpgsLabel.setText("Google Play Game Services \n [You are signed out at this moment]");
+                    gpgsButton.getLabel().setText(str.get("Enable"));
+                    gpgsLabel.setText(str.get("sWGPGSOutLabel"));
                     g.myActionResolver.signOutGPGS();
                     g.settings.automaticSignInGPGS = false;
                     g.settings.saveSettings();
-                    Dialog(g.str.dPlayerManuallySignOffGPGS, true);
+                    okDialog(str.get("sdPlayerManuallySignOffGPGS"), true);
                 }
                 else {
-                    gpgsButton.getLabel().setText("Disable");
-                    gpgsLabel.setText("Google Play Game Services \n [You are successfully sign in.]");
-                    g.settings.automaticSignInGPGS = true;
-                    g.settings.saveSettings();
-                    g.myActionResolver.signInGPGS();
+                    GPGSSignIn();
                 }
             }
         });
 
         //settings for sound effects and music volume
-        final sLabel musicLabel = new sLabel("Music volume", g.assets.skin);
-        final sLabel soundLabel = new sLabel("Sound effects volume", g.assets.skin);
+        final sLabel musicLabel = new sLabel(str.get("sWMVLabel"), assets.skin);
+        final sLabel soundLabel = new sLabel(str.get("sWSEVLabel"), assets.skin);
         musicLabel.setScale(0.5f+g.settings.musicVolume);
         soundLabel.setScale(0.5f+g.settings.soundVolume);
         musicLabel.setAlignment(Align.center);
         soundLabel.setAlignment(Align.center);
-        final Slider musicSlider = new Slider(0.0f,1.0f,0.02f,false, g.assets.skin);
-        final Slider soundSlider = new Slider(0.0f,1.0f,0.02f,false, g.assets.skin);
+        final Slider musicSlider = new Slider(0.0f,1.0f,0.02f,false, assets.skin);
+        final Slider soundSlider = new Slider(0.0f,1.0f,0.02f,false, assets.skin);
         musicSlider.setValue(g.settings.musicVolume);
         soundSlider.setValue(g.settings.soundVolume);
         musicSlider.addListener(new ChangeListener() {
@@ -505,11 +559,11 @@ public class MainScreen implements Screen {
                 g.settings.saveSettings();
                 soundLabel.setScale(0.5f + soundSlider.getValue());
                 if (g.settings.soundVolume > 0.66)
-                    g.tts.say(g.str.sSoundSliderJoke1, g.settings.soundVolume);
+                    g.tts.say(str.get("saySoundSliderJoke1"), g.settings.soundVolume);
                 else if (g.settings.soundVolume > 0.33)
-                    g.tts.say(g.str.sSoundSliderJoke2, g.settings.soundVolume);
+                    g.tts.say(str.get("saySoundSliderJoke2"), g.settings.soundVolume);
                 else
-                    g.tts.say(g.str.sSoundSliderJoke3, g.settings.soundVolume);
+                    g.tts.say(str.get("saySoundSliderJoke3"), g.settings.soundVolume);
             }
         });
         soundSlider.addListener(new InputListener() {
@@ -523,17 +577,17 @@ public class MainScreen implements Screen {
 
 
 
-        Table settingTable = new Table(g.assets.skin);
+        Table settingTable = new Table(assets.skin);
 
 
         settingTable.add(musicLabel).right().fill().height(50).expandX().row();
         settingTable.add(musicSlider).width(stage.getWidth() / 2).row();
-        settingTable.add(new sLabel(" ", g.assets.skin)).expandX().fill().row();
+        settingTable.add(emptyLine()).expandX().fill().row();
 
 
         settingTable.add(soundLabel).right().fill().height(50).expandX().row();
         settingTable.add(soundSlider).width(stage.getWidth() / 2).row();
-        settingTable.add(new sLabel(" ", g.assets.skin)).expandX().fill().row();
+        settingTable.add(emptyLine()).expandX().fill().row();
 
 
         settingTable.add(gpgsLabel).right().fill().expandX().row();
@@ -550,28 +604,27 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void mainMenu(){
-        mainWindow = makeWindow("Wormkout");
+        mainWindow = makeWindow(assets.str.get(str.get("Wormkout")));
         mainWindow.setVisible(true);
+        sTextButton exitButton = new sTextButton(str.get("Exit"), assets.skin);
+        exitButton.getLabel().setAlignment(Align.center);
+        mainWindow.getButtonTable().add(exitButton).height(mainWindow.getPadTop()).row();
 
-        sTextButton playButton = new sTextButton("Play", g.assets.skin);
-        sTextButton settingsButton = new sTextButton("Settings", g.assets.skin);
-        sTextButton musicButton = new sTextButton("Music", g.assets.skin);
-        sTextButton leaderboardsButton = new sTextButton("Leaderboards", g.assets.skin);
-        sTextButton achievementsButton = new sTextButton("Achievements", g.assets.skin);
-        sTextButton exitButton = new sTextButton("Exit", g.assets.skin);
-        sTextButton creditsButton = new sTextButton("Credits", g.assets.skin);
-        sTextButton helpButton = new sTextButton("Help", g.assets.skin);
+        sTextButton playButton = new sTextButton(str.get("Play"), assets.skin);
+        sTextButton settingsButton = new sTextButton(str.get("Settings"), assets.skin);
+        sTextButton musicButton = new sTextButton(str.get("Music"), assets.skin);
+        sTextButton achievementsButton = new sTextButton(str.get("Achievements"), assets.skin);
+        sTextButton creditsButton = new sTextButton(str.get("Credits"), assets.skin);
+        sTextButton helpButton = new sTextButton(str.get("Help"), assets.skin);
 
 
         float wFB = 200;
         mainWindow.add(playButton).width(wFB).expand().colspan(2).row();
         mainWindow.add(settingsButton).width(wFB).expand();
         mainWindow.add(musicButton).width(wFB).expand().row();
-        mainWindow.add(leaderboardsButton).width(wFB).expand();
+        mainWindow.add(helpButton).width(wFB).expand();
         mainWindow.add(achievementsButton).width(wFB).expand().row();
-        mainWindow.add(creditsButton).width(wFB).expand();
-        mainWindow.add(helpButton).width(wFB).expand().row();
-        mainWindow.add(exitButton).width(wFB).expand().colspan(2);
+        mainWindow.add(creditsButton).width(wFB).expand().colspan(2);
 
 
         //listeners for buttons
@@ -580,7 +633,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 levelWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say(g.str.sLevelWindow,g.settings.soundVolume);
+                g.tts.say(str.get("sayLevelWindow"),g.settings.soundVolume);
             }
         });
 
@@ -589,7 +642,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 settingsWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say(g.str.sSettingsWindow,g.settings.soundVolume);
+                g.tts.say(str.get("saySettingsWindow"),g.settings.soundVolume);
             }
         });
 
@@ -598,34 +651,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 musicWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say(g.str.sMusicWindow,g.settings.soundVolume);
-            }
-        });
-
-        leaderboardsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (g.myActionResolver.isSignedInGPGS()) {
-                    g.tts.say(g.str.sLeaderBoardWindow,g.settings.soundVolume);
-                    g.myActionResolver.getLeaderboardGPGS();
-                }
-                else {
-                    sDialog dialog = new sDialog("", g.assets.skin);
-                    dialog.text(g.str.dNoCanDoWithoutSignInGPGS);
-                    sTextButton yesButton = new sTextButton("  Yes  ", g.assets.skin);
-                    dialog.button(yesButton, true);
-                    sTextButton noButton = new sTextButton("  No  ", g.assets.skin);
-                    dialog.button(noButton, false);
-                    dialog.show(stage);
-
-                    yesButton.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            g.myActionResolver.signInGPGS();
-                        }
-                    });
-                    g.tts.say(g.str.dNoCanDoWithoutSignInGPGS,g.settings.soundVolume);
-                }
+                g.tts.say(str.get("sayMusicWindow"),g.settings.soundVolume);
             }
         });
 
@@ -633,23 +659,22 @@ public class MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (g.myActionResolver.isSignedInGPGS())
-                    g.myActionResolver.getAchivementsGPGS();
+                    g.myActionResolver.getAchievementsGPGS();
                 else {
-                    sDialog dialog = new sDialog("", g.assets.skin);
-                    dialog.text(g.str.dNoCanDoWithoutSignInGPGS);
-                    sTextButton yesButton = new sTextButton("  Yes  ", g.assets.skin);
+                    sDialog dialog = new sDialog("", assets.skin);
+                    dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
+                    sTextButton yesButton = new sTextButton(str.get("Yes"), assets.skin);
                     dialog.button(yesButton, true);
-                    sTextButton noButton = new sTextButton("  No  ", g.assets.skin);
-                    dialog.button(noButton, false);
+                    dialog.button(new sTextButton(str.get("No"), assets.skin), false);
                     dialog.show(stage);
 
                     yesButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            g.myActionResolver.signInGPGS();
+                            GPGSSignIn();
                         }
                     });
-                    g.tts.say(g.str.dNoCanDoWithoutSignInGPGS,g.settings.soundVolume);
+                    g.tts.say(str.get("sdNoCanDoWithoutSignInGPGS"),g.settings.soundVolume);
                 }
             }
         });
@@ -659,7 +684,8 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say(g.str.sCreditsWindow,g.settings.soundVolume);
+                g.myActionResolver.unlockAchievementGPGS("achievement_visited_credits");
+                g.tts.say(str.get("sayCreditsWindow"),g.settings.soundVolume);
             }
         });
 
@@ -668,14 +694,15 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 helpWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.tts.say(g.str.sHelpWindow,g.settings.soundVolume);
+                g.tts.say(str.get("sayHelpWindow"),g.settings.soundVolume);
+                g.myActionResolver.unlockAchievementGPGS("achievement_visited_help");
             }
         });
 
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                g.tts.say("Bye",g.settings.soundVolume);
+                g.tts.say(str.get("Bye"),g.settings.soundVolume);
                 Gdx.app.exit();
             }
         });
@@ -687,7 +714,7 @@ public class MainScreen implements Screen {
      * @return returns new window with prepared common parameters
      */
     private sWindow makeWindow(String title){
-        sWindow window = new sWindow(title, g.assets.skin, g.assets.fontShader);
+        sWindow window = new sWindow(title, assets.skin, assets.fontShader);
         window.setVisible(false);
         window.setWidth(stage.getWidth() / 1.0272f);
         window.setHeight(stage.getHeight() / 1.0272f);
@@ -702,7 +729,7 @@ public class MainScreen implements Screen {
      * @return closeButton for with common code for all secondary windows
      */
     private sTextButton makeCloseButton(){
-        sTextButton closeButton = new sTextButton(" Back ", g.assets.skin);
+        sTextButton closeButton = new sTextButton(str.get("Back"), assets.skin);
         closeButton.getLabel().setAlignment(Align.center);
         closeButton.addListener(new ClickListener() {
             @Override
@@ -718,11 +745,23 @@ public class MainScreen implements Screen {
         return closeButton;
     }
 
-    private void Dialog(String msg, boolean speak){
-        new sDialog("", g.assets.skin){}.text(msg).button("Ok").show(stage);
+
+    private void okDialog(String msg, boolean speak){
+        new sDialog("", assets.skin){}.text(msg).button(str.get("Ok")).show(stage);
         if (speak)
             g.tts.say(msg, g.settings.soundVolume);
     }
+
+
+    private void GPGSSignIn(){
+        gpgsButton.getLabel().setText(str.get("Disable"));
+        gpgsLabel.setText(str.get("sWGPGSInLabel"));
+        g.settings.automaticSignInGPGS = true;
+        g.settings.saveSettings();
+        g.myActionResolver.signInGPGS();
+        g.levelStates.saveLevelProgress();
+    }
+
 
     @Override
     public void resize (int width, int height){

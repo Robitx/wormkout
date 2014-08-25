@@ -199,9 +199,9 @@ public class sFileChooser extends FileChooser {
     };
 
 
-    public sFileChooser(Skin skin, Listener listener) {
+    public sFileChooser(Skin skin, Listener listener, String addButton) {
         super(listener);
-        buildWidgets(skin);
+        buildWidgets(skin,addButton);
         setSkin(skin);
         build();
     }
@@ -217,16 +217,16 @@ public class sFileChooser extends FileChooser {
     }
 
     /** builds {@link #chooseButton}, {@link #cancelButtonListener}, {@link #tree}, {@link #treePane} */
-    protected void buildWidgets(Skin skin) {
+    protected void buildWidgets(Skin skin, String addButton) {
         tree = new Tree(skin);
         tree.addListener(treeListener);
         treePane = new ScrollPane(tree);
-        chooseButton = new sTextButton("  Add song  ",skin);
+        chooseButton = new sTextButton(addButton,skin);
         chooseButton.addListener(chooseButtonListener);
         chooseButton.setDisabled(true);
 
-
-        (cancelButton = new sTextButton("  Add song  ",skin)).addListener(cancelButtonListener);
+        //is hidden and disabled
+        (cancelButton = new sTextButton("Cancel",skin)).addListener(cancelButtonListener);
         cancelButton.setVisible(false);
         cancelButton.setDisabled(true);
     }

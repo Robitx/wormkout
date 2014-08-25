@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -27,7 +26,7 @@ public class GameScreen implements Screen {
     public GameScreen(Wormkout game){ this.g = game; }
 
     private Stage stage;
-    private Batch batch;
+   // private Batch batch;
     private sLabel msgLabel;
     private ModelBatch modelBatch;
     private Environment environment;
@@ -62,14 +61,11 @@ public class GameScreen implements Screen {
                 timer = 0;
             if (timer > 2.0f)
                 g.mySensorProcessing.calibrate();
-            msgLabel.setText(g.str.mCalibration);
-            msgLabel.setScale(2.0f);
             msgLabel.setVisible(calibrating);
-
         }
 
         if (g.level.gameOver) {
-            g.tts.say(g.str.sGameOver1,g.settings.soundVolume);
+            g.tts.say(g.myAssets.str.get("sayGameOver1"),g.settings.soundVolume);
 
             g.setScreen(g.mainScreen);
             return;
@@ -81,15 +77,16 @@ public class GameScreen implements Screen {
             float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
             if (bestTime > timer) {
                 g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
-                g.tts.say(g.str.sVictoryNewBestTime,g.settings.soundVolume);
+                g.tts.say(g.myAssets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
             }
             else {
-                g.tts.say(g.str.sVictoryslow,g.settings.soundVolume);
+                g.tts.say(g.myAssets.str.get("sayVictorySlow"),g.settings.soundVolume);
             }
             // unlocks next lvl
             if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
                 g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
-                g.tts.appendSay(g.str.sLevelUnlock,g.settings.soundVolume);
+                g.tts.appendSay(g.myAssets.str.get("sayLevelUnlock"),g.settings.soundVolume);
+                g.levelStates.unlockingBuffer++;
             }
             g.levelStates.saveLevelProgress();
 
@@ -115,15 +112,13 @@ public class GameScreen implements Screen {
     @Override
     public void show (){
         Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1);
-        sLabel.setShader(g.assets.fontShader);
+        sLabel.setShader(g.myAssets.fontShader);
         stage = new Stage();
-        stage.setViewport(g.assets.viewport);
+        stage.setViewport(g.myAssets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final sLabel speedLabel = new sLabel("Speed: 2 gates/s", g.assets.skin);
+        final sLabel speedLabel = new sLabel(g.myAssets.str.format("Speed",2), g.myAssets.skin);
         speedLabel.setAlignment(Align.left);
-
-
         stage.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -143,14 +138,14 @@ public class GameScreen implements Screen {
                    g.player.speed--;
                g.player.speed = (g.player.speed>1) ? g.player.speed : 1;
                g.player.speed = (g.player.speed<20) ? g.player.speed : 20;
-               speedLabel.setText("Speed: "+ g.player.speed +" gates/s");
+               speedLabel.setText(g.myAssets.str.format("Speed",g.player.speed));
                return true;
            }
         });
 
 
-
-        msgLabel = new sLabel(" ", g.assets.skin);
+        msgLabel = new sLabel(g.myAssets.str.get("Calibration"), g.myAssets.skin);
+        msgLabel.setScale(2.0f);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);
 
