@@ -67,8 +67,8 @@ public class MySensorProcessing {
         //in order to avoid NaN from acos
         float x = MathUtils.clamp(tmp1.dot(tmp2), -0.99999f, 0.99999f);
         x = (tmp1.x*tmp2.y>tmp1.y*tmp2.x)? (float)Math.acos(x) : -(float)Math.acos(x);
-        //maximum angle is +- 60 degrees from calibrated direction
-        return MathUtils.clamp(x, -(float)Math.PI/3, (float)Math.PI/3);
+        //maximum angle is +- PI/2.25 from calibrated direction
+        return MathUtils.clamp(x, -(float)Math.PI/2.25f, (float)Math.PI/2.25f);
     }
 
 

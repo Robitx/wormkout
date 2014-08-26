@@ -327,18 +327,19 @@ public class MainScreen implements Screen {
                     g.setScreen(g.gameScreen);
                 }
             });
-            table.add(lvlButton).width(200).padLeft(10).align(Align.left);
+            table.add(lvlButton).width(200).padLeft(10).padBottom(10).align(Align.left);
         }
         else {
             sLabel label = new sLabel(g.levelStates.lvls.get(level).name+" " + str.get("locked"), skin);
             label.setAlignment(Align.center);
-            table.add(label).width(200).padLeft(10).align(Align.left);
+            table.add(label).width(200).padLeft(10).padBottom(10).align(Align.left);
         }
 
         //level description
         sLabel lvlLabel = new sLabel(g.levelStates.lvls.get(level).description, skin);
         lvlLabel.setAlignment(Align.left);
-        table.add(lvlLabel).expandX().align(Align.left).padLeft(10).fill();
+        lvlLabel.setWrap(true);
+        table.add(lvlLabel).expandX().align(Align.left).padLeft(10).padBottom(10).fill();
 
         //leaderboard button with best time
         String LBString;
@@ -377,10 +378,8 @@ public class MainScreen implements Screen {
                 }
             }
         });
-        table.add(LBButton).width(175).padLeft(10).padRight(10).align(Align.left).row();
+        table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
 
-
-        table.add(emptyLine()).expandX().colspan(3).fill().row();
         return table;
     }
 
@@ -395,7 +394,7 @@ public class MainScreen implements Screen {
 
         Table table = new Table();
         table.add(titleLabel(str.get("Level"),1.25f)).width(200).align(Align.left).padLeft(10).fill();
-        table.add(titleLabel(str.get("Description"),1.25f)).expandX().align(Align.left).padLeft(10).fill();
+        table.add(titleLabel(str.get("Info"),1.25f)).expandX().align(Align.left).padLeft(10).fill();
         table.add(titleLabel(str.get("Time"),1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
 
         levelTable.add(table).expand().fill().row();

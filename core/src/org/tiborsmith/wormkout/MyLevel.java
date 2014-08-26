@@ -20,10 +20,10 @@ public class MyLevel {
     public MyLevel(Wormkout game){ this.g = game; }
 
     private float gateRadius = 1.0f;
-    public float gateDistance = gateRadius*0.618f;
-    private int noRG = 25; // number of rendered gates
+    public float gateDistance = gateRadius*0.618f*0.618f;
+    private int noRG = 40; // number of rendered gates
     private Array<Vector3> path = new Array<Vector3>(); // array with path for level
-    private Color[] gateColors= new Color[32]; // array of colors for rendered gates
+    private Color[] gateColors= new Color[42]; // array of colors for rendered gates
     private Vector3 poLRG = new Vector3(0,0,0); //position of last rendered gate
     private int gN = 0; //gate number
     private float startAC = 5.0f; //start animation countdown
@@ -60,8 +60,9 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
-        for (int i=7; i< noRG; i++){
-            int j = i+g.player.speed%3;//careful with noRG here
+        for (int i=7+g.player.speed/2; i< noRG; i++){
+            //int j = i+g.player.speed%3;//careful with noRG here
+            int j = i;
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[j].r,
                     gateColors[j].g,gateColors[j].b,1));
         }
@@ -72,12 +73,13 @@ public class MyLevel {
      * finish is noRG before lastGate
      * @param delta
      */
-    public void update(float delta){
+    public int update(float delta){
         updateColors(delta);
         if (1 < path.size){
             if(collisionTest()){
                 addNextGate();
             }
+            return noRG+path.size-2;
         }
         else {
             path.clear();
@@ -86,11 +88,13 @@ public class MyLevel {
                     gN++;
                 g.audio.device.setVolume((float)(noRG-gN)/(float)noRG * g.settings.musicVolume);
                 startAC = 0.5f;
+                return noRG - gN-1;
             }
             else {
                 startAC-=delta;
                 if (startAC < 0)
                     gameVictory = true;
+                return 0;
             }
         }
     }
@@ -190,7 +194,7 @@ public class MyLevel {
         loadPath();
 
         //clear gate colors
-        for (int i=0; i<32; i++){
+        for (int i=0; i<gateColors.length; i++){
             gateColors[i] = new Color(Color.WHITE);
         }
 

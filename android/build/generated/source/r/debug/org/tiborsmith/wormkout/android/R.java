@@ -1466,11 +1466,16 @@ containing a value of this type.
         public static final int gamehelper_sign_in_failed=0x7f0a002f;
         public static final int gamehelper_unknown_error=0x7f0a0030;
         public static final int leaderboard_pi_1=0x7f0a0031;
-        public static final int leaderboard_pi_2=0x7f0a0032;
-        public static final int leaderboard_pi_3=0x7f0a0033;
-        public static final int leaderboard_pi_4=0x7f0a0034;
-        public static final int leaderboard_pi_5=0x7f0a0035;
-        public static final int wallet_buy_button_place_holder=0x7f0a0036;
+        public static final int leaderboard_pi_10=0x7f0a0032;
+        public static final int leaderboard_pi_2=0x7f0a0033;
+        public static final int leaderboard_pi_3=0x7f0a0034;
+        public static final int leaderboard_pi_4=0x7f0a0035;
+        public static final int leaderboard_pi_5=0x7f0a0036;
+        public static final int leaderboard_pi_6=0x7f0a0037;
+        public static final int leaderboard_pi_7=0x7f0a0038;
+        public static final int leaderboard_pi_8=0x7f0a0039;
+        public static final int leaderboard_pi_9=0x7f0a003a;
+        public static final int wallet_buy_button_place_holder=0x7f0a003b;
     }
     public static final class style {
         public static final int GdxTheme=0x7f0b0000;

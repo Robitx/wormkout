@@ -64,6 +64,6 @@ public class MyPlayer {
         cam.update();
 
         //default speed
-        speed = 2;
+        speed = 5;
     }
 }

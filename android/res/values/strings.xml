@@ -9,10 +9,15 @@
     <string name="achievement_wisdom">CgkIsqLtr_0eEAIQBw</string>
     <string name="achievement_curiosity">CgkIsqLtr_0eEAIQAw</string>
     <string name="achievement_generosity">CgkIsqLtr_0eEAIQAg</string>
-    <string name="leaderboard_pi_1">CgkIsqLtr_0eEAIQDA</string>
-    <string name="leaderboard_pi_2">CgkIsqLtr_0eEAIQDQ</string>
-    <string name="leaderboard_pi_3">CgkIsqLtr_0eEAIQCQ</string>
-    <string name="leaderboard_pi_4">CgkIsqLtr_0eEAIQCg</string>
-    <string name="leaderboard_pi_5">CgkIsqLtr_0eEAIQCw</string>
+    <string name="leaderboard_pi_1">CgkIsqLtr_0eEAIQDg</string>
+    <string name="leaderboard_pi_2">CgkIsqLtr_0eEAIQDw</string>
+    <string name="leaderboard_pi_3">CgkIsqLtr_0eEAIQEA</string>
+    <string name="leaderboard_pi_4">CgkIsqLtr_0eEAIQEg</string>
+    <string name="leaderboard_pi_5">CgkIsqLtr_0eEAIQEQ</string>
+    <string name="leaderboard_pi_6">CgkIsqLtr_0eEAIQEw</string>
+    <string name="leaderboard_pi_7">CgkIsqLtr_0eEAIQFA</string>
+    <string name="leaderboard_pi_8">CgkIsqLtr_0eEAIQFQ</string>
+    <string name="leaderboard_pi_9">CgkIsqLtr_0eEAIQFg</string>
+    <string name="leaderboard_pi_10">CgkIsqLtr_0eEAIQFw</string>
 
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wormkout-demo</string>
+
+    <string name="app_id">675064262054</string>
+    <string name="achievement_determination">CgkIptvc59ITEAIQAQ</string>
+    <string name="achievement_individuality">CgkIptvc59ITEAIQAg</string>
+    <string name="achievement_wisdom">CgkIptvc59ITEAIQAw</string>
+    <string name="achievement_curiosity">CgkIptvc59ITEAIQBA</string>
+    <string name="achievement_generosity">CgkIptvc59ITEAIQBQ</string>
+    <string name="leaderboard_pi_1">CgkIptvc59ITEAIQBg</string>
+    <string name="leaderboard_pi_2">CgkIptvc59ITEAIQBw</string>
+    <string name="leaderboard_pi_3">CgkIptvc59ITEAIQCA</string>
+    <string name="leaderboard_pi_4">CgkIptvc59ITEAIQCQ</string>
+    <string name="leaderboard_pi_5">CgkIptvc59ITEAIQCg</string>
+    <string name="leaderboard_pi_6">CgkIptvc59ITEAIQCw</string>
+    <string name="leaderboard_pi_7">CgkIptvc59ITEAIQDA</string>
+    <string name="leaderboard_pi_8">CgkIptvc59ITEAIQDQ</string>
+    <string name="leaderboard_pi_9">CgkIptvc59ITEAIQDg</string>
+    <string name="leaderboard_pi_10">CgkIptvc59ITEAIQDw</string>
+
+</resources>

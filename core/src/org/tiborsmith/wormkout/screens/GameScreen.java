@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
     private Stage stage;
    // private Batch batch;
     private sLabel msgLabel;
+    private sLabel gNLabel;
     private ModelBatch modelBatch;
     private Environment environment;
 
@@ -51,7 +52,7 @@ public class GameScreen implements Screen {
 
         if (!calibrating) {
             g.player.updatePlayer(delta);
-            g.level.update(delta);
+            gNLabel.setText(g.assets.str.format("RemainingGates",g.level.update(delta)));
             timer += delta;
         }
         else {
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
             if (timer > 2.0f)
                 g.mySensorProcessing.calibrate();
             msgLabel.setVisible(calibrating);
+            gNLabel.setVisible(!calibrating);
         }
 
         if (g.level.gameOver) {
@@ -117,7 +119,7 @@ public class GameScreen implements Screen {
         stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",2), g.assets.skin);
+        final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",5), g.assets.skin);
         speedLabel.setAlignment(Align.left);
         stage.addListener(new InputListener(){
             @Override
@@ -136,13 +138,16 @@ public class GameScreen implements Screen {
                    g.player.speed++;
                else
                    g.player.speed--;
-               g.player.speed = (g.player.speed>1) ? g.player.speed : 1;
-               g.player.speed = (g.player.speed<20) ? g.player.speed : 20;
+               g.player.speed = (g.player.speed>0) ? g.player.speed : 0;
+               g.player.speed = (g.player.speed<50) ? g.player.speed : 50;
                speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
                return true;
            }
         });
 
+        gNLabel = new sLabel(g.assets.str.format("RemainingGates",0), g.assets.skin);
+        gNLabel.setAlignment(Align.right);
+        gNLabel.setVisible(false);
 
         msgLabel = new sLabel(g.assets.str.get("Calibration"), g.assets.skin);
         msgLabel.setScale(2.0f);
@@ -151,8 +156,9 @@ public class GameScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(speedLabel).expandX().fill().row();
-        table.add(msgLabel).expand().fill().row();
+        table.add(speedLabel).expandX().padLeft(10).fill();
+        table.add(gNLabel).expandX().padRight(10).fill().row();
+        table.add(msgLabel).expand().fill().colspan(2).row();
         stage.addActor(table);
 
 

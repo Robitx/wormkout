@@ -23,11 +23,11 @@ public class MyAudio {
 
     private short[] samples = new short[2048];
     private float[] spectrum = new float[1025];
-    private float[] topValues = new float[512];
+    private float[] topValues = new float[1025];
 
 
 
-    private int NB_BARS = 32;
+    private int NB_BARS = 42;
 
     /**
      * Need to get better color generation

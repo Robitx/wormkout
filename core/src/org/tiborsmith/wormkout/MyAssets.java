@@ -29,7 +29,7 @@ public class MyAssets {
     public Skin skin;
     public Model gate;
     public Model skybox;
-    public MyLevelParts parts = new MyLevelParts();
+    public MyLvlParts parts = new MyLvlParts();
 
     public  I18NBundle str;
     public Viewport viewport;

@@ -2,17 +2,17 @@
 <pre-dex-items>
 
     <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-999c84d67e4ff3f5be3fd486cbd734d34b718743.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
-    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/core-1.0.0-81551077dd213c605fb4a5982b8fbaacf21b9067.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="4b2ce9e655abe9fadb7340660be0307b02236b5b"/>
+        sha1="dd56d98d1c445938d7b6735205d8236792a82526"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-4f2f4bcf614632068c762784a0ae1b11f8e45afa.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-audio-2c76f46bdccb5f1ebabac6dac3fb6698fcb9feaa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/gdx-audio.jar"
@@ -20,11 +20,53 @@
         revision="19.1.0"
         sha1="baa583528ea0c6b7cae7eedee30af472fac4351e"/>
     <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-e3d5dcd1a2673d39d8cb4cb97b6f388936e1ad2c.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.0.89/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa"/>
+    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-4bdb60113099356f3d3ef494d613f343006fbea1.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-f6303a900a8ae2c07c6d5d726ab4ae9f94ae656c.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.3.1-d90c39a0c5572c5492ba8a3247d5ec83f24635b6.jar"
+        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.3.1/a2d556d1380aa4324a24497fdfa2ebec64d40251/gdx-backend-android-1.3.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="a2d556d1380aa4324a24497fdfa2ebec64d40251"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-e6ced889f044036a1f8354043ba43da040c7fee5.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/gdx-audio-3b0e269fa1e5903b9410d05b3a96d3b6a6432c02.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/gdx-audio.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="baa583528ea0c6b7cae7eedee30af472fac4351e"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-d89a5bf95712125000c7096bf97fe68ceab2424f.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-999c84d67e4ff3f5be3fd486cbd734d34b718743.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-1.3.1-4d38f16e2b4a318c64845750203c327cca7872ca.jar"
         jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.3.1/18995f8b7b19118975722370818023c76a86fdf4/gdx-1.3.1.jar"
@@ -32,11 +74,11 @@
         revision="19.1.0"
         sha1="18995f8b7b19118975722370818023c76a86fdf4"/>
     <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-f6303a900a8ae2c07c6d5d726ab4ae9f94ae656c.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-af94e3c3bce0a85217823302634bc3eaec3b5b9a.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+        sha1="58b509c50f1e617b2ec68d5a71b4773a4d58a7c1"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-ac9eecc253fdba2831c82bc0dc80fba11be63671.jar"
         jar="/opt/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
@@ -49,12 +91,6 @@
         jumboMode="false"
         revision="19.1.0"
         sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa"/>
-    <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/gdx-backend-android-1.3.1-d90c39a0c5572c5492ba8a3247d5ec83f24635b6.jar"
-        jar="/home/tibor/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-android/1.3.1/a2d556d1380aa4324a24497fdfa2ebec64d40251/gdx-backend-android-1.3.1.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="a2d556d1380aa4324a24497fdfa2ebec64d40251"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/classes-4fb1006ad69356446e3662d18a4c10ef82895db7.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0.0/classes.jar"
