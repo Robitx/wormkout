@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
         }
 
         if (g.level.gameOver) {
-            g.tts.say(g.myAssets.str.get("sayGameOver1"),g.settings.soundVolume);
+            g.pDI.say(g.assets.str.get("sayGameOver1"),g.settings.soundVolume);
 
             g.setScreen(g.mainScreen);
             return;
@@ -77,15 +77,15 @@ public class GameScreen implements Screen {
             float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
             if (bestTime > timer) {
                 g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
-                g.tts.say(g.myAssets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
+                g.pDI.say(g.assets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
             }
             else {
-                g.tts.say(g.myAssets.str.get("sayVictorySlow"),g.settings.soundVolume);
+                g.pDI.say(g.assets.str.get("sayVictorySlow"),g.settings.soundVolume);
             }
             // unlocks next lvl
             if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
                 g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
-                g.tts.appendSay(g.myAssets.str.get("sayLevelUnlock"),g.settings.soundVolume);
+                g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"),g.settings.soundVolume);
                 g.levelStates.unlockingBuffer++;
             }
             g.levelStates.saveLevelProgress();
@@ -112,12 +112,12 @@ public class GameScreen implements Screen {
     @Override
     public void show (){
         Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1);
-        sLabel.setShader(g.myAssets.fontShader);
+        sLabel.setShader(g.assets.fontShader);
         stage = new Stage();
-        stage.setViewport(g.myAssets.viewport);
+        stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final sLabel speedLabel = new sLabel(g.myAssets.str.format("Speed",2), g.myAssets.skin);
+        final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",2), g.assets.skin);
         speedLabel.setAlignment(Align.left);
         stage.addListener(new InputListener(){
             @Override
@@ -138,13 +138,13 @@ public class GameScreen implements Screen {
                    g.player.speed--;
                g.player.speed = (g.player.speed>1) ? g.player.speed : 1;
                g.player.speed = (g.player.speed<20) ? g.player.speed : 20;
-               speedLabel.setText(g.myAssets.str.format("Speed",g.player.speed));
+               speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
                return true;
            }
         });
 
 
-        msgLabel = new sLabel(g.myAssets.str.get("Calibration"), g.myAssets.skin);
+        msgLabel = new sLabel(g.assets.str.get("Calibration"), g.assets.skin);
         msgLabel.setScale(2.0f);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);

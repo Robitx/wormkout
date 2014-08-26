@@ -61,7 +61,7 @@ public class MyLevel {
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
         for (int i=7; i< noRG; i++){
-            int j = i-2+g.player.speed%3;
+            int j = i+g.player.speed%3;//careful with noRG here
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[j].r,
                     gateColors[j].g,gateColors[j].b,1));
         }
@@ -107,17 +107,17 @@ public class MyLevel {
             if (startAC>2.0f) {
                 gateColors[0].set(1,0,0,1);
                 if (startAC>3.0){
-                    gateColors[0].set(Color.DARK_GRAY).mul((5.0f-startAC)/2);
+                    gateColors[0].set(Color.BLACK).mul((5.0f-startAC)/2);
                 }
                 if (startAC>3.0f && startAC<3.1f)
-                    g.tts.say("Three.",g.settings.soundVolume);
+                    g.pDI.say("Three.",g.settings.soundVolume);
                 if (startAC<2.1f)
-                    g.tts.say("Two.",g.settings.soundVolume);
+                    g.pDI.say("Two.",g.settings.soundVolume);
             }
             else if (startAC>1.0f){
                 gateColors[0].set(Color.ORANGE);
                 if (startAC<1.1f)
-                    g.tts.say("One.",g.settings.soundVolume);
+                    g.pDI.say("One.",g.settings.soundVolume);
             }
             else{
                 gateColors[0].set(Color.GREEN);
@@ -129,7 +129,7 @@ public class MyLevel {
             return true;
         }
         else {
-            g.tts.say("Go.",g.settings.soundVolume);
+            g.pDI.say("Go.",g.settings.soundVolume);
             return false;
         }
     }
@@ -139,7 +139,7 @@ public class MyLevel {
      * Adds new gate to gates
      */
     private void addGate(){
-        ModelInstance gate = new ModelInstance(g.myAssets.gate);  //makes new model instance
+        ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
@@ -172,7 +172,7 @@ public class MyLevel {
             InputStream is = lvl.read();
             DataInputStream dis = new DataInputStream(is);
             while(dis.available()>0){
-                g.myAssets.parts.getNextPart(path, dis.readByte());
+                g.assets.parts.getNextPart(path, dis.readByte());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -201,7 +201,7 @@ public class MyLevel {
         gN = 0;
 
         //zero gate
-        ModelInstance zeroInstance = new ModelInstance(g.myAssets.gate);
+        ModelInstance zeroInstance = new ModelInstance(g.assets.gate);
         gates.add(zeroInstance);
 
         //load first noRG gates
@@ -209,7 +209,7 @@ public class MyLevel {
             addGate();
         }
 
-        skybox = new ModelInstance(g.myAssets.skybox);
+        skybox = new ModelInstance(g.assets.skybox);
     }
 
 

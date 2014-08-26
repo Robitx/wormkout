@@ -13,12 +13,14 @@ public class MyPlayList {
     public MyPlayList(){
         songNames = new Array<String>();
         songPaths = new Array<String>();
+        onlyCustomNames = new Array<String>();
     }
 
     public int numOfDefaultSong;
     public boolean playDefault;
     public Array<String> songNames;
     public Array<String> songPaths;
+    public transient Array<String> onlyCustomNames;
 
 
     public void savePlayList(){
@@ -65,6 +67,8 @@ public class MyPlayList {
             for (int i = numOfDefaultSong; i < songPaths.size; i++){
                 if (!Gdx.files.external(songPaths.get(i).toString()).exists())
                     songPaths.removeIndex(i);
+                else
+                    onlyCustomNames.add(songNames.get(i));
             }
         }
 

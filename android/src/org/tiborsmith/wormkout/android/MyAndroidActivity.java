@@ -13,14 +13,13 @@ import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 import org.tiborsmith.wormkout.Wormkout;
-import org.tiborsmith.wormkout.steady.MyActionResolver;
-import org.tiborsmith.wormkout.steady.MyTTS;
+import org.tiborsmith.wormkout.steady.PDI;
 
 import java.util.HashMap;
 import java.util.Locale;
 
 public class MyAndroidActivity extends AndroidApplication implements GameHelper.GameHelperListener,
-        MyActionResolver, TextToSpeech.OnInitListener, MyTTS {
+        PDI, TextToSpeech.OnInitListener {
 
     private GameHelper gameHelper;
     private TextToSpeech tts;
@@ -40,7 +39,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
         //keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        initialize(new Wormkout(new MyAndroidSensors(this.getContext()),this, this), config);
+        initialize(new Wormkout(new MyAndroidSensors(this.getContext()), this), config);
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES );
         gameHelper.enableDebugLog(false);

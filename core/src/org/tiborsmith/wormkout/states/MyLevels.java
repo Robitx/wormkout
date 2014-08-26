@@ -26,11 +26,11 @@ public class MyLevels {
      */
     public void saveLevelProgress(){
         //try to update leaderboards and achievements
-        if (g.myActionResolver.isSignedInGPGS()) {
+        if (g.pDI.isSignedInGPGS()) {
             for (int i=0; i< lvls.size ; i++)
-                g.myActionResolver.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
+                g.pDI.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
             if ( unlockingBuffer > 0) {
-                g.myActionResolver.incrementAchievementGPGS("achievement_level_progress", unlockingBuffer);
+                g.pDI.incrementAchievementGPGS("achievement_level_progress", unlockingBuffer);
                 unlockingBuffer = 0;
             }
         }

@@ -11,10 +11,9 @@ import org.tiborsmith.wormkout.screens.SplashScreen;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
 import org.tiborsmith.wormkout.states.MySettings;
-import org.tiborsmith.wormkout.steady.MyActionResolver;
 import org.tiborsmith.wormkout.steady.MySensorProcessing;
 import org.tiborsmith.wormkout.steady.MySensors;
-import org.tiborsmith.wormkout.steady.MyTTS;
+import org.tiborsmith.wormkout.steady.PDI;
 
 
 public class Wormkout extends Game {
@@ -26,44 +25,39 @@ public class Wormkout extends Game {
     //my own control of sensors
     public final MySensors mySensors;
     public final MySensorProcessing mySensorProcessing;
-    //action resolver for interaction with GPGS
-    public final MyActionResolver myActionResolver;
-    //interface for text to speech
-    public final MyTTS tts;
+    //action resolver for interaction with GPGS and with TTS
+    public final PDI pDI;
     //player class (camera,controls)
     public final MyPlayer player;
     //loading models, music, levels and such
-    public final MyAssets myAssets;
+    public final MyAssets assets;
     public final MyAudio audio;
     public final MyLevel level;
-    //strings and other constants
-   // public final Constants str;
 
 
     //state classes and variables
     public MyLevels levelStates;
     public MySettings settings;
     public MyPlayList playList;
-    public int currentLevel = 0;
-    public int currentSong = 0;
+
 
     //some flags
     public boolean welcomeBack;
     public boolean playMenu;
     public boolean firstLaunch;
+    public int currentLevel = 0;
+    public int currentSong = 0;
 
 
-    public Wormkout(MySensors mySensors, MyActionResolver myActionResolver, MyTTS myTTS){
+    public Wormkout(MySensors mySensors, PDI pDI){
         super();
         this.mySensors = mySensors;
-        this.myActionResolver = myActionResolver;
-        this.tts = myTTS;
+        this.pDI = pDI;
         mySensorProcessing = new MySensorProcessing(this);
-        myAssets = new MyAssets(this);
+        assets = new MyAssets(this);
         player = new MyPlayer(this);
         audio = new MyAudio(this);
         level = new MyLevel(this);
-    //    str = new Constants();
     }
 
 
@@ -73,7 +67,6 @@ public class Wormkout extends Game {
         gameScreen = new GameScreen(this);
         mainScreen = new MainScreen(this);
 
-
         Gdx.input.setCatchBackKey(true);
 
         super.setScreen(splashScreen);
@@ -81,7 +74,7 @@ public class Wormkout extends Game {
 
     @Override
     public void dispose(){
-        myAssets.dispose();
+        assets.dispose();
 
         mainScreen.dispose();
         gameScreen.dispose();
