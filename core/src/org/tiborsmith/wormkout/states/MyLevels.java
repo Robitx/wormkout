@@ -30,7 +30,7 @@ public class MyLevels {
             for (int i=0; i< lvls.size ; i++)
                 g.pDI.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
             if ( unlockingBuffer > 0) {
-                g.pDI.incrementAchievementGPGS("achievement_level_progress", unlockingBuffer);
+                g.pDI.incrementAchievementGPGS("achievement_determination", unlockingBuffer);
                 unlockingBuffer = 0;
             }
         }

@@ -165,30 +165,30 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
 
     @Override
     public void incrementAchievementGPGS(String achievement, int score) {
-        if (achievement == "achievement_level_progress") {
+        if (achievement.equals("achievement_determination") ) {
             Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_level_progress),score);
+                    getString(R.string.achievement_determination),score);
         }
     }
 
     @Override
     public void unlockAchievementGPGS(String achievement) {
 
-        if (achievement == "achievement_customized_music") {
+        if (achievement == "achievement_individuality") {
             Games.Achievements.unlock(gameHelper.getApiClient(),
-                    getString(R.string.achievement_customized_music));
+                    getString(R.string.achievement_individuality));
         }
-        if (achievement == "achievement_link_exploration") {
-            Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_link_exploration),1);
-        }
-        if (achievement == "achievement_visited_help") {
+        if (achievement == "achievement_generosity") {
             Games.Achievements.unlock(gameHelper.getApiClient(),
-                    getString(R.string.achievement_visited_help));
+                    getString(R.string.achievement_generosity));
         }
-        if (achievement == "achievement_visited_credits") {
+        if (achievement == "achievement_wisdom") {
             Games.Achievements.unlock(gameHelper.getApiClient(),
-                    getString(R.string.achievement_visited_credits));
+                    getString(R.string.achievement_wisdom));
+        }
+        if (achievement == "achievement_curiosity") {
+            Games.Achievements.unlock(gameHelper.getApiClient(),
+                    getString(R.string.achievement_curiosity));
         }
     }
 

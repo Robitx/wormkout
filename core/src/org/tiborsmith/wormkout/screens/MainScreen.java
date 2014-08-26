@@ -185,7 +185,8 @@ public class MainScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     mainWindow.setVisible(false);
                     helpWindow.setVisible(true);
-                    g.pDI.unlockAchievementGPGS("achievement_visited_help");
+                    if (g.pDI.isSignedInGPGS())
+                        g.pDI.unlockAchievementGPGS("achievement_wisdom");
                 }
             });
             g.pDI.say(str.get("sdFirstWelcome"),g.settings.soundVolume);
@@ -269,7 +270,8 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (button) {
                     Gdx.net.openURI(link);
-                    g.pDI.unlockAchievementGPGS("achievement_link_exploration");
+                    if (link==str.get("cWpaypalLink") && g.pDI.isSignedInGPGS())
+                        g.pDI.unlockAchievementGPGS("achievement_generosity");
                 }
             }
         });
@@ -472,7 +474,8 @@ public class MainScreen implements Screen {
                 g.playList.onlyCustomNames.add(file.name());
                 playlist.setItems(g.playList.onlyCustomNames);
                 g.playList.savePlayList();
-                g.pDI.unlockAchievementGPGS("achievement_customized_music");
+                if (g.pDI.isSignedInGPGS())
+                    g.pDI.unlockAchievementGPGS("achievement_individuality");
             }
 
             @Override
@@ -669,6 +672,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (g.pDI.isSignedInGPGS()) {
                     g.pDI.say(str.get("sayAchievementWindow"),g.settings.soundVolume);
+                    g.levelStates.saveLevelProgress();
                     g.pDI.getAchievementsGPGS();
                 }
                 else {
@@ -696,7 +700,8 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 creditsWindow.setVisible(true);
                 mainWindow.setVisible(false);
-                g.pDI.unlockAchievementGPGS("achievement_visited_credits");
+                if (g.pDI.isSignedInGPGS())
+                    g.pDI.unlockAchievementGPGS("achievement_curiosity");
                 g.pDI.say(str.get("sayCreditsWindow"),g.settings.soundVolume);
             }
         });
@@ -707,7 +712,8 @@ public class MainScreen implements Screen {
                 helpWindow.setVisible(true);
                 mainWindow.setVisible(false);
                 g.pDI.say(str.get("sayHelpWindow"),g.settings.soundVolume);
-                g.pDI.unlockAchievementGPGS("achievement_visited_help");
+                if (g.pDI.isSignedInGPGS())
+                    g.pDI.unlockAchievementGPGS("achievement_wisdom");
             }
         });
 
