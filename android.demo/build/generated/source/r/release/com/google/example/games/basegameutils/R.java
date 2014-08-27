@@ -496,7 +496,7 @@ public final class R {
 		public static final int gamehelper_license_failed = 0x7f0a002e;
 		public static final int gamehelper_sign_in_failed = 0x7f0a002f;
 		public static final int gamehelper_unknown_error = 0x7f0a0030;
-		public static final int wallet_buy_button_place_holder = 0x7f0a0032;
+		public static final int wallet_buy_button_place_holder = 0x7f0a003b;
 	}
 	public static final class style {
 		public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog = 0x7f0b0001;

@@ -188,17 +188,18 @@ public class MyAudio {
         try {
             playbackThread.interrupt();
             playbackThread.join();
+
+            //dispose of stuff if its not null
+            if (device != null)
+                device.dispose();
+            if (decoder != null)
+                decoder.dispose();
+            if(fft != null)
+                fft.dispose();
         } catch (InterruptedException e) {
             Gdx.app.error("AudioThread", "Thread had problem with ending",e);
         }
 
-        //dispose of stuff if its not null
-        if (device != null)
-            device.dispose();
-        if (decoder != null)
-            decoder.dispose();
-        if(fft != null)
-            fft.dispose();
     }
 }
 

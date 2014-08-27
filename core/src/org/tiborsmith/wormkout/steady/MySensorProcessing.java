@@ -12,8 +12,8 @@ import org.tiborsmith.wormkout.Wormkout;
  */
 
 public class MySensorProcessing {
-    Wormkout game;
-    public MySensorProcessing(Wormkout game){this.game = game;}
+    Wormkout g;
+    public MySensorProcessing(Wormkout game){this.g = game;}
 
     final private Vector3 calibrationVector = new Vector3(0,0,1);
     final private Vector3 orientationVector = new Vector3(0,0,1);
@@ -41,10 +41,10 @@ public class MySensorProcessing {
      */
     public void getOrientationVector(Vector3 orientationVector){
         float x,y,z,w;
-        w = game.mySensors.getRotationQuaternion3();
-        x = game.mySensors.getRotationQuaternion0();
-        y = game.mySensors.getRotationQuaternion1();
-        z = game.mySensors.getRotationQuaternion2();
+        w = g.mySensors.getRotationQuaternion3();
+        x = g.mySensors.getRotationQuaternion0();
+        y = g.mySensors.getRotationQuaternion1();
+        z = g.mySensors.getRotationQuaternion2();
 
         orientationVector.set(2.0f * (z * x + w * y), 2.0f * (z * y - w * x), w * w + z * z - x * x - y * y);
     }
@@ -71,6 +71,15 @@ public class MySensorProcessing {
         return MathUtils.clamp(x, -(float)Math.PI/2.25f, (float)Math.PI/2.25f);
     }
 
+
+    //return true if gravity on Z is small enough
+    public boolean isVertical(){
+        if (g.mySensors.getGravityZ()*g.mySensors.getGravityZ()*1.75<
+                g.mySensors.getGravityY()*g.mySensors.getGravityY()+
+                        g.mySensors.getGravityX()*g.mySensors.getGravityX())
+            return true;
+        return false;
+    }
 
 
 }

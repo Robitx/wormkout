@@ -2,12 +2,6 @@
 <pre-dex-items>
 
     <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android/build/intermediates/pre-dexed/debug/core-1.0.0-81551077dd213c605fb4a5982b8fbaacf21b9067.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="dd56d98d1c445938d7b6735205d8236792a82526"/>
-    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-4f2f4bcf614632068c762784a0ae1b11f8e45afa.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
         jumboMode="false"
@@ -56,6 +50,12 @@
         revision="19.1.0"
         sha1="baa583528ea0c6b7cae7eedee30af472fac4351e"/>
     <item
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/core-1.0.1-85d36f9aecb6ecbd09258b154dc8003d14a7d4b3.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="b657bbd375c1e313afbc68cf090f70a8c10aa1b3"/>
+    <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-d89a5bf95712125000c7096bf97fe68ceab2424f.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
         jumboMode="false"
@@ -74,8 +74,8 @@
         revision="19.1.0"
         sha1="18995f8b7b19118975722370818023c76a86fdf4"/>
     <item
-        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-af94e3c3bce0a85217823302634bc3eaec3b5b9a.jar"
-        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0.0/classes.jar"
+        dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/classes-08e48f50c7ee8562d253b5a8f3f110ef5e667f09.jar"
+        jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/Wormkout/BaseGameUtils/1.0.1/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="58b509c50f1e617b2ec68d5a71b4773a4d58a7c1"/>

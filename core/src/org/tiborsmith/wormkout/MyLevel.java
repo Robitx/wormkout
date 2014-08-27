@@ -60,7 +60,7 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
-        for (int i=7+g.player.speed/2; i< noRG; i++){
+        for (int i=7+g.player.speed/5; i< noRG; i++){
             //int j = i+g.player.speed%3;//careful with noRG here
             int j = i;
             gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[j].r,
@@ -195,7 +195,7 @@ public class MyLevel {
 
         //clear gate colors
         for (int i=0; i<gateColors.length; i++){
-            gateColors[i] = new Color(Color.WHITE);
+            gateColors[i] = new Color(Color.GREEN);
         }
 
         poLRG.set(0,0,0);
@@ -211,6 +211,7 @@ public class MyLevel {
         //load first noRG gates
         for (int i=1; i< noRG; i++){
             addGate();
+            gates.get(gates.size-1).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i-1]));
         }
 
         skybox = new ModelInstance(g.assets.skybox);

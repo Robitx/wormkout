@@ -13,6 +13,7 @@ public class sLabel extends Label{
 
     private static ShaderProgram shader;
     private float scale;
+   // private Color color = new Color();
 
 
     public sLabel(CharSequence text, LabelStyle style) {
@@ -32,10 +33,16 @@ public class sLabel extends Label{
         super.setFontScale(scale);
     }
 
+   /* public void setColor(Color color){
+        this.color = color;
+    }*/
+
     public void setScale(float scale){
         this.scale = scale;
         this.setFontScale(scale);
     }
+
+
 
 
     @Override
@@ -45,6 +52,8 @@ public class sLabel extends Label{
             shader.setUniformf("u_smoothing", 0.75f / (4 * scale));
         }
         BitmapFontCache cache = super.getBitmapFontCache();
+       // cache.setColors(color);
+
         cache.setPosition(getX(),getY()+5*scale);
         cache.draw(batch, parentAlpha);
        // super.draw(batch, parentAlpha);

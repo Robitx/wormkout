@@ -163,7 +163,7 @@ public class MainScreen implements Screen {
         });
 
 
-        if (g.welcomeBack){
+        if (g.welcomeBack && !g.firstLaunch){
             if (g.settings.automaticSignInGPGS) {
                 g.pDI.signInGPGS();
                 g.levelStates.saveLevelProgress();
@@ -183,14 +183,29 @@ public class MainScreen implements Screen {
             yesButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    if (g.settings.automaticSignInGPGS) {
+                        g.pDI.signInGPGS();
+                        g.levelStates.saveLevelProgress();
+                    }
                     mainWindow.setVisible(false);
                     helpWindow.setVisible(true);
                     if (g.pDI.isSignedInGPGS())
                         g.pDI.unlockAchievementGPGS("achievement_wisdom");
+                    g.firstLaunch = false;
                 }
             });
+            noButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (g.settings.automaticSignInGPGS) {
+                        g.pDI.signInGPGS();
+                        g.levelStates.saveLevelProgress();
+                    }
+                    g.firstLaunch = false;
+                }
+            });
+            g.welcomeBack = false;
             g.pDI.say(str.get("sdFirstWelcome"),g.settings.soundVolume);
-            g.firstLaunch = false;
         }
 
     }
@@ -323,8 +338,11 @@ public class MainScreen implements Screen {
             lvlButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    g.currentLevel = level;
-                    g.setScreen(g.gameScreen);
+                        g.currentLevel = level;
+                    if (level==0)
+                        g.setScreen(g.tutorialScreen);
+                    else
+                        g.setScreen(g.gameScreen);
                 }
             });
             table.add(lvlButton).width(200).padLeft(10).padBottom(10).align(Align.left);
@@ -341,45 +359,46 @@ public class MainScreen implements Screen {
         lvlLabel.setWrap(true);
         table.add(lvlLabel).expandX().align(Align.left).padLeft(10).padBottom(10).fill();
 
-        //leaderboard button with best time
-        String LBString;
-        if (g.levelStates.lvls.get(level).finished){
-            float time = g.levelStates.lvls.get(level).bestTime;
-            LBString = str.format("TimeScore",  (int)time/60, (int)time%60, Math.round(time*100)%100);
-        }
-        else {
-            LBString = str.get("emptyTimeScore");
-        }
-        sTextButton LBButton = new sTextButton( LBString, skin);
-        LBButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (g.pDI.isSignedInGPGS()) {
-                    g.levelStates.saveLevelProgress();
-                    g.pDI.say(str.get("sayLeaderBoardWindowOpen"),g.settings.soundVolume);
-                    g.pDI.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
-                }
-                else {
-                    sDialog dialog = new sDialog("", skin);
-                    dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
-                    sTextButton yesButton = new sTextButton(str.get("Yes"), skin);
-                    dialog.button(yesButton, true);
-                    dialog.button(new sTextButton(str.get("No"), skin), false);
-                    dialog.setMovable(false);
-                    dialog.show(stage);
-
-                    yesButton.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            GPGSSignIn();
-                        }
-                    });
-                    g.pDI.say(str.get("sdNoCanDoWithoutSignInGPGS"),g.settings.soundVolume);
-                }
+        if (level!=0) {
+            //leaderboard button with best time
+            String LBString;
+            if (g.levelStates.lvls.get(level).finished) {
+                float time = g.levelStates.lvls.get(level).bestTime;
+                LBString = str.format("TimeScore", (int) time / 60, (int) time % 60, Math.round(time * 100) % 100);
+            } else {
+                LBString = str.get("emptyTimeScore");
             }
-        });
-        table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
+            sTextButton LBButton = new sTextButton(LBString, skin);
+            LBButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (g.pDI.isSignedInGPGS()) {
+                        g.levelStates.saveLevelProgress();
+                        g.pDI.say(str.get("sayLeaderBoardWindowOpen"), g.settings.soundVolume);
+                        g.pDI.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
+                    } else {
+                        sDialog dialog = new sDialog("", skin);
+                        dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
+                        sTextButton yesButton = new sTextButton(str.get("Yes"), skin);
+                        dialog.button(yesButton, true);
+                        dialog.button(new sTextButton(str.get("No"), skin), false);
+                        dialog.setMovable(false);
+                        dialog.show(stage);
 
+                        yesButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                GPGSSignIn();
+                            }
+                        });
+                        g.pDI.say(str.get("sdNoCanDoWithoutSignInGPGS"), g.settings.soundVolume);
+                    }
+                }
+            });
+            table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
+        }
+        else
+            table.add(emptyLine()).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
         return table;
     }
 
@@ -397,7 +416,8 @@ public class MainScreen implements Screen {
         table.add(titleLabel(str.get("Info"),1.25f)).expandX().align(Align.left).padLeft(10).fill();
         table.add(titleLabel(str.get("Time"),1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
 
-        levelTable.add(table).expand().fill().row();
+        levelTable.add(table).expandX().fill().row();
+
         for (int i=0 ; i < g.levelStates.lvls.size; i++){
             levelTable.add(generateLevelTable(i)).expandX().fill().row();
         }
@@ -651,6 +671,14 @@ public class MainScreen implements Screen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (g.pDI.isSignedInGPGS()) {
+                    gpgsButton.setText(str.get("Disable"));
+                    gpgsLabel.setText(str.get("sWGPGSInLabel"));
+                }
+                else{
+                    gpgsButton.setText(str.get("Enable"));
+                    gpgsLabel.setText(str.get("sWGPGSOutLabel"));
+                }
                 settingsWindow.setVisible(true);
                 mainWindow.setVisible(false);
                 g.pDI.say(str.get("saySettingsWindow"),g.settings.soundVolume);

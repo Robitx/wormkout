@@ -3,11 +3,13 @@ package org.tiborsmith.wormkout;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 
 import org.tiborsmith.wormkout.screens.GameScreen;
 import org.tiborsmith.wormkout.screens.MainScreen;
 import org.tiborsmith.wormkout.screens.SplashScreen;
+import org.tiborsmith.wormkout.screens.TutorialScreen;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
 import org.tiborsmith.wormkout.states.MySettings;
@@ -20,6 +22,7 @@ public class Wormkout extends Game {
     //screens in game
     public SplashScreen splashScreen;
     public GameScreen gameScreen;
+    public TutorialScreen tutorialScreen;
     public MainScreen mainScreen;
 
     //my own control of sensors
@@ -66,6 +69,7 @@ public class Wormkout extends Game {
         splashScreen = new SplashScreen(this);
         gameScreen = new GameScreen(this);
         mainScreen = new MainScreen(this);
+        tutorialScreen = new TutorialScreen(this);
 
         Gdx.input.setCatchBackKey(true);
 
@@ -78,6 +82,7 @@ public class Wormkout extends Game {
 
         mainScreen.dispose();
         gameScreen.dispose();
+        tutorialScreen.dispose();
     }
 
    @Override
@@ -105,7 +110,7 @@ public class Wormkout extends Game {
         FileHandle levelFile = Gdx.files.local("levelStates.json");
         if (levelFile.exists()) {
             Json json = new Json();
-            levelStates = json.fromJson(MyLevels.class, levelFile.readString());
+            levelStates = json.fromJson(MyLevels.class, Base64Coder.decodeString(levelFile.readString()));
             levelStates.g = this;
         } else {
             levelStates = new MyLevels();

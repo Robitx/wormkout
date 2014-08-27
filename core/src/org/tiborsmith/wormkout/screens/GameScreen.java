@@ -153,6 +153,7 @@ public class GameScreen implements Screen {
         msgLabel.setScale(2.0f);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);
+        msgLabel.setWrap(true);
 
         Table table = new Table();
         table.setFillParent(true);

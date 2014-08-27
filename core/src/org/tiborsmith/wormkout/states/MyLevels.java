@@ -3,6 +3,7 @@ package org.tiborsmith.wormkout.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 
 import org.tiborsmith.wormkout.Wormkout;
@@ -27,7 +28,7 @@ public class MyLevels {
     public void saveLevelProgress(){
         //try to update leaderboards and achievements
         if (g.pDI.isSignedInGPGS()) {
-            for (int i=0; i< lvls.size ; i++)
+            for (int i=1; i< lvls.size ; i++)
                 g.pDI.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
             if ( unlockingBuffer > 0) {
                 g.pDI.incrementAchievementGPGS("achievement_determination", unlockingBuffer);
@@ -37,7 +38,7 @@ public class MyLevels {
         //save locally
         FileHandle levelFile = Gdx.files.local("levelStates.json");
         Json json = new Json();
-        levelFile.writeString(json.prettyPrint(this), false);
+        levelFile.writeString(Base64Coder.encodeString(json.prettyPrint(this)), false);
     }
 
 
@@ -48,26 +49,28 @@ public class MyLevels {
     public void makeDefault(){
         unlockingBuffer = 0;
         lvls.clear();
-        lvls.add(getNewLevelInstance(false,false,3600,"Pi 1","levels/Pi1.bin",
-                "776 gates long, about 40 seconds with speed 20"));
+        lvls.add(getNewLevelInstance(false,false,3600,"Tutorial","levels/tutorial.bin",
+                "Tutorial level"));
+        lvls.add(getNewLevelInstance(true,false,3600,"Pi 1","levels/Pi1.bin",
+                "776 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 2","levels/Pi2.bin",
-                "1 535 gates long, about 1:15 minutes with speed 20"));
+                "1 535 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 3","levels/Pi3.bin",
-                "1 535 gates long, about 1:15 minutes with speed 20"));
+                "1 535 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 4","levels/Pi4.bin",
-                "1 457 gates long, about 1:15 minutes with speed 20"));
+                "1 457 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 5","levels/Pi5.bin",
-                "2 353 gates long, about 2:00 minutes with speed 20"));
+                "2 353 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 6","levels/Pi6.bin",
-                "2 174 gates long, about 1:50 minutes with speed 20"));
+                "2 174 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 7","levels/Pi7.bin",
-                "2 386 gates long, about 2:00 minutes with speed 20"));
+                "2 386 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 8","levels/Pi8.bin",
-                "3 091 gates long, about 2:35 minutes with speed 20"));
+                "3 091 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 9","levels/Pi9.bin",
-                "3 917 gates long, about 3:15 minutes with speed 20"));
+                "3 917 gates long"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 10","levels/Pi10.bin",
-                "3 815 gates long, about 3:10 minutes with speed 20"));
+                "3 815 gates long"));
  
         saveLevelProgress();
     }
