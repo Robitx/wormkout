@@ -28,6 +28,7 @@ public class MyLevel {
     private int gN = 0; //gate number
     private float startAC = 5.0f; //start animation countdown
     private Vector3 tmpVector = new Vector3(0,0,0); // temporary vector
+    private int levelSize;
 
     public boolean gameOver = false;
     public boolean gameVictory = false;
@@ -41,12 +42,12 @@ public class MyLevel {
      */
     private boolean collisionTest(){
         gates.get(1+gN).transform.getTranslation(tmpVector).sub(g.player.position);
-        if (tmpVector.len2()<gateRadius*gateRadius){
+        if (tmpVector.len2()<gates.get(1+gN).transform.getScaleXSquared()){
             return true;
         }
         else {
             gates.get(0+gN).transform.getTranslation(tmpVector).sub(g.player.position);
-            if (tmpVector.len2()>gateRadius*gateRadius){
+            if (tmpVector.len2()>gates.get(0+gN).transform.getScaleXSquared()){
                 gameOver=true;
             }
             return false;
@@ -145,13 +146,41 @@ public class MyLevel {
     private void addGate(){
         ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
-        gate.transform.setToRotation(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
-        gate.transform.trn(tmpVector.scl(gateDistance));  //translates about gate distance in specified direction
+        float scalingFactor = gateRadius;
+        if (g.currentLevel>1) {
+            int n = (g.currentLevel < 5)? g.currentLevel%5 : 5;
+            for (int i=1; i <= n; i++) {
+                scalingFactor *= Math.abs(1 - scaling(path.size, levelSize*i/(n), 25, 2));
+            }
+
+        }
+        gate.transform.setToScaling(scalingFactor,scalingFactor,scalingFactor);  //scale gate
+        gate.transform.rotate(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
+        gate.transform.trn(tmpVector.scl(gateDistance*scalingFactor));  //translates about gate distance in specified direction
         gate.transform.trn(poLRG);  //adds position of current last gate
         gate.transform.getTranslation(poLRG);  //updates pOLGR
-        gate.transform.scl(gateRadius);  //scale gate
         gates.add(gate);  //add gate to gates
         path.removeIndex(0); // removes gate from path
+    }
+
+    private float scaling(int x, int y,int length, float scl){
+        float tmp = scl;
+        if (Math.abs(x - y)>length*4){
+            tmp=0;
+        }
+        else if (x<y) {
+            x = (x - y); // x = (x - y != 0) ? x - y : 1;
+            tmp = (float) Math.exp( -x*x / 20.0f) / tmp;
+        }
+        else if (x<=y+length) {
+            tmp = 1 / tmp;
+        }
+        else {
+            x = (x - y - length); // x = (x - y - length != 0) ? x - y - length : 1;
+            tmp = (float) Math.exp( -x*x / 20.0f) / tmp;
+        }
+
+        return tmp;
     }
 
 
@@ -182,6 +211,7 @@ public class MyLevel {
             e.printStackTrace();
             return false;
         }
+        levelSize = path.size;
         return true;
     }
 

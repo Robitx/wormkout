@@ -50,27 +50,27 @@ public class MyLevels {
         unlockingBuffer = 0;
         lvls.clear();
         lvls.add(getNewLevelInstance(false,false,3600,"Tutorial","levels/tutorial.bin",
-                "Tutorial level"));
+                "Tutorial level, maximal speed 5 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 1","levels/Pi1.bin",
-                "776 gates long"));
+                "776 gates long, minimal speed 5 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 2","levels/Pi2.bin",
-                "1 535 gates long"));
+                "1 535 gates long, minimal speed 5 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 3","levels/Pi3.bin",
-                "1 535 gates long"));
+                "1 535 gates long, minimal speed 10 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 4","levels/Pi4.bin",
-                "1 457 gates long"));
+                "1 457 gates long, minimal speed 10 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 5","levels/Pi5.bin",
-                "2 353 gates long"));
+                "2 353 gates long, minimal speed 15 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 6","levels/Pi6.bin",
-                "2 174 gates long"));
+                "2 174 gates long, minimal speed 15 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 7","levels/Pi7.bin",
-                "2 386 gates long"));
+                "2 386 gates long, minimal speed 20 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 8","levels/Pi8.bin",
-                "3 091 gates long"));
+                "3 091 gates long, minimal speed 20 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 9","levels/Pi9.bin",
-                "3 917 gates long"));
+                "3 917 gates long, minimal speed 20 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 10","levels/Pi10.bin",
-                "3 815 gates long"));
+                "3 815 gates long, minimal speed 20 gates/s"));
  
         saveLevelProgress();
     }

@@ -54,9 +54,8 @@ public class TutorialScreen implements Screen {
 
 
         if (timer<0.25) {
-            g.pDI.say(g.assets.str.get("TutorialBeforeCalibration"), g.settings.soundVolume);
-            msgLabel.setText(g.assets.str.get("TutorialBeforeCalibration"));
-            //msgLabel.setText(g.assets.str.get("TutorialBeforeCalibration"));
+            g.pDI.say(g.assets.str.get("BeforeCalibration"), g.settings.soundVolume);
+            msgLabel.setText(g.assets.str.get("BeforeCalibration"));
             g.player.speed = 0;
             speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
         }

@@ -54,7 +54,7 @@
         jar="/home/tibor/AndroidStudioProjects/Wormkout/core/build/libs/core-1.0.1.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="b657bbd375c1e313afbc68cf090f70a8c10aa1b3"/>
+        sha1="1c8d78a136b3cd08d7720de607e785ff94cfa699"/>
     <item
         dex="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-d89a5bf95712125000c7096bf97fe68ceab2424f.jar"
         jar="/home/tibor/AndroidStudioProjects/Wormkout/android.demo/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"

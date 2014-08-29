@@ -56,14 +56,26 @@ public class GameScreen implements Screen {
             timer += delta;
         }
         else {
-            timer += delta;
-            calibrating = g.level.startingAnimation(delta);
-            if (!calibrating)
-                timer = 0;
-            if (timer > 2.0f)
-                g.mySensorProcessing.calibrate();
-            msgLabel.setVisible(calibrating);
-            gNLabel.setVisible(!calibrating);
+            if (g.mySensorProcessing.isVertical()) {
+                timer += delta;
+                calibrating = g.level.startingAnimation(delta);
+                if (!calibrating)
+                    timer = 0;
+                if (timer > 2.0f)
+                    g.mySensorProcessing.calibrate();
+                msgLabel.setText(g.assets.str.get("Calibration"));
+                msgLabel.setVisible(calibrating);
+                gNLabel.setVisible(!calibrating);
+            }
+            else {
+                msgLabel.setText(g.assets.str.get("BeforeCalibration"));
+                msgLabel.setVisible(calibrating);
+                if (timer==0) {
+                    g.pDI.say(g.assets.str.get("BeforeCalibration"), g.settings.soundVolume);
+                    timer+=delta;
+                }
+            }
+
         }
 
         if (g.level.gameOver) {
@@ -119,7 +131,21 @@ public class GameScreen implements Screen {
         stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",5), g.assets.skin);
+        //better function
+        int ms;
+        if (g.currentLevel < 3)
+            ms = 5;
+        else if (g.currentLevel < 5)
+            ms = 10;
+        else if (g.currentLevel < 7)
+            ms = 15;
+        else
+            ms=20;
+
+        final int minimalSpeed = ms;
+        //final int minimalSpeed = ((g.levelStates.lvls.size/g.currentLevel)>5) ? (g.currentLevel/5) : 5;
+
+        final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",minimalSpeed), g.assets.skin);
         speedLabel.setAlignment(Align.left);
         stage.addListener(new InputListener(){
             @Override
@@ -138,7 +164,7 @@ public class GameScreen implements Screen {
                    g.player.speed++;
                else
                    g.player.speed--;
-               g.player.speed = (g.player.speed>0) ? g.player.speed : 0;
+               g.player.speed = (g.player.speed>minimalSpeed) ? g.player.speed : minimalSpeed;
                g.player.speed = (g.player.speed<50) ? g.player.speed : 50;
                speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
                return true;
@@ -149,7 +175,7 @@ public class GameScreen implements Screen {
         gNLabel.setAlignment(Align.right);
         gNLabel.setVisible(false);
 
-        msgLabel = new sLabel(g.assets.str.get("Calibration"), g.assets.skin);
+        msgLabel = new sLabel(" ", g.assets.skin);
         msgLabel.setScale(2.0f);
         msgLabel.setAlignment(Align.center);
         msgLabel.setVisible(false);
@@ -177,6 +203,7 @@ public class GameScreen implements Screen {
         //first lvl then player
         g.level.loadLevel();
         g.player.initPlayer();
+        g.player.speed = minimalSpeed;
     }
 
 

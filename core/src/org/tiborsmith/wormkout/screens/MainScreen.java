@@ -815,6 +815,10 @@ public class MainScreen implements Screen {
 
     @Override
     public void hide (){
+        if (g.settings.automaticSignInGPGS && !g.pDI.isSignedInGPGS()) {
+            g.settings.automaticSignInGPGS = false;
+            g.settings.saveSettings();
+        }
         stage.dispose();
         modelBatch.dispose();
         environment.clear();
@@ -831,5 +835,10 @@ public class MainScreen implements Screen {
     public void resume (){ }
 
     @Override
-    public void dispose (){ }
+    public void dispose (){
+        if (g.settings.automaticSignInGPGS && !g.pDI.isSignedInGPGS()) {
+            g.settings.automaticSignInGPGS = false;
+            g.settings.saveSettings();
+        }
+    }
 }
