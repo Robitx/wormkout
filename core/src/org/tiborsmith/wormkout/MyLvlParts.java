@@ -23,7 +23,8 @@ public class MyLvlParts {
      * @param i number of element which is added
      */
     public void getNextPart(Array<Vector3> path,final int i){
-        tmpV.set(path.get(path.size-1)).sub(path.get(path.size-2)).nor();  //direction vector for last gate in path
+        tmpV.set(path.get(path.size-1)).sub(path.get(path.size-2));  //direction vector for last gate in path
+        tmpV.sub(0,tmpV.y,0).nor();//keep things in horizontal plane
         tmpQ.setFromCross(new Vector3(0,0,-1),tmpV);  // calculate rotation quaternion
         tmpLV.set(path.get(path.size-1));  // current last vector from path
         for (int j=0; j < element[i].array.size; j++){

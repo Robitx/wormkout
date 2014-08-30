@@ -21,12 +21,11 @@ import org.tiborsmith.wormkout.ui.sLabel;
  * Created by tibor on 28.7.14.
  */
 
-public class GameScreen implements Screen {
+public class SurvivalScreen implements Screen {
     Wormkout g;
-    public GameScreen(Wormkout game){ this.g = game; }
+    public SurvivalScreen(Wormkout game){ this.g = game; }
 
     private Stage stage;
-   // private Batch batch;
     private sLabel msgLabel;
     private sLabel gNLabel;
     private ModelBatch modelBatch;
@@ -38,7 +37,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta){
-       Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glEnable(GL20.GL_CULL_FACE);
         Gdx.gl.glCullFace(GL20.GL_BACK);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -52,8 +51,8 @@ public class GameScreen implements Screen {
 
         if (!calibrating) {
             g.player.updatePlayer(delta);
-            gNLabel.setText(g.assets.str.format("RemainingGates",g.level.update(delta)));
-            timer += delta;
+            timer += g.level.updateInfinite(delta);
+            gNLabel.setText(g.assets.str.format("ScoreGates",(int)timer));
         }
         else {
             if (g.mySensorProcessing.isVertical()) {
@@ -81,32 +80,21 @@ public class GameScreen implements Screen {
         if (g.level.gameOver) {
             g.pDI.say(g.assets.str.get("sayGameOver1"),g.settings.soundVolume);
 
-            g.setScreen(g.mainScreen);
-            return;
-        }
 
-        if (g.level.gameVictory){
-            // sets new best time
-            g.levelStates.lvls.get(g.currentLevel).finished = true;
-            float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
-            if (bestTime > timer) {
+            float bestScore = g.levelStates.lvls.get(g.currentLevel).bestTime;
+            if (bestScore < timer) {
                 g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
-                g.pDI.say(g.assets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
+                g.pDI.say(g.assets.str.get("sayVictoryNewBestScore"),g.settings.soundVolume);
             }
             else {
-                g.pDI.say(g.assets.str.get("sayVictorySlow"),g.settings.soundVolume);
-            }
-            // unlocks next lvl
-            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
-                g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
-                g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"),g.settings.soundVolume);
-                g.levelStates.unlockingBuffer++;
+                g.pDI.say(g.assets.str.get("sayDoneBetterBefore"),g.settings.soundVolume);
             }
             g.levelStates.saveLevelProgress();
 
             g.setScreen(g.mainScreen);
             return;
         }
+
 
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -116,7 +104,7 @@ public class GameScreen implements Screen {
 
         if (!g.audio.playing)
             g.audio.startMusic();
-}
+    }
 
     @Override
     public void resize (int width, int height){
@@ -133,14 +121,16 @@ public class GameScreen implements Screen {
 
         //better function
         int ms;
-        if (g.currentLevel < 3)
-            ms = 5;
-        else if (g.currentLevel < 5)
-            ms = 10;
-        else if (g.currentLevel < 7)
+        if (g.currentLevel == g.levelStates.lvls.size-1)
+            ms = 30;
+        else if (g.currentLevel == g.levelStates.lvls.size-2)
+            ms = 25;
+        else if (g.currentLevel == g.levelStates.lvls.size-3)
+            ms = 20;
+        else if (g.currentLevel == g.levelStates.lvls.size-4)
             ms = 15;
         else
-            ms=20;
+            ms = 10;
 
         final int minimalSpeed = ms;
 
@@ -157,20 +147,20 @@ public class GameScreen implements Screen {
                     return false;
             }
 
-           @Override
-           public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-               if (x> stage.getWidth()/2)
-                   g.player.speed++;
-               else
-                   g.player.speed--;
-               g.player.speed = (g.player.speed>minimalSpeed) ? g.player.speed : minimalSpeed;
-               g.player.speed = (g.player.speed<50) ? g.player.speed : 50;
-               speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
-               return true;
-           }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (x> stage.getWidth()/2)
+                    g.player.speed++;
+                else
+                    g.player.speed--;
+                g.player.speed = (g.player.speed>minimalSpeed) ? g.player.speed : minimalSpeed;
+                g.player.speed = (g.player.speed<50) ? g.player.speed : 50;
+                speedLabel.setText(g.assets.str.format("Speed",g.player.speed));
+                return true;
+            }
         });
 
-        gNLabel = new sLabel(g.assets.str.format("RemainingGates",0), g.assets.skin);
+        gNLabel = new sLabel(g.assets.str.format("ScoreGates",0), g.assets.skin);
         gNLabel.setAlignment(Align.right);
         gNLabel.setVisible(false);
 
@@ -200,7 +190,7 @@ public class GameScreen implements Screen {
         g.mySensorProcessing.newCalibration = true;
 
         //first lvl then player
-        g.level.loadLevel();
+        g.level.loadInfiniteLevel();
         g.player.initPlayer();
         g.player.speed = minimalSpeed;
     }

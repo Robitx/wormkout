@@ -101,6 +101,9 @@ public class MyLevel {
     }
 
 
+
+
+
     /**
      * play three beeps and go from red to orange to green
      * @param delta
@@ -147,13 +150,19 @@ public class MyLevel {
         ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         float scalingFactor = gateRadius;
-        if (g.currentLevel>1) {
+        if (g.currentLevel>1 && g.currentLevel < g.levelStates.lvls.size-5) {
             int n = (g.currentLevel < 5)? g.currentLevel%5 : 5;
             for (int i=1; i <= n; i++) {
-                scalingFactor *= Math.abs(1 - scaling(path.size, levelSize*i/(n), 25, 2));
+                scalingFactor *= Math.abs(1 - scaling(path.size, levelSize*i/(n), 20, 2.125f));
             }
-
         }
+        else if (g.currentLevel>1){
+            //int n = (g.currentLevel-g.levelStates.lvls.size+5)%5;
+            scalingFactor *= Math.abs(1 - scaling(path.size, 1500, 20, 2.125f));
+            scalingFactor *= Math.abs(1 - scaling(path.size, 1000, 20, 2.125f));
+            scalingFactor *= Math.abs(1 - scaling(path.size, 500, 20, 2.125f));
+        }
+
         gate.transform.setToScaling(scalingFactor,scalingFactor,scalingFactor);  //scale gate
         gate.transform.rotate(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
         gate.transform.trn(tmpVector.scl(gateDistance*scalingFactor));  //translates about gate distance in specified direction
@@ -246,6 +255,68 @@ public class MyLevel {
 
         skybox = new ModelInstance(g.assets.skybox);
     }
+
+    /**
+     * load begining of random infinite level and set certain number of first gates to render
+     */
+    public void loadInfiniteLevel(){
+        path.clear();
+        path.add(new Vector3(0,0,0));
+        path.add(new Vector3(0,0,-1));
+        g.assets.parts.getNextPart(path, 5);
+        generatePath();
+
+        //clear gate colors
+        for (int i=0; i<gateColors.length; i++){
+            gateColors[i] = new Color(Color.GREEN);
+        }
+
+        poLRG.set(0,0,0);
+        gameOver = false;
+        gameVictory = false;
+        startAC = 5.0f;
+        gN = 0;
+
+        //zero gate
+        ModelInstance zeroInstance = new ModelInstance(g.assets.gate);
+        gates.add(zeroInstance);
+
+        //load first noRG gates
+        for (int i=1; i< noRG; i++){
+            addGate();
+            gates.get(gates.size-1).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i-1]));
+        }
+
+        skybox = new ModelInstance(g.assets.skybox);
+    }
+
+    private void generatePath(){
+        while (path.size<2000) {
+            int i = (int)(18.0f*Math.random());
+            i = (i<10) ? i : i%9;
+            g.assets.parts.getNextPart(path, i);
+        }
+        levelSize = path.size;
+    }
+
+
+    /**
+     * finish is noRG before lastGate
+     * @param delta
+     */
+    public int updateInfinite(float delta){
+        updateColors(delta);
+        if (100 > path.size){
+            generatePath();
+        }
+
+        if(collisionTest()){
+            addNextGate();
+            return 1;
+        }
+        else return 0;
+    }
+
 
 
     public void disposeLevel(){

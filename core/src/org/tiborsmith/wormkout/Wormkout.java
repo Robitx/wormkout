@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import org.tiborsmith.wormkout.screens.GameScreen;
 import org.tiborsmith.wormkout.screens.MainScreen;
 import org.tiborsmith.wormkout.screens.SplashScreen;
+import org.tiborsmith.wormkout.screens.SurvivalScreen;
 import org.tiborsmith.wormkout.screens.TutorialScreen;
 import org.tiborsmith.wormkout.states.MyLevels;
 import org.tiborsmith.wormkout.states.MyPlayList;
@@ -22,6 +23,7 @@ public class Wormkout extends Game {
     //screens in game
     public SplashScreen splashScreen;
     public GameScreen gameScreen;
+    public SurvivalScreen survivalScreen;
     public TutorialScreen tutorialScreen;
     public MainScreen mainScreen;
 
@@ -68,6 +70,7 @@ public class Wormkout extends Game {
 	public void create () {
         splashScreen = new SplashScreen(this);
         gameScreen = new GameScreen(this);
+        survivalScreen = new SurvivalScreen(this);
         mainScreen = new MainScreen(this);
         tutorialScreen = new TutorialScreen(this);
 

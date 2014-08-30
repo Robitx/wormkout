@@ -81,27 +81,28 @@ public class TutorialScreen implements Screen {
 
         if (!calibrating) {
             int gN = g.level.update(delta);
-            if (gN>110)
+            if (gN>115)
                 msgLabel.setText(g.assets.str.get("TutorialTapRight"));
+            if (gN==115)
+                msgLabel.setText("");
             if (gN==110)
-                msgLabel.setText("");
-            if (gN==105)
                 g.pDI.say(g.assets.str.get("TutorialTapLeft"), g.settings.soundVolume);
-            if (gN>90 && gN<105)
+            if (gN>95 && gN<110)
                 msgLabel.setText(g.assets.str.get("TutorialTapLeft"));
+            if (gN==95)
+                msgLabel.setText("");
             if (gN==90)
-                msgLabel.setText("");
-            if (gN==80)
                 g.pDI.say(g.assets.str.get("TutorialTurnLeft"), g.settings.soundVolume);
-            if (gN>60 && gN<80)
+            if (gN>65 && gN<90)
                 msgLabel.setText(g.assets.str.get("TutorialTurnLeft"));
-            if (gN==60)
+            if (gN==65)
                 msgLabel.setText("");
-            if (gN==50)
+            if (gN==55)
                 g.pDI.say(g.assets.str.get("TutorialUpOrDown"),g.settings.soundVolume);
-            if (gN>20 && gN<50)
+            if (gN>25 && gN<55)
                 msgLabel.setText(g.assets.str.get("TutorialUpOrDown"));
-
+            if (gN==25)
+                msgLabel.setText("");
 
             g.player.updatePlayer(delta);
             gNLabel.setText(g.assets.str.format("RemainingGates",gN));

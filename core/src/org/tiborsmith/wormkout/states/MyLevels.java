@@ -28,7 +28,7 @@ public class MyLevels {
     public void saveLevelProgress(){
         //try to update leaderboards and achievements
         if (g.pDI.isSignedInGPGS()) {
-            for (int i=1; i< lvls.size ; i++)
+            for (int i=1; i< lvls.size-5 ; i++)
                 g.pDI.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
             if ( unlockingBuffer > 0) {
                 g.pDI.incrementAchievementGPGS("achievement_determination", unlockingBuffer);
@@ -71,6 +71,17 @@ public class MyLevels {
                 "3 917 gates long, minimal speed 20 gates/s"));
         lvls.add(getNewLevelInstance(true,false,3600,"Pi 10","levels/Pi10.bin",
                 "3 815 gates long, minimal speed 20 gates/s"));
+        lvls.add(getNewLevelInstance(false,false,0,"Very easy","",
+                "minimal speed 10 gates/s"));
+        lvls.add(getNewLevelInstance(false,false,0,"Easy","",
+                "minimal speed 15 gates/s"));
+        lvls.add(getNewLevelInstance(false,false,0,"Normal","",
+                "minimal speed 20 gates/s"));
+        lvls.add(getNewLevelInstance(false,false,0,"Hard","",
+                "minimal speed 25 gates/s"));
+        lvls.add(getNewLevelInstance(false,false,0,"Insane","",
+                "minimal speed 30 gates/s"));
+
  
         saveLevelProgress();
     }

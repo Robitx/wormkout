@@ -116,10 +116,7 @@ public class MainScreen implements Screen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 
-        //first lvl then player
-        g.level.loadLevel();
-        g.player.initPlayer();
-        g.player.speed=0;
+
 
 
 
@@ -131,6 +128,11 @@ public class MainScreen implements Screen {
         helpMenu();
         creditsMenu();
 
+        //first lvl then player
+        g.currentLevel = (g.currentLevel < g.levelStates.lvls.size-5) ? g.currentLevel : 1;
+        g.level.loadLevel();
+        g.player.initPlayer();
+        g.player.speed=0;
 
         // from g screen is first window levelWindow
         if (g.playMenu){
@@ -329,7 +331,7 @@ public class MainScreen implements Screen {
 
 
 
-    private Table generateLevelTable(final int level){
+    private Table genLvlTable(final int level){
         Table table = new Table();
 
         //play button or lock label
@@ -338,11 +340,13 @@ public class MainScreen implements Screen {
             lvlButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                        g.currentLevel = level;
+                    g.currentLevel = level;
                     if (level==0)
                         g.setScreen(g.tutorialScreen);
-                    else
+                    else if(level<g.levelStates.lvls.size-5)
                         g.setScreen(g.gameScreen);
+                    else
+                        g.setScreen(g.survivalScreen);
                 }
             });
             table.add(lvlButton).width(200).padLeft(10).padBottom(10).align(Align.left);
@@ -359,7 +363,9 @@ public class MainScreen implements Screen {
         lvlLabel.setWrap(true);
         table.add(lvlLabel).expandX().align(Align.left).padLeft(10).padBottom(10).fill();
 
-        if (level!=0) {
+        if (level==0)
+            table.add(emptyLine()).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
+        else if(level<g.levelStates.lvls.size-5){
             //leaderboard button with best time
             String LBString;
             if (g.levelStates.lvls.get(level).finished) {
@@ -397,31 +403,109 @@ public class MainScreen implements Screen {
             });
             table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
         }
-        else
-            table.add(emptyLine()).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
+        else {  //leaderboard button with best score
+            int score = (int)g.levelStates.lvls.get(level).bestTime;
+            String LBString = str.format("GateScore", score);
+
+            sTextButton LBButton = new sTextButton(LBString, skin);
+            LBButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    okDialog(str.get("sdInfiniteLvlsAddedLater"),true);
+                   /* if (g.pDI.isSignedInGPGS()) {
+                        g.levelStates.saveLevelProgress();
+                        g.pDI.say(str.get("sayLeaderBoardWindowOpen"), g.settings.soundVolume);
+                        g.pDI.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
+                    } else {
+                        sDialog dialog = new sDialog("", skin);
+                        dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
+                        sTextButton yesButton = new sTextButton(str.get("Yes"), skin);
+                        dialog.button(yesButton, true);
+                        dialog.button(new sTextButton(str.get("No"), skin), false);
+                        dialog.setMovable(false);
+                        dialog.show(stage);
+
+                        yesButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                GPGSSignIn();
+                            }
+                        });
+                        g.pDI.say(str.get("sdNoCanDoWithoutSignInGPGS"), g.settings.soundVolume);
+                    }
+                    */
+                }
+            });
+            table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
+        }
+
         return table;
     }
+
 
     private void levelMenu(){
         levelWindow = makeWindow(str.get("lWTitle"));
         levelWindow.getButtonTable().add(makeCloseButton()).height(levelWindow.getPadTop());
 
+        final Table commonTable = new Table();
+        ScrollPane scroll = new ScrollPane(commonTable.top());
 
-        Table levelTable = new Table();
-        ScrollPane scroll = new ScrollPane(levelTable.top());
-        //levelTable.add(new sLabel(" ", g.as.skin)).expandX().fill().row();
 
+        final Table normalTable = new Table();
         Table table = new Table();
-        table.add(titleLabel(str.get("Level"),1.25f)).width(200).align(Align.left).padLeft(10).fill();
-        table.add(titleLabel(str.get("Info"),1.25f)).expandX().align(Align.left).padLeft(10).fill();
-        table.add(titleLabel(str.get("Time"),1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
-
-        levelTable.add(table).expandX().fill().row();
-
-        for (int i=0 ; i < g.levelStates.lvls.size; i++){
-            levelTable.add(generateLevelTable(i)).expandX().fill().row();
+        table.add(titleLabel(str.get("Level"), 1.25f)).width(200).align(Align.left).padLeft(10).fill();
+        table.add(titleLabel(str.get("Info"), 1.25f)).expandX().align(Align.left).padLeft(10).fill();
+        table.add(titleLabel(str.get("Time"), 1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
+        normalTable.add(table).expandX().fill().row();
+        for (int i=0 ; i < g.levelStates.lvls.size-5; i++){
+            normalTable.add(genLvlTable(i)).expandX().fill().row();
         }
-        levelTable.add(emptyLine()).expand().fill().row();
+        normalTable.add(emptyLine()).expand().fill().row();
+
+
+        final Table survivalTable = new Table();
+        final Table stable = new Table();
+        stable.add(titleLabel(str.get("Level"), 1.25f)).width(200).align(Align.left).padLeft(10).fill();
+        stable.add(titleLabel(str.get("Info"), 1.25f)).expandX().align(Align.left).padLeft(10).fill();
+        stable.add(titleLabel(str.get("Score"), 1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
+        survivalTable.add(stable).expandX().fill().row();
+        for (int i=g.levelStates.lvls.size-5 ; i < g.levelStates.lvls.size; i++){
+            survivalTable.add(genLvlTable(i)).expandX().fill().row();
+        }
+        survivalTable.add(emptyLine()).expand().fill().row();
+
+
+
+
+        final sTextButton tableSwitch = new sTextButton(str.get("lwButtonNormal"),skin);
+        tableSwitch.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (normalTable.isVisible()) {
+                    commonTable.clearChildren();
+                    commonTable.add(survivalTable).expand().fill().row();
+                    normalTable.setVisible(false);
+                    tableSwitch.setText(str.get("lwButtonNormal"));
+                }
+                else {
+                    normalTable.setVisible(true);
+                    commonTable.clearChildren();
+                    commonTable.add(normalTable).expand().fill().row();
+                    tableSwitch.setText(str.get("lwButtonSurvival"));
+                }
+            }
+        });
+
+        if (g.currentLevel < g.levelStates.lvls.size-5) {
+            commonTable.add(normalTable).expand().fill().row();
+        }
+        else {
+            commonTable.add(survivalTable).expand().fill().row();
+            normalTable.setVisible(false);
+            tableSwitch.setText(str.get("lwButtonNormal"));
+        }
+
+        levelWindow.add(tableSwitch).width(400).padTop(10).expandX().fill().row();
 
         levelWindow.add(scroll).expand().fill();
     }
