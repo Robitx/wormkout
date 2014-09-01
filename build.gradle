@@ -9,7 +9,6 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
     apply plugin: "idea"
 
     version = '1.0.1'
@@ -44,22 +43,6 @@ project(":android") {
     }
 }
 
-project(":android.demo") {
-    apply plugin: "android"
-
-    configurations { natives }
-
-    dependencies {
-        compile project(":core")
-        compile 'com.google.android.gms:play-services:5.0.89'
-        compile files('gdx-audio.jar')
-        compile project(":BaseGameUtils")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-    //    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-    }
-}
 
 project(":core") {
     apply plugin: "java"
@@ -69,8 +52,4 @@ project(":core") {
         compile files('gdx-audio.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }

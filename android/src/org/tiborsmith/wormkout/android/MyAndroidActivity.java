@@ -9,6 +9,9 @@ import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
@@ -23,6 +26,8 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
 
     private GameHelper gameHelper;
     private TextToSpeech tts;
+    private int version;
+    private InterstitialAd interstitialAd;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -39,7 +44,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
         //keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        initialize(new Wormkout(new MyAndroidSensors(this.getContext()), this), config);
+
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES );
         gameHelper.enableDebugLog(false);
@@ -47,7 +52,66 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
         gameHelper.setup(this);
 
         tts = new TextToSpeech(this,this);
+
+        if (MyVersion.type == MyVersion.Type.fullPaid)
+            version = 0;
+        else {
+            interstitialAd = new InterstitialAd(this);
+            if (MyVersion.type == MyVersion.Type.demo) {
+                version = 1;
+                interstitialAd.setAdUnitId("ca-app-pub-9606402841789110/2440650586");
+            }
+            else {
+                version = 2;
+                interstitialAd.setAdUnitId("ca-app-pub-9606402841789110/6929725786");
+            }
+
+            AdRequest interstitialRequest = new AdRequest.Builder().build();
+            interstitialAd.loadAd(interstitialRequest);
+
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                  //  Toast.makeText(getApplicationContext(), "Finished Loading Interstitial",
+                    //        Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void onAdClosed() {
+                 //   Toast.makeText(getApplicationContext(), "Closed Interstitial",
+                   //         Toast.LENGTH_SHORT).show();
+                    AdRequest interstitialRequest = new AdRequest.Builder().build();
+                    interstitialAd.loadAd(interstitialRequest);
+                }
+            });
+
+        }
+
+
+        initialize(new Wormkout(new MyAndroidSensors(this.getContext()), this), config);
 	}
+
+
+    @Override
+    public void showOrLoadInterstital() {
+        try {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (interstitialAd.isLoaded()) {
+                        interstitialAd.show();
+                      //  Toast.makeText(getApplicationContext(), "Showing Interstitial",
+                                //Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        AdRequest interstitialRequest = new AdRequest.Builder().build();
+                        interstitialAd.loadAd(interstitialRequest);
+                       // Toast.makeText(getApplicationContext(), "Loading Interstitial",
+                         //       Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } catch (Exception e) {
+        }
+    }
 
     /**
      * GameHelperListener method
@@ -136,7 +200,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
                 }
             });
         } catch (final Exception e){
-            Gdx.app.log("MainActivity", "Log in failed: " + e.getMessage() + ".");
+            Gdx.app.log("MainActivity", "Log in failed: " + e.getMessage() + "");
         }
     }
 
@@ -151,7 +215,7 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
             });
         }
         catch (Exception e){
-            Gdx.app.log("MainActivity", "Log out failed: " + e.getMessage() + ".");
+            Gdx.app.log("MainActivity", "Log out failed: " + e.getMessage() + "");
         }
     }
 
@@ -228,6 +292,15 @@ public class MyAndroidActivity extends AndroidApplication implements GameHelper.
             tts.speak(phrase, TextToSpeech.QUEUE_ADD, param);
         }
     }
+
+
+    @Override
+    public int appVersion() {
+        return version;
+    }
+
+
+
 
     @Override
     protected void onDestroy() {

@@ -118,14 +118,14 @@ public class TutorialScreen implements Screen {
 
         if (g.level.gameVictory){
             // sets new best time
-            g.levelStates.lvls.get(g.currentLevel).finished = true;
+            g.lvls.lvls.get(g.currentLevel).finished = true;
             g.pDI.say(g.assets.str.get("sayVictorySlow"),g.settings.soundVolume);
             // unlocks next lvl
-            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
-                g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
+            if (g.currentLevel+1 < g.lvls.lvls.size && g.lvls.lvls.get(g.currentLevel+1).locked) {
+                g.lvls.lvls.get(g.currentLevel + 1).locked = false;
                 g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"),g.settings.soundVolume);
             }
-            g.levelStates.saveLevelProgress();
+            g.lvls.saveLevelProgress();
 
             g.setScreen(g.mainScreen);
             return;

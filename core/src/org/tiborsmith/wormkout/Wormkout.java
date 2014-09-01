@@ -41,7 +41,7 @@ public class Wormkout extends Game {
 
 
     //state classes and variables
-    public MyLevels levelStates;
+    public MyLevels lvls;
     public MySettings settings;
     public MyPlayList playList;
 
@@ -110,15 +110,15 @@ public class Wormkout extends Game {
         }
 
         //game progress
-        FileHandle levelFile = Gdx.files.local("levelStates.json");
+        FileHandle levelFile = Gdx.files.local("states.json");
         if (levelFile.exists()) {
             Json json = new Json();
-            levelStates = json.fromJson(MyLevels.class, Base64Coder.decodeString(levelFile.readString()));
-            levelStates.g = this;
+            lvls = json.fromJson(MyLevels.class, Base64Coder.decodeString(levelFile.readString()));
+            lvls.g = this;
         } else {
-            levelStates = new MyLevels();
-            levelStates.g = this;
-            levelStates.makeDefault();
+            lvls = new MyLevels();
+            lvls.g = this;
+            lvls.makeDefault();
         }
 
         //music playlist

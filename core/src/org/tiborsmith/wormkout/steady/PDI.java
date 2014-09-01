@@ -19,4 +19,9 @@ public interface PDI {
     public void say(String phrase, float volume);
     public void appendSay(String phrase, float volume);
 
+    public int appVersion();  //full paid = 0, demo = 1, full free = 2
+
+    public void showOrLoadInterstital();
+
 }
+

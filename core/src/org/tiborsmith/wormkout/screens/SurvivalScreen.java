@@ -81,16 +81,19 @@ public class SurvivalScreen implements Screen {
             g.pDI.say(g.assets.str.get("sayGameOver1"),g.settings.soundVolume);
 
 
-            float bestScore = g.levelStates.lvls.get(g.currentLevel).bestTime;
+            float bestScore = g.lvls.lvls.get(g.currentLevel).bestTime;
             if (bestScore < timer) {
-                g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
+                g.lvls.lvls.get(g.currentLevel).bestTime = timer;
                 g.pDI.say(g.assets.str.get("sayVictoryNewBestScore"),g.settings.soundVolume);
             }
             else {
                 g.pDI.say(g.assets.str.get("sayDoneBetterBefore"),g.settings.soundVolume);
             }
-            g.levelStates.saveLevelProgress();
+            g.lvls.saveLevelProgress();
 
+            if (g.pDI.appVersion()>0){
+                g.pDI.showOrLoadInterstital();
+            }
             g.setScreen(g.mainScreen);
             return;
         }
@@ -121,13 +124,13 @@ public class SurvivalScreen implements Screen {
 
         //better function
         int ms;
-        if (g.currentLevel == g.levelStates.lvls.size-1)
+        if (g.currentLevel == g.lvls.lvls.size-1)
             ms = 30;
-        else if (g.currentLevel == g.levelStates.lvls.size-2)
+        else if (g.currentLevel == g.lvls.lvls.size-2)
             ms = 25;
-        else if (g.currentLevel == g.levelStates.lvls.size-3)
+        else if (g.currentLevel == g.lvls.lvls.size-3)
             ms = 20;
-        else if (g.currentLevel == g.levelStates.lvls.size-4)
+        else if (g.currentLevel == g.lvls.lvls.size-4)
             ms = 15;
         else
             ms = 10;

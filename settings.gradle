@@ -1,1 +1,1 @@
-include 'android', 'core', 'BaseGameUtils', 'android.demo'
+include 'android', 'core', 'BaseGameUtils'
