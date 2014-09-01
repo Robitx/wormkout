@@ -51,11 +51,9 @@ public class MainScreen implements Screen {
         assets = g.assets;
     }
 
-
     //variables to make things shorter
     I18NBundle str;
     Skin skin;
-
 
     private Stage stage;
     private ModelBatch modelBatch;
@@ -118,8 +116,6 @@ public class MainScreen implements Screen {
 
 
 
-
-
         //separated code for MyWindows on Mainscreen
         mainMenu();
         settingsMenu();
@@ -129,7 +125,7 @@ public class MainScreen implements Screen {
         creditsMenu();
 
         //first lvl then player
-        g.currentLevel = (g.currentLevel < g.levelStates.lvls.size-5) ? g.currentLevel : 1;
+        g.currentLevel = (g.currentLevel < g.lvls.lvls.size-5) ? g.currentLevel : 1;
         g.level.loadLevel();
         g.player.initPlayer();
         g.player.speed=0;
@@ -168,13 +164,19 @@ public class MainScreen implements Screen {
         if (g.welcomeBack && !g.firstLaunch){
             if (g.settings.automaticSignInGPGS) {
                 g.pDI.signInGPGS();
-                g.levelStates.saveLevelProgress();
+                g.lvls.saveLevelProgress();
             }
-            g.pDI.say(str.get("sNormalWelcome1"), g.settings.soundVolume);
+            int choice = (int)(3*Math.random());
+            if (choice == 0)
+                g.pDI.say(str.get("sNormalWelcome1"), g.settings.soundVolume);
+            else if (choice == 1)
+                g.pDI.say(str.get("sNormalWelcome2"), g.settings.soundVolume);
+            else
+                g.pDI.say(str.get("sNormalWelcome3"), g.settings.soundVolume);
             g.welcomeBack = false;
         }
         if (g.firstLaunch) {
-            sDialog dialog = new sDialog("", skin);
+            /*sDialog dialog = new sDialog("", skin);
             dialog.text(str.get("sdFirstWelcome"));
             sTextButton yesButton = new sTextButton(str.get("Visit"), skin);
             dialog.button(yesButton, true);
@@ -187,7 +189,7 @@ public class MainScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if (g.settings.automaticSignInGPGS) {
                         g.pDI.signInGPGS();
-                        g.levelStates.saveLevelProgress();
+                        g.lvls.saveLevelProgress();
                     }
                     mainWindow.setVisible(false);
                     helpWindow.setVisible(true);
@@ -201,13 +203,17 @@ public class MainScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if (g.settings.automaticSignInGPGS) {
                         g.pDI.signInGPGS();
-                        g.levelStates.saveLevelProgress();
+                        g.lvls.saveLevelProgress();
                     }
                     g.firstLaunch = false;
                 }
-            });
-            g.welcomeBack = false;
+            });*/
             g.pDI.say(str.get("sdFirstWelcome"),g.settings.soundVolume);
+            g.pDI.signInGPGS();
+            g.lvls.saveLevelProgress();
+            //okDialog(str.get("sdFirstWelcome"),true);
+            g.firstLaunch = false;
+            g.welcomeBack = false;
         }
 
     }
@@ -243,9 +249,16 @@ public class MainScreen implements Screen {
         creditsTable.add(aboutWormkoutLabel1).expandX().fill().row();
 
 
+        if (g.pDI.appVersion()==0)
+            creditsTable.add(ImageButtonWithDescription("playstore",str.get("cWplaystorefullLink"),
+                    str.get("cWPlaystoreText"),true)).colspan(2).expandX().fill().row();
+        if (g.pDI.appVersion()==1)
+            creditsTable.add(ImageButtonWithDescription("playstore",str.get("cWplaystoredemoLink"),
+                    str.get("cWPlaystoreText"),true)).colspan(2).expandX().fill().row();
+        if (g.pDI.appVersion()==2)
+            creditsTable.add(ImageButtonWithDescription("playstore",str.get("cWplaystorefullfreeLink"),
+                    str.get("cWPlaystoreText"),true)).colspan(2).expandX().fill().row();
 
-        creditsTable.add(ImageButtonWithDescription("playstore",str.get("cWplaystoreLink"),
-                str.get("cWPlaystoreText"),true)).colspan(2).expandX().fill().row();
         creditsTable.add(emptyLine()).colspan(2).row();
         creditsTable.add(ImageButtonWithDescription("gplus",str.get("cWgplusLink"),
                 str.get("cWGooglePlusText"),true)).colspan(2).expandX().fill().row();
@@ -318,11 +331,17 @@ public class MainScreen implements Screen {
                 str.get("hWHowPlayText"),false)).colspan(2).expandX().fill().row();
 
 
-        helpTable.add(titleLabel(str.get("hWMASETitle"),2)).colspan(2).expandX().fill().row();
+        helpTable.add(titleLabel(str.get("hWMusicTitle"),2)).colspan(2).expandX().fill().row();
         sLabel musicHelpIntro = new sLabel(str.get("hWHowMusicText"),skin);
         musicHelpIntro.setWrap(true);
         helpTable.add(emptyLine());
         helpTable.add(musicHelpIntro).expandX().fill().row();
+
+        helpTable.add(titleLabel(str.get("hWSoundsTitle"),2)).colspan(2).expandX().fill().row();
+        sLabel soundHelpIntro = new sLabel(str.get("hWHowSoundsText"),skin);
+        soundHelpIntro.setWrap(true);
+        helpTable.add(emptyLine());
+        helpTable.add(soundHelpIntro).expandX().fill().row();
 
         helpTable.add(emptyLine()).row();
         ScrollPane scroll = new ScrollPane(helpTable);
@@ -335,15 +354,15 @@ public class MainScreen implements Screen {
         Table table = new Table();
 
         //play button or lock label
-        if (!g.levelStates.lvls.get(level).locked){
-            sTextButton lvlButton = new sTextButton(g.levelStates.lvls.get(level).name, skin);
+        if (!g.lvls.lvls.get(level).locked){
+            sTextButton lvlButton = new sTextButton(g.lvls.lvls.get(level).name, skin);
             lvlButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     g.currentLevel = level;
                     if (level==0)
                         g.setScreen(g.tutorialScreen);
-                    else if(level<g.levelStates.lvls.size-5)
+                    else if(level<g.lvls.lvls.size-5)
                         g.setScreen(g.gameScreen);
                     else
                         g.setScreen(g.survivalScreen);
@@ -352,24 +371,24 @@ public class MainScreen implements Screen {
             table.add(lvlButton).width(200).padLeft(10).padBottom(10).align(Align.left);
         }
         else {
-            sLabel label = new sLabel(g.levelStates.lvls.get(level).name+" " + str.get("locked"), skin);
+            sLabel label = new sLabel(g.lvls.lvls.get(level).name+" " + str.get("locked"), skin);
             label.setAlignment(Align.center);
             table.add(label).width(200).padLeft(10).padBottom(10).align(Align.left);
         }
 
         //level description
-        sLabel lvlLabel = new sLabel(g.levelStates.lvls.get(level).description, skin);
+        sLabel lvlLabel = new sLabel(g.lvls.lvls.get(level).description, skin);
         lvlLabel.setAlignment(Align.left);
         lvlLabel.setWrap(true);
         table.add(lvlLabel).expandX().align(Align.left).padLeft(10).padBottom(10).fill();
 
         if (level==0)
             table.add(emptyLine()).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
-        else if(level<g.levelStates.lvls.size-5){
+        else if(level<g.lvls.lvls.size-5){
             //leaderboard button with best time
             String LBString;
-            if (g.levelStates.lvls.get(level).finished) {
-                float time = g.levelStates.lvls.get(level).bestTime;
+            if (g.lvls.lvls.get(level).finished) {
+                float time = g.lvls.lvls.get(level).bestTime;
                 LBString = str.format("TimeScore", (int) time / 60, (int) time % 60, Math.round(time * 100) % 100);
             } else {
                 LBString = str.get("emptyTimeScore");
@@ -379,9 +398,9 @@ public class MainScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (g.pDI.isSignedInGPGS()) {
-                        g.levelStates.saveLevelProgress();
+                        g.lvls.saveLevelProgress();
                         g.pDI.say(str.get("sayLeaderBoardWindowOpen"), g.settings.soundVolume);
-                        g.pDI.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
+                        g.pDI.getLeaderboardGPGS(g.lvls.lvls.get(level).name);
                     } else {
                         sDialog dialog = new sDialog("", skin);
                         dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
@@ -404,18 +423,18 @@ public class MainScreen implements Screen {
             table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
         }
         else {  //leaderboard button with best score
-            int score = (int)g.levelStates.lvls.get(level).bestTime;
+            int score = (int)g.lvls.lvls.get(level).bestTime;
             String LBString = str.format("GateScore", score);
 
             sTextButton LBButton = new sTextButton(LBString, skin);
             LBButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    okDialog(str.get("sdInfiniteLvlsAddedLater"),true);
-                   /* if (g.pDI.isSignedInGPGS()) {
-                        g.levelStates.saveLevelProgress();
+                   // okDialog(str.get("sdInfiniteLvlsAddedLater"),true);
+                    if (g.pDI.isSignedInGPGS()) {
+                        g.lvls.saveLevelProgress();
                         g.pDI.say(str.get("sayLeaderBoardWindowOpen"), g.settings.soundVolume);
-                        g.pDI.getLeaderboardGPGS(g.levelStates.lvls.get(level).name);
+                        g.pDI.getLeaderboardGPGS(g.lvls.lvls.get(level).name);
                     } else {
                         sDialog dialog = new sDialog("", skin);
                         dialog.text(str.get("sdNoCanDoWithoutSignInGPGS"));
@@ -433,7 +452,6 @@ public class MainScreen implements Screen {
                         });
                         g.pDI.say(str.get("sdNoCanDoWithoutSignInGPGS"), g.settings.soundVolume);
                     }
-                    */
                 }
             });
             table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
@@ -457,7 +475,7 @@ public class MainScreen implements Screen {
         table.add(titleLabel(str.get("Info"), 1.25f)).expandX().align(Align.left).padLeft(10).fill();
         table.add(titleLabel(str.get("Time"), 1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
         normalTable.add(table).expandX().fill().row();
-        for (int i=0 ; i < g.levelStates.lvls.size-5; i++){
+        for (int i=0 ; i < g.lvls.lvls.size-5; i++){
             normalTable.add(genLvlTable(i)).expandX().fill().row();
         }
         normalTable.add(emptyLine()).expand().fill().row();
@@ -469,7 +487,7 @@ public class MainScreen implements Screen {
         stable.add(titleLabel(str.get("Info"), 1.25f)).expandX().align(Align.left).padLeft(10).fill();
         stable.add(titleLabel(str.get("Score"), 1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
         survivalTable.add(stable).expandX().fill().row();
-        for (int i=g.levelStates.lvls.size-5 ; i < g.levelStates.lvls.size; i++){
+        for (int i=g.lvls.lvls.size-5 ; i < g.lvls.lvls.size; i++){
             survivalTable.add(genLvlTable(i)).expandX().fill().row();
         }
         survivalTable.add(emptyLine()).expand().fill().row();
@@ -477,7 +495,7 @@ public class MainScreen implements Screen {
 
 
 
-        final sTextButton tableSwitch = new sTextButton(str.get("lwButtonNormal"),skin);
+        final sTextButton tableSwitch = new sTextButton(str.get("lwButtonSurvival"),skin);
         tableSwitch.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -496,7 +514,7 @@ public class MainScreen implements Screen {
             }
         });
 
-        if (g.currentLevel < g.levelStates.lvls.size-5) {
+        if (g.currentLevel < g.lvls.lvls.size-5) {
             commonTable.add(normalTable).expand().fill().row();
         }
         else {
@@ -719,7 +737,17 @@ public class MainScreen implements Screen {
      * prepares main menu window and adds it to stage
      */
     private void mainMenu(){
-        mainWindow = makeWindow(assets.str.get(str.get("Wormkout")));
+        String title;
+        switch (g.pDI.appVersion()) {
+            case 1:  title = str.get("Wormkoutdemo");
+                break;
+            case 2:  title = str.get("Wormkoutfree");
+                break;
+            default:
+                title = str.get("Wormkout");
+        }
+        mainWindow = makeWindow(title);
+
         mainWindow.setVisible(true);
         sTextButton exitButton = new sTextButton(str.get("Exit"), skin);
         exitButton.getLabel().setAlignment(Align.center);
@@ -737,6 +765,16 @@ public class MainScreen implements Screen {
         mainWindow.add(playButton).width(wFB).expand().colspan(2).row();
         mainWindow.add(settingsButton).width(wFB).expand();
         mainWindow.add(musicButton).width(wFB).expand().row();
+        if (g.pDI.appVersion()==1){
+            sTextButton getFullButton = new sTextButton(str.get("GetFull"), skin);
+            mainWindow.add(getFullButton).width(wFB).expand().colspan(2).row();
+            getFullButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.net.openURI(str.get("cWplaystorefullfreeLink"));
+                }
+            });
+        }
         mainWindow.add(helpButton).width(wFB).expand();
         mainWindow.add(achievementsButton).width(wFB).expand().row();
         mainWindow.add(creditsButton).width(wFB).expand().colspan(2);
@@ -783,7 +821,7 @@ public class MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (g.pDI.isSignedInGPGS()) {
                     g.pDI.say(str.get("sayAchievementWindow"),g.settings.soundVolume);
-                    g.levelStates.saveLevelProgress();
+                    g.lvls.saveLevelProgress();
                     g.pDI.getAchievementsGPGS();
                 }
                 else {
@@ -888,7 +926,7 @@ public class MainScreen implements Screen {
         g.settings.automaticSignInGPGS = true;
         g.settings.saveSettings();
         g.pDI.signInGPGS();
-        g.levelStates.saveLevelProgress();
+        g.lvls.saveLevelProgress();
     }
 
 

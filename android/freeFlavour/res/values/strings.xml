@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wormkout FREE</string>
+
+    <string name="app_id">854693245616</string>
+    <string name="achievement_determination">CgkIsOW__e8YEAIQAQ</string>
+    <string name="achievement_individuality">CgkIsOW__e8YEAIQAg</string>
+    <string name="achievement_curiosity">CgkIsOW__e8YEAIQAw</string>
+    <string name="achievement_wisdom">CgkIsOW__e8YEAIQBA</string>
+    <string name="achievement_generosity">CgkIsOW__e8YEAIQBQ</string>
+    <string name="leaderboard_very_easy">CgkIsOW__e8YEAIQBg</string>
+    <string name="leaderboard_easy">CgkIsOW__e8YEAIQBw</string>
+    <string name="leaderboard_normal">CgkIsOW__e8YEAIQCA</string>
+    <string name="leaderboard_hard">CgkIsOW__e8YEAIQCQ</string>
+    <string name="leaderboard_insane">CgkIsOW__e8YEAIQCg</string>
+    <string name="leaderboard_e_1">CgkIsOW__e8YEAIQCw</string>
+    <string name="leaderboard_e_2">CgkIsOW__e8YEAIQDA</string>
+    <string name="leaderboard_e_3">CgkIsOW__e8YEAIQDQ</string>
+    <string name="leaderboard_e_4">CgkIsOW__e8YEAIQDg</string>
+    <string name="leaderboard_e_5">CgkIsOW__e8YEAIQDw</string>
+    <string name="leaderboard_e_6">CgkIsOW__e8YEAIQEA</string>
+    <string name="leaderboard_e_7">CgkIsOW__e8YEAIQEQ</string>
+    <string name="leaderboard_e_8">CgkIsOW__e8YEAIQEg</string>
+    <string name="leaderboard_e_9">CgkIsOW__e8YEAIQEw</string>
+    <string name="leaderboard_e_10">CgkIsOW__e8YEAIQFA</string>
+    <string name="leaderboard_e_11">CgkIsOW__e8YEAIQFQ</string>
+    <string name="leaderboard_e_12">CgkIsOW__e8YEAIQFg</string>
+    <string name="leaderboard_e_13">CgkIsOW__e8YEAIQFw</string>
+    <string name="leaderboard_e_14">CgkIsOW__e8YEAIQGA</string>
+    <string name="leaderboard_e_15">CgkIsOW__e8YEAIQGQ</string>
+    <string name="leaderboard_e_16">CgkIsOW__e8YEAIQGg</string>
+    <string name="leaderboard_e_17">CgkIsOW__e8YEAIQGw</string>
+    <string name="leaderboard_e_18">CgkIsOW__e8YEAIQHA</string>
+    <string name="leaderboard_e_19">CgkIsOW__e8YEAIQHQ</string>
+    <string name="leaderboard_e_20">CgkIsOW__e8YEAIQHg</string>
+    <string name="leaderboard_e_21">CgkIsOW__e8YEAIQHw</string>
+    <string name="leaderboard_e_22">CgkIsOW__e8YEAIQIA</string>
+    <string name="leaderboard_pi_11">CgkIsOW__e8YEAIQIQ</string>
+    <string name="leaderboard_pi_12">CgkIsOW__e8YEAIQIg</string>
+    <string name="leaderboard_pi_13">CgkIsOW__e8YEAIQIw</string>
+    <string name="leaderboard_pi_14">CgkIsOW__e8YEAIQJA</string>
+    <string name="leaderboard_pi_15">CgkIsOW__e8YEAIQJQ</string>
+    <string name="leaderboard_pi_16">CgkIsOW__e8YEAIQJg</string>
+    <string name="leaderboard_pi_17">CgkIsOW__e8YEAIQJw</string>
+    <string name="leaderboard_pi_18">CgkIsOW__e8YEAIQKA</string>
+    <string name="leaderboard_pi_19">CgkIsOW__e8YEAIQKQ</string>
+    <string name="leaderboard_pi_20">CgkIsOW__e8YEAIQKg</string>
+    <string name="leaderboard_pi_21">CgkIsOW__e8YEAIQKw</string>
+    <string name="leaderboard_pi_22">CgkIsOW__e8YEAIQLA</string>
+    <string name="leaderboard_pi_23">CgkIsOW__e8YEAIQLQ</string>
+    <string name="leaderboard_pi_24">CgkIsOW__e8YEAIQLg</string>
+    <string name="leaderboard_pi_25">CgkIsOW__e8YEAIQLw</string>
+    <string name="leaderboard_pi_26">CgkIsOW__e8YEAIQMA</string>
+    <string name="leaderboard_pi_27">CgkIsOW__e8YEAIQMQ</string>
+    <string name="leaderboard_pi_28">CgkIsOW__e8YEAIQMg</string>
+    <string name="leaderboard_pi_29">CgkIsOW__e8YEAIQMw</string>
+    <string name="leaderboard_pi_30">CgkIsOW__e8YEAIQNA</string>
+    <string name="leaderboard_pi_31">CgkIsOW__e8YEAIQNQ</string>
+    <string name="leaderboard_pi_32">CgkIsOW__e8YEAIQNg</string>
+    <string name="leaderboard_pi_33">CgkIsOW__e8YEAIQNw</string>
+    <string name="leaderboard_pi_34">CgkIsOW__e8YEAIQOA</string>
+    <string name="leaderboard_pi_35">CgkIsOW__e8YEAIQOQ</string>
+    <string name="leaderboard_pi_36">CgkIsOW__e8YEAIQOg</string>
+    <string name="leaderboard_pi_37">CgkIsOW__e8YEAIQOw</string>
+    <string name="leaderboard_pi_38">CgkIsOW__e8YEAIQPA</string>
+    <string name="leaderboard_pi_39">CgkIsOW__e8YEAIQPQ</string>
+    <string name="leaderboard_pi_40">CgkIsOW__e8YEAIQPg</string>
+    <string name="leaderboard_pi_41">CgkIsOW__e8YEAIQQA</string>
+    <string name="leaderboard_pi_42">CgkIsOW__e8YEAIQPw</string>
+    <string name="leaderboard_crazy_1">CgkIsOW__e8YEAIQQQ</string>
+    <string name="leaderboard_crazy_2">CgkIsOW__e8YEAIQQg</string>
+    <string name="leaderboard_crazy_3">CgkIsOW__e8YEAIQQw</string>
+    <string name="leaderboard_crazy_4">CgkIsOW__e8YEAIQRA</string>
+    <string name="leaderboard_crazy_5">CgkIsOW__e8YEAIQRQ</string>
+
+</resources>

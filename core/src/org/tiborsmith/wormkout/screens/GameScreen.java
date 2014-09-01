@@ -79,31 +79,45 @@ public class GameScreen implements Screen {
         }
 
         if (g.level.gameOver) {
-            g.pDI.say(g.assets.str.get("sayGameOver1"),g.settings.soundVolume);
+            int choice = (int)(3*Math.random());
+            if (choice == 0)
+                g.pDI.say(g.assets.str.get("sayGameOver1"),g.settings.soundVolume);
+            else if (choice == 1)
+                g.pDI.say(g.assets.str.get("sayGameOver2"),g.settings.soundVolume);
+            else
+                g.pDI.say(g.assets.str.get("sayGameOver3"),g.settings.soundVolume);
+            g.welcomeBack = false;
 
+
+            if (g.pDI.appVersion()>0){
+                g.pDI.showOrLoadInterstital();
+            }
             g.setScreen(g.mainScreen);
             return;
         }
 
         if (g.level.gameVictory){
             // sets new best time
-            g.levelStates.lvls.get(g.currentLevel).finished = true;
-            float bestTime = g.levelStates.lvls.get(g.currentLevel).bestTime;
+            g.lvls.lvls.get(g.currentLevel).finished = true;
+            float bestTime = g.lvls.lvls.get(g.currentLevel).bestTime;
             if (bestTime > timer) {
-                g.levelStates.lvls.get(g.currentLevel).bestTime = timer;
+                g.lvls.lvls.get(g.currentLevel).bestTime = timer;
                 g.pDI.say(g.assets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
             }
             else {
                 g.pDI.say(g.assets.str.get("sayVictorySlow"),g.settings.soundVolume);
             }
             // unlocks next lvl
-            if (g.currentLevel+1 < g.levelStates.lvls.size && g.levelStates.lvls.get(g.currentLevel+1).locked) {
-                g.levelStates.lvls.get(g.currentLevel + 1).locked = false;
+            if (g.currentLevel+1 < g.lvls.lvls.size && g.lvls.lvls.get(g.currentLevel+1).locked) {
+                g.lvls.lvls.get(g.currentLevel + 1).locked = false;
                 g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"),g.settings.soundVolume);
-                g.levelStates.unlockingBuffer++;
+                g.lvls.unlockingBuffer++;
             }
-            g.levelStates.saveLevelProgress();
+            g.lvls.saveLevelProgress();
 
+            if (g.pDI.appVersion()>0){
+                g.pDI.showOrLoadInterstital();
+            }
             g.setScreen(g.mainScreen);
             return;
         }

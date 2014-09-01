@@ -26,7 +26,6 @@ public class MyPlayer {
         phi = game.mySensorProcessing.getPhi();
         theta = game.mySensorProcessing.getTheta();
 
-
         if (!(Float.isNaN(phi) || Float.isNaN(theta))){
             direction.y=(float)Math.sin(theta);
             direction.z=(-1.0f)*(float)(Math.cos(theta)*Math.cos(phi));
@@ -36,7 +35,6 @@ public class MyPlayer {
         else {
             Gdx.app.log("NaN","phi or theta have been NaN");
         }
-
     }
 
     public void updatePlayer(float delta){

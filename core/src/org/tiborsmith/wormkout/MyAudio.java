@@ -18,7 +18,7 @@ public class MyAudio {
     public AudioDevice device;
     private KissFFT fft;
     private Mpg123Decoder decoder;
-    private Thread playbackThread;
+    public Thread playbackThread;
 
 
     private short[] samples = new short[2048];
@@ -189,17 +189,22 @@ public class MyAudio {
             playbackThread.interrupt();
             playbackThread.join();
 
+        } catch (InterruptedException e) {
+            Gdx.app.error("AudioThread", "Thread had problem with ending",e);
+        }
+
+        try {
             //dispose of stuff if its not null
             if (device != null)
                 device.dispose();
             if (decoder != null)
                 decoder.dispose();
-            if(fft != null)
+            if (fft != null)
                 fft.dispose();
-        } catch (InterruptedException e) {
+        }
+        catch (IllegalStateException e) {
             Gdx.app.error("AudioThread", "Thread had problem with ending",e);
         }
-
     }
 }
 

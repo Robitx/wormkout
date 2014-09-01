@@ -15,8 +15,8 @@ public class MySensorProcessing {
     Wormkout g;
     public MySensorProcessing(Wormkout game){this.g = game;}
 
-    final private Vector3 calibrationVector = new Vector3(0,0,1);
-    final private Vector3 orientationVector = new Vector3(0,0,1);
+    public final Vector3 calibrationVector = new Vector3(0,0,1);
+    public final Vector3 orientationVector = new Vector3(0,0,1);
     public boolean newCalibration = true;
 
     final private Vector2 tmp1 = new Vector2(), tmp2 = new Vector2();
@@ -68,7 +68,7 @@ public class MySensorProcessing {
         float x = MathUtils.clamp(tmp1.dot(tmp2), -0.99999f, 0.99999f);
         x = (tmp1.x*tmp2.y>tmp1.y*tmp2.x)? (float)Math.acos(x) : -(float)Math.acos(x);
         //maximum angle is +- PI/2.25 from calibrated direction
-        return MathUtils.clamp(x, -(float)Math.PI/2.25f, (float)Math.PI/2.25f);
+        return MathUtils.clamp(x, -(float)Math.PI/2.025f, (float)Math.PI/2.025f);
     }
 
 

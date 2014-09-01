@@ -30,13 +30,16 @@ public class MyLevels {
         if (g.pDI.isSignedInGPGS()) {
             for (int i=1; i< lvls.size-5 ; i++)
                 g.pDI.submitScoreGPGS(lvls.get(i).name,(int)(lvls.get(i).bestTime*1000));
+            for (int i=lvls.size-5; i< lvls.size ; i++) {
+                g.pDI.submitScoreGPGS(lvls.get(i).name, (int) (lvls.get(i).bestTime));
+            }
             if ( unlockingBuffer > 0) {
                 g.pDI.incrementAchievementGPGS("achievement_determination", unlockingBuffer);
                 unlockingBuffer = 0;
             }
         }
         //save locally
-        FileHandle levelFile = Gdx.files.local("levelStates.json");
+        FileHandle levelFile = Gdx.files.local("states.json");
         Json json = new Json();
         levelFile.writeString(Base64Coder.encodeString(json.prettyPrint(this)), false);
     }
@@ -51,36 +54,62 @@ public class MyLevels {
         lvls.clear();
         lvls.add(getNewLevelInstance(false,false,3600,"Tutorial","levels/tutorial.bin",
                 "Tutorial level, maximal speed 5 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 1","levels/Pi1.bin",
-                "776 gates long, minimal speed 5 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 2","levels/Pi2.bin",
-                "1 535 gates long, minimal speed 5 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 3","levels/Pi3.bin",
-                "1 535 gates long, minimal speed 10 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 4","levels/Pi4.bin",
-                "1 457 gates long, minimal speed 10 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 5","levels/Pi5.bin",
-                "2 353 gates long, minimal speed 15 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 6","levels/Pi6.bin",
-                "2 174 gates long, minimal speed 15 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 7","levels/Pi7.bin",
-                "2 386 gates long, minimal speed 20 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 8","levels/Pi8.bin",
-                "3 091 gates long, minimal speed 20 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 9","levels/Pi9.bin",
-                "3 917 gates long, minimal speed 20 gates/s"));
-        lvls.add(getNewLevelInstance(true,false,3600,"Pi 10","levels/Pi10.bin",
-                "3 815 gates long, minimal speed 20 gates/s"));
+        if (g.pDI.appVersion() == 0 || g.pDI.appVersion() == 2) {
+            for (int i = 11; i < 43; i++) {
+                if (i < 13)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 5 gates/s"));
+                else if (i < 16)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 10 gates/s"));
+                else if (i < 18)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 15 gates/s"));
+                else
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 20 gates/s"));
+            }
+            for (int i = 1; i < 23; i++)
+                lvls.add(getNewLevelInstance(true, false, 3600, "e " + i, "levels/E " + i + ".bin",
+                        "Euler series, minimal speed 20 gates/s"));
+            lvls.add(getNewLevelInstance(false, false, 3600, "Crazy 1", "levels/C 1.bin",
+                    "Over the hills and far away"));
+            lvls.add(getNewLevelInstance(false, false, 3600, "Crazy 2", "levels/C 2.bin",
+                    "Dizzy Dizzy"));
+            lvls.add(getNewLevelInstance(false, false, 3600, "Crazy 3", "levels/C 3.bin",
+                    "My side, your side"));
+            lvls.add(getNewLevelInstance(false, false, 3600, "Crazy 4", "levels/C 4.bin",
+                    "Screw up"));
+            lvls.add(getNewLevelInstance(false, false, 3600, "Crazy 5", "levels/C 5.bin",
+                    "Screw down"));
+        }
+        else {
+            for (int i = 1; i < 11; i++) {
+                if (i < 3)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 5 gates/s"));
+                else if (i < 5)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 10 gates/s"));
+                else if (i < 7)
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 15 gates/s"));
+                else
+                    lvls.add(getNewLevelInstance(true, false, 3600, "Pi " + i, "levels/Pi " + i + ".bin",
+                            "Pi series, minimal speed 20 gates/s"));
+            }
+        }
+
         lvls.add(getNewLevelInstance(false,false,0,"Very easy","",
-                "minimal speed 10 gates/s"));
+                "Randomly generated, minimal speed 10 gates/s"));
         lvls.add(getNewLevelInstance(false,false,0,"Easy","",
-                "minimal speed 15 gates/s"));
+                "Randomly generated, minimal speed 15 gates/s"));
         lvls.add(getNewLevelInstance(false,false,0,"Normal","",
-                "minimal speed 20 gates/s"));
+                "Randomly generated, minimal speed 20 gates/s"));
         lvls.add(getNewLevelInstance(false,false,0,"Hard","",
-                "minimal speed 25 gates/s"));
+                "Randomly generated, minimal speed 25 gates/s"));
         lvls.add(getNewLevelInstance(false,false,0,"Insane","",
-                "minimal speed 30 gates/s"));
+                "Randomly generated, minimal speed 30 gates/s"));
 
  
         saveLevelProgress();

@@ -115,7 +115,7 @@ public class MyLevel {
             if (startAC>2.0f) {
                 gateColors[0].set(1,0,0,1);
                 if (startAC>3.0){
-                    gateColors[0].set(Color.BLACK).mul((5.0f-startAC)/2);
+                    gateColors[0].set(Color.DARK_GRAY).mul((5.0f-startAC)/2);
                 }
                 if (startAC>3.0f && startAC<3.1f)
                     g.pDI.say("Three.",g.settings.soundVolume);
@@ -150,14 +150,14 @@ public class MyLevel {
         ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         float scalingFactor = gateRadius;
-        if (g.currentLevel>1 && g.currentLevel < g.levelStates.lvls.size-5) {
+        if (g.currentLevel>1 && g.currentLevel < g.lvls.lvls.size-5) {
             int n = (g.currentLevel < 5)? g.currentLevel%5 : 5;
             for (int i=1; i <= n; i++) {
                 scalingFactor *= Math.abs(1 - scaling(path.size, levelSize*i/(n), 20, 2.125f));
             }
         }
         else if (g.currentLevel>1){
-            //int n = (g.currentLevel-g.levelStates.lvls.size+5)%5;
+            //int n = (g.currentLevel-g.lvls.lvls.size+5)%5;
             scalingFactor *= Math.abs(1 - scaling(path.size, 1500, 20, 2.125f));
             scalingFactor *= Math.abs(1 - scaling(path.size, 1000, 20, 2.125f));
             scalingFactor *= Math.abs(1 - scaling(path.size, 500, 20, 2.125f));
@@ -209,7 +209,7 @@ public class MyLevel {
         path.add(new Vector3(0,0,0));
         path.add(new Vector3(0,0,-1));
 
-        FileHandle lvl = Gdx.files.internal(g.levelStates.lvls.get(g.currentLevel).path);
+        FileHandle lvl = Gdx.files.internal(g.lvls.lvls.get(g.currentLevel).path);
         try {
             InputStream is = lvl.read();
             DataInputStream dis = new DataInputStream(is);
@@ -234,7 +234,7 @@ public class MyLevel {
 
         //clear gate colors
         for (int i=0; i<gateColors.length; i++){
-            gateColors[i] = new Color(Color.GREEN);
+            gateColors[i] = new Color(Color.DARK_GRAY);
         }
 
         poLRG.set(0,0,0);
@@ -268,7 +268,7 @@ public class MyLevel {
 
         //clear gate colors
         for (int i=0; i<gateColors.length; i++){
-            gateColors[i] = new Color(Color.GREEN);
+            gateColors[i] = new Color(Color.DARK_GRAY);
         }
 
         poLRG.set(0,0,0);
