@@ -50,32 +50,31 @@ public class GameScreen implements Screen {
         modelBatch.end();
 
 
-        if (!calibrating) {
-            g.player.updatePlayer(delta);
-            gNLabel.setText(g.assets.str.format("RemainingGates",g.level.update(delta)));
-            timer += delta;
-        }
-        else {
-            if (g.mySensorProcessing.isVertical()) {
+        if (!(g.level.gameVictory || g.level.gameOver)) {
+            if (!calibrating) {
+                g.player.updatePlayer(delta);
+                gNLabel.setText(g.assets.str.format("RemainingGates", g.level.update(delta)));
                 timer += delta;
-                calibrating = g.level.startingAnimation(delta);
-                if (!calibrating)
-                    timer = 0;
-                if (timer > 2.0f)
-                    g.mySensorProcessing.calibrate();
-                msgLabel.setText(g.assets.str.get("Calibration"));
-                msgLabel.setVisible(calibrating);
-                gNLabel.setVisible(!calibrating);
-            }
-            else {
-                msgLabel.setText(g.assets.str.get("BeforeCalibration"));
-                msgLabel.setVisible(calibrating);
-                if (timer==0) {
-                    g.pDI.say(g.assets.str.get("BeforeCalibration"), g.settings.soundVolume);
-                    timer+=delta;
+            } else {
+                if (g.mySensorProcessing.isVertical()) {
+                    timer += delta;
+                    calibrating = g.level.startingAnimation(delta);
+                    if (!calibrating)
+                        timer = 0;
+                    if (timer > 2.0f)
+                        g.mySensorProcessing.calibrate();
+                    msgLabel.setText(g.assets.str.get("Calibration"));
+                    msgLabel.setVisible(calibrating);
+                    gNLabel.setVisible(!calibrating);
+                } else {
+                    msgLabel.setText(g.assets.str.get("BeforeCalibration"));
+                    msgLabel.setVisible(calibrating);
+                    if (timer == 0) {
+                        g.pDI.say(g.assets.str.get("BeforeCalibration"), g.settings.soundVolume);
+                        timer += delta;
+                    }
                 }
             }
-
         }
 
         if (g.level.gameOver) {
@@ -97,28 +96,36 @@ public class GameScreen implements Screen {
         }
 
         if (g.level.gameVictory){
-            // sets new best time
-            g.lvls.lvls.get(g.currentLevel).finished = true;
-            float bestTime = g.lvls.lvls.get(g.currentLevel).bestTime;
-            if (bestTime > timer) {
-                g.lvls.lvls.get(g.currentLevel).bestTime = timer;
-                g.pDI.say(g.assets.str.get("sayVictoryNewBestTime"),g.settings.soundVolume);
-            }
-            else {
-                g.pDI.say(g.assets.str.get("sayVictorySlow"),g.settings.soundVolume);
-            }
-            // unlocks next lvl
-            if (g.currentLevel+1 < g.lvls.lvls.size && g.lvls.lvls.get(g.currentLevel+1).locked) {
-                g.lvls.lvls.get(g.currentLevel + 1).locked = false;
-                g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"),g.settings.soundVolume);
-                g.lvls.unlockingBuffer++;
-            }
-            g.lvls.saveLevelProgress();
+            if (!calibrating) {
+                // sets new best time
+                g.lvls.lvls.get(g.currentLevel).finished = true;
+                float bestTime = g.lvls.lvls.get(g.currentLevel).bestTime;
+                if (bestTime > timer) {
+                    g.lvls.lvls.get(g.currentLevel).bestTime = timer;
+                    g.pDI.say(g.assets.str.get("sayVictoryNewBestTime"), g.settings.soundVolume);
+                    g.lvls.lvls.get(g.currentLevel).rewards=1;
+                    if (timer < g.level.levelSize/14.5f){
+                        g.lvls.lvls.get(g.currentLevel).rewards=2;
+                    }
+                    if (timer < g.level.levelSize/19.5f){
+                        g.lvls.lvls.get(g.currentLevel).rewards=3;
+                    }
+                } else {
+                    g.pDI.say(g.assets.str.get("sayVictorySlow"), g.settings.soundVolume);
+                }
+                // unlocks next lvl
+                if (g.currentLevel + 1 < g.lvls.lvls.size && g.lvls.lvls.get(g.currentLevel + 1).locked) {
+                    g.lvls.lvls.get(g.currentLevel + 1).locked = false;
+                    g.pDI.appendSay(g.assets.str.get("sayLevelUnlock"), g.settings.soundVolume);
+                    g.lvls.unlockingBuffer++;
+                }
+                g.lvls.saveLevelProgress();
 
             if (g.pDI.appVersion()>0){
                 g.pDI.showOrLoadInterstital();
             }
             g.setScreen(g.mainScreen);
+            }
             return;
         }
 
@@ -145,18 +152,8 @@ public class GameScreen implements Screen {
         stage.setViewport(g.assets.viewport);
         Gdx.input.setInputProcessor(stage);
 
-        //better function
-        int ms;
-        if (g.currentLevel < 3)
-            ms = 5;
-        else if (g.currentLevel < 5)
-            ms = 10;
-        else if (g.currentLevel < 7)
-            ms = 15;
-        else
-            ms=20;
 
-        final int minimalSpeed = ms;
+        final int minimalSpeed = 10;
 
         final sLabel speedLabel = new sLabel(g.assets.str.format("Speed",minimalSpeed), g.assets.skin);
         speedLabel.setAlignment(Align.left);
@@ -218,7 +215,6 @@ public class GameScreen implements Screen {
         g.player.initPlayer();
         g.player.speed = minimalSpeed;
     }
-
 
 
     @Override

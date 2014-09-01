@@ -8,6 +8,6 @@ public final class BuildConfig {
   public static final String PACKAGE_NAME = "org.tiborsmith.wormkout.android.free";
   public static final String BUILD_TYPE = "debug";
   public static final String FLAVOR = "freeFlavour";
-  public static final int VERSION_CODE = 2;
-  public static final String VERSION_NAME = "1.0.1";
+  public static final int VERSION_CODE = 3;
+  public static final String VERSION_NAME = "1.0.2";
 }

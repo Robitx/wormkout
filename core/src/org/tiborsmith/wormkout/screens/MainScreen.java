@@ -314,6 +314,19 @@ public class MainScreen implements Screen {
         return table;
     }
 
+    public Table rewardIcons(int score, int max){
+        Table table = new Table();
+            for (int i = 1; i <= max; i++) {
+                if (i <= score)
+                    table.add(new ImageButton(new
+                            Image(assets.images.findRegion("rewardfull")).getDrawable())).fill();
+                else
+                    table.add(new ImageButton(new
+                            Image(assets.images.findRegion("rewardempty")).getDrawable())).fill();
+            }
+            return table;
+    }
+
 
     private void helpMenu(){
         helpWindow = makeWindow(str.get("hWTitle"));
@@ -329,6 +342,9 @@ public class MainScreen implements Screen {
         helpTable.add(helpIntro).expandX().fill().row();
         helpTable.add(ImageButtonWithDescription("howtocontrol","",
                 str.get("hWHowPlayText"),false)).colspan(2).expandX().fill().row();
+
+        helpTable.add(ImageButtonWithDescription("rewardfull","",
+                str.get("hWSpeedSign"),false)).colspan(2).expandX().fill().row();
 
 
         helpTable.add(titleLabel(str.get("hWMusicTitle"),2)).colspan(2).expandX().fill().row();
@@ -382,14 +398,17 @@ public class MainScreen implements Screen {
         lvlLabel.setWrap(true);
         table.add(lvlLabel).expandX().align(Align.left).padLeft(10).padBottom(10).fill();
 
+
         if (level==0)
             table.add(emptyLine()).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
         else if(level<g.lvls.lvls.size-5){
+            table.add(rewardIcons(g.lvls.lvls.get(level).rewards,3)).padLeft(10).padBottom(10).fill();
             //leaderboard button with best time
             String LBString;
             if (g.lvls.lvls.get(level).finished) {
                 float time = g.lvls.lvls.get(level).bestTime;
-                LBString = str.format("TimeScore", (int) time / 60, (int) time % 60, Math.round(time * 100) % 100);
+                LBString = str.format("TimeScore", (int) time / 60, (int) time % 60,
+                        Math.round(time * 100) % 100);
             } else {
                 LBString = str.get("emptyTimeScore");
             }
@@ -422,7 +441,10 @@ public class MainScreen implements Screen {
             });
             table.add(LBButton).width(175).padLeft(10).padRight(10).padBottom(10).align(Align.left).row();
         }
-        else {  //leaderboard button with best score
+        else {
+            int r = -(g.lvls.lvls.size-level-6);
+            table.add(rewardIcons(r,5)).padLeft(10).padBottom(10).fill();
+            //leaderboard button with best score
             int score = (int)g.lvls.lvls.get(level).bestTime;
             String LBString = str.format("GateScore", score);
 
@@ -473,7 +495,7 @@ public class MainScreen implements Screen {
         Table table = new Table();
         table.add(titleLabel(str.get("Level"), 1.25f)).width(200).align(Align.left).padLeft(10).fill();
         table.add(titleLabel(str.get("Info"), 1.25f)).expandX().align(Align.left).padLeft(10).fill();
-        table.add(titleLabel(str.get("Time"), 1.25f)).width(175).align(Align.left).padLeft(10).padRight(10).fill().row();
+        table.add(titleLabel(str.get("Time"), 1.25f)).width(350).align(Align.left).padLeft(10).padRight(10).fill().row();
         normalTable.add(table).expandX().fill().row();
         for (int i=0 ; i < g.lvls.lvls.size-5; i++){
             normalTable.add(genLvlTable(i)).expandX().fill().row();

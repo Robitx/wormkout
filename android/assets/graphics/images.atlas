@@ -66,3 +66,17 @@ gplus
   orig: 96, 96
   offset: 0, 0
   index: -1
+rewardempty
+  rotate: false
+  xy: 399, 122
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+rewardfull
+  rotate: false
+  xy: 301, 24
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

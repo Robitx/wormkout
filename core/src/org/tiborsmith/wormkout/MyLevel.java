@@ -28,7 +28,7 @@ public class MyLevel {
     private int gN = 0; //gate number
     private float startAC = 5.0f; //start animation countdown
     private Vector3 tmpVector = new Vector3(0,0,0); // temporary vector
-    private int levelSize;
+    public int levelSize;
 
     public boolean gameOver = false;
     public boolean gameVictory = false;
