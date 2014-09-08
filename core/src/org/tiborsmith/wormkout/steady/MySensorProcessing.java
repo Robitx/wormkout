@@ -55,7 +55,7 @@ public class MySensorProcessing {
         tmp1.set(orientationVector.x,orientationVector.y).nor();
         tmp2.set(calibrationVector.x,calibrationVector.y).nor();
         //in order to avoid NaN from acos
-        float x = MathUtils.clamp(tmp1.dot(tmp2), -0.99999f, 0.99999f);
+        float x = MathUtils.clamp(tmp1.dot(tmp2), -1.0f, 1.0f);
         return (tmp1.x*tmp2.y>tmp1.y*tmp2.x)? (float)Math.acos(x) : -(float)Math.acos(x);
     }
 
@@ -65,7 +65,7 @@ public class MySensorProcessing {
         tmp1.set((float)Math.sqrt(orientationVector.x*orientationVector.x+orientationVector.y*orientationVector.y),orientationVector.z).nor();
         tmp2.set((float)Math.sqrt(calibrationVector.x*calibrationVector.x+calibrationVector.y*calibrationVector.y),calibrationVector.z).nor();
         //in order to avoid NaN from acos
-        float x = MathUtils.clamp(tmp1.dot(tmp2), -0.99999f, 0.99999f);
+        float x = MathUtils.clamp(tmp1.dot(tmp2), -1.0f, 1.0f);
         x = (tmp1.x*tmp2.y>tmp1.y*tmp2.x)? (float)Math.acos(x) : -(float)Math.acos(x);
         //maximum angle is +- PI/2.25 from calibrated direction
         return MathUtils.clamp(x, -(float)Math.PI/2.025f, (float)Math.PI/2.025f);
@@ -74,7 +74,7 @@ public class MySensorProcessing {
 
     //return true if gravity on Z is small enough
     public boolean isVertical(){
-        if (g.mySensors.getGravityZ()*g.mySensors.getGravityZ()*1.75<
+        if (g.mySensors.getGravityZ()*g.mySensors.getGravityZ()*1.5<
                 g.mySensors.getGravityY()*g.mySensors.getGravityY()+
                         g.mySensors.getGravityX()*g.mySensors.getGravityX())
             return true;

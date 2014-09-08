@@ -61,11 +61,11 @@ public class MyLevel {
      */
     public void updateColors(float delta){
         g.audio.generateColors(delta, gateColors);
-        for (int i=7+g.player.speed/5; i< noRG; i++){
+        for (int i=11; i< noRG; i++){
             //int j = i+g.player.speed%3;//careful with noRG here
-            int j = i;
-            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[j].r,
-                    gateColors[j].g,gateColors[j].b,1));
+            //int j = i;
+            gates.get(i).materials.get(0).set(ColorAttribute.createDiffuse(gateColors[i].r,
+                    gateColors[i].g,gateColors[i].b,1));
         }
     }
 
@@ -150,7 +150,7 @@ public class MyLevel {
         ModelInstance gate = new ModelInstance(g.assets.gate);  //makes new model instance
         tmpVector.set(path.get(1)).sub(path.get(0)).nor();  //get direction vector for next gate
         float scalingFactor = gateRadius;
-        if (g.currentLevel>1 && g.currentLevel < g.lvls.lvls.size-5) {
+       /* if (g.currentLevel>1 && g.currentLevel < g.lvls.lvls.size-5) {
             int n = (g.currentLevel < 5)? g.currentLevel%5 : 5;
             for (int i=1; i <= n; i++) {
                 scalingFactor *= Math.abs(1 - scaling(path.size, levelSize*i/(n), 20, 2.125f));
@@ -161,7 +161,7 @@ public class MyLevel {
             scalingFactor *= Math.abs(1 - scaling(path.size, 1500, 20, 2.125f));
             scalingFactor *= Math.abs(1 - scaling(path.size, 1000, 20, 2.125f));
             scalingFactor *= Math.abs(1 - scaling(path.size, 500, 20, 2.125f));
-        }
+        }*/
 
         gate.transform.setToScaling(scalingFactor,scalingFactor,scalingFactor);  //scale gate
         gate.transform.rotate(new Vector3(0,0,-1),tmpVector);  //rotates gate according to next gate orientation
